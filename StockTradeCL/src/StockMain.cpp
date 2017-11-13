@@ -17,24 +17,31 @@ CLSlog Log;
 //---------------------------------------------------------------------------
 // Local
 //---------------------------------------------------------------------------
-AnsiString LogDir;
+AnsiString ExeDir;
 //---------------------------------------------------------------------------
 __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 	: TForm(Owner)
 {
+	char logPath[256];
 	// Set Log directory
-	LogDir = ExtractFilePath(Application->ExeName);
-	LogDir.printf("%s\\log", LogDir.c_str());
-//	SetCurrentDirectory(LogDir.c_str());
+	ExeDir = ExtractFilePath(Application->ExeName);
 
-	//Log = CLSlog("STOCKCL", LogDir.c_str());
-	Log = CLSlog("STOCKCL", "D:\\work\\Builder\\Berlin\\01.Study PJT_\\bin\\log");
+	sprintf(logPath,"%s\\log", ExeDir.c_str());
+	MakeDirectory(logPath);
+
+	Log = CLSlog("STOCKCL", logPath);
 	Log.Write("Process start");
 
 	mTcpSt = false;
-	//Pstock = new CPstock(commEnv.ip, commEnv.port);
 	Pstock = new CPstock("210.220.167.67", 12000);
 	tmTcpSt->Enabled = true;
+}
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::MakeDirectory(const char* path)
+{
+	CreateDir(path);         // make log directory
 }
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::tmTcpStTimer(TObject *Sender)
