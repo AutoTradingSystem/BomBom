@@ -32,6 +32,8 @@ __published:	// IDE-managed Components
 	void __fastcall btnEchoClick(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
+
+	void __fastcall MakeDirectory(const char* path);
 public:		// User declarations
 
 	__fastcall TStockMainF(TComponent* Owner);

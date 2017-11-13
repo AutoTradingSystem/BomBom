@@ -20,9 +20,11 @@ StockTradeCL/src/__history
 StockTradeCL/src/__recovery
 StockTradeCL/src/CPstock/__history
 StockTradeCL/src/GenLib/__history
+StockTradeCL/src/fileMng/__history
 StockTradeCL/src/Win32/Debug
 StockTradeCL/src/inc/__history
 StockTradeCL/bin
+
 
 ### Histor ###
 #*.~*~
