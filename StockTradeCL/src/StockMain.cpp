@@ -22,6 +22,7 @@ AnsiString ExeDir;
 __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 	: TForm(Owner)
 {
+	// test fetch
 	char logPath[256];
 	// Set Log directory
 	ExeDir = ExtractFilePath(Application->ExeName);
