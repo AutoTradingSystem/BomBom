@@ -193,6 +193,12 @@
             <DependentOn>inc\StockDB.h</DependentOn>
             <BuildOrder>10</BuildOrder>
         </CppCompile>
+        <CppCompile Include="STDebug.cpp">
+            <Form>STDebugF</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>STDebug.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
         <CppCompile Include="StockMain.cpp">
             <Form>StockMainF</Form>
             <FormType>dfm</FormType>
@@ -206,6 +212,7 @@
             <BuildOrder>1</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
+        <FormResources Include="STDebug.dfm"/>
         <FormResources Include="StockMain.dfm"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

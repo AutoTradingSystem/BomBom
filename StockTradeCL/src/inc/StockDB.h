@@ -11,9 +11,21 @@
 //---------------------------------------------------------------------------
 typedef struct
 {
+	unsigned short year;
+	unsigned short mon;
+	unsigned short day;
+	unsigned short hour;
+	unsigned short min;
+	unsigned short sec;
+	unsigned short mSec;
+} SysTime;
+extern SysTime sTime;
+//---------------------------------------------------------------------------
+typedef struct
+{
 	AnsiString str;
 } TestMSG;
-extern PACKAGE TestMSG Message;
+extern PACKAGE TestMSG RecvMsgLog;
 extern PACKAGE TestMSG SendMsgLog;
 
 typedef struct
