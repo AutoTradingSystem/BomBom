@@ -4,6 +4,7 @@
 
 #include "CLSstcokIF.h"
 #include "StockMain.h"
+#include "STDebug.h"
 #include "StockDB.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -173,7 +174,7 @@ bool __fastcall CLSstockIF::ManageRX(void)
 	RxHandler(buffer, count);
 	//Log.Write("RECV : %s [%d]", buffer, count);
 	//Log.FLdump("RX DATA", buffer, count, count);
-	Message.str.printf("RECV:[%s]", buffer);
+	RecvMsgLog.str.printf("RECV:[%s]", buffer);
 	PostMessage(StockMainF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
 	return (true);
 }
@@ -335,7 +336,7 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
 		, TDINFO.type, TDINFO.mon, TDINFO.day, TDINFO.hour, TDINFO.minute, TDINFO.stockCode,TDINFO.stockNm, TDINFO.price);
 
-	Message.str.printf("[TradeSignal] [%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
+	RecvMsgLog.str.printf("[TradeSignal] [%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
 		, TDINFO.type, TDINFO.mon, TDINFO.day, TDINFO.hour, TDINFO.minute, TDINFO.stockCode,TDINFO.stockNm, TDINFO.price);
 	PostMessage(StockMainF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
 

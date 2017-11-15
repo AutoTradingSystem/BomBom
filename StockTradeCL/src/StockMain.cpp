@@ -4,6 +4,8 @@
 #pragma hdrstop
 
 #include "StockMain.h"
+#include "STDebug.h"
+//---------------------------------------------------------------------------
 #include "StockDB.h"
 #include "CPstock.h"
 //---------------------------------------------------------------------------
@@ -34,44 +36,43 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 
 	mTcpSt = false;
 	Pstock = new CPstock("210.220.167.67", 12000);
-	tmTcpSt->Enabled = true;
+	tmStatus->Enabled = true;
 }
 //---------------------------------------------------------------------------
-//
+// MakeDirectory
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::MakeDirectory(const char* path)
 {
 	CreateDir(path);         // make log directory
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::tmTcpStTimer(TObject *Sender)
+// Timer (tmStatusTimer)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::tmStatusTimer(TObject *Sender)
 {
 	if(mTcpSt != Pstock->GetTcpStatus())
 	{
 		mTcpSt = Pstock->GetTcpStatus();
-		lbCommSt->Caption = (mTcpSt)?"ON":"OFF";
+		StatusBar->Panels->Items[3]->Text = (mTcpSt)?"ON":"OFF";
 	}
+
+    // time set
+	m_curTime = Now();
+	m_curTime.DecodeDate(&sTime.year, &sTime.mon, &sTime.day);
+	m_curTime.DecodeTime(&sTime.hour, &sTime.min, &sTime.sec, &sTime.mSec);
+	AnsiString s="";
+	s.printf("%04d-%02d-%02d %02d:%02d:%02d", sTime.year, sTime.mon, sTime.day, sTime.hour, sTime.min, sTime.sec);
+	StatusBar->Panels->Items[3]->Text=s;
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::btnEchoClick(TObject *Sender)
+// Button Event (btnDebugClick)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::btnDebugClick(TObject *Sender)
 {
 //
-	if(Pstock->SendEcho("Hello world"))
-	{
-		ShowMessage("success");
-	}
-	else
-	{
-        ShowMessage("fail");
-    }
-
+	if (STDebugF == NULL) STDebugF = new TSTDebugF(this);
+	if( !STDebugF->Visible ) STDebugF->Show();
+	if( STDebugF->WindowState == wsMinimized ) STDebugF->WindowState = wsNormal;
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::fnMessageLog(TMessage Msg)
-{
-	lbLog->Items->Add(Message.str);
-}
-void __fastcall TStockMainF::fnMessageSendLog(TMessage Msg)
-{
-    lbSendLog->Items->Add(SendMsgLog.str);
-}
+
