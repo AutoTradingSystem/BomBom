@@ -42,13 +42,18 @@ class TMainF : public TForm
 {
 __published:	// IDE-managed Components
 	TTimer *tmClock;
-	TEdit *Edit1;
-	TEdit *Edit2;
-	TEdit *Edit3;
-	TEdit *Edit4;
-	TEdit *Edit5;
+	TEdit *edMonth;
+	TEdit *edDay;
+	TEdit *edHour;
+	TEdit *edMinute;
+	TEdit *edCode;
+	TComboBox *cbMark;
+	TEdit *edName;
+	TEdit *edPrice;
+	TButton *btnSend;
 	void __fastcall tmClockTimer(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
+	void __fastcall btnSendClick(TObject *Sender);
 private:	// User declarations
 	void __fastcall fnSysLog(TMessage Msg);
 	void __fastcall fnSysLog(AnsiString strLog, int iMsgLevel);

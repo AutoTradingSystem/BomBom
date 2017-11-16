@@ -240,5 +240,11 @@ void __fastcall TMainF::FormShow(TObject *Sender)
         Close();
 	}
 }
+
+//---------------------------------------------------------------------------
+void __fastcall TMainF::btnSendClick(TObject *Sender)
+{
+//
+}
 //---------------------------------------------------------------------------
 
