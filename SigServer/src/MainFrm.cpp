@@ -13,6 +13,7 @@ wzMQueue<int, String>    SysLogQ;
 wzMQueue<int, SIG_COMMLOG>  SigCommLogQ;
 //---------------------------------------------------------------------------
 //  브랜치 테스트
+// 내저정소 먼저 Push
 //---------------------------------------------------------------------------
 __fastcall TMainF::TMainF(TComponent* Owner)
 	: TForm(Owner)
