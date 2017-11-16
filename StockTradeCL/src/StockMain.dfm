@@ -11,6 +11,7 @@ object StockMainF: TStockMainF
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object StatusBar: TStatusBar
@@ -28,13 +29,12 @@ object StockMainF: TStockMainF
         Width = 50
       end
       item
-        Width = 650
+        Width = 600
       end
       item
-        Width = 50
+        Alignment = taRightJustify
+        Width = 100
       end>
-    ExplicitTop = 583
-    ExplicitWidth = 968
   end
   object pnlMain: TPanel
     Left = 0
@@ -43,9 +43,6 @@ object StockMainF: TStockMainF
     Height = 649
     Align = alClient
     TabOrder = 1
-    ExplicitTop = -6
-    ExplicitWidth = 968
-    ExplicitHeight = 583
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -53,7 +50,6 @@ object StockMainF: TStockMainF
       Height = 90
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 966
       object pnlTopMenu: TPanel
         Left = 1
         Top = 42
@@ -61,8 +57,6 @@ object StockMainF: TStockMainF
         Height = 47
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 964
-        ExplicitHeight = 54
         object btnDebug: TButton
           Left = 8
           Top = 4
@@ -80,11 +74,10 @@ object StockMainF: TStockMainF
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 962
         object Label1: TLabel
           Left = 376
           Top = 5
-          Width = 217
+          Width = 171
           Height = 25
           Alignment = taCenter
           Caption = 'AutoTrading Client'
@@ -98,6 +91,14 @@ object StockMainF: TStockMainF
           ParentFont = False
         end
       end
+    end
+    object KHOpenAPI: TKHOpenAPI
+      Left = 896
+      Top = 560
+      Width = 100
+      Height = 33
+      TabOrder = 1
+      ControlData = {02000100560A00006903000000000000}
     end
   end
   object tmStatus: TTimer

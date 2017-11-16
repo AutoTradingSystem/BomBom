@@ -10,6 +10,7 @@
 #include "CPstock.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#pragma link "KHOpenAPILib_OCX"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 // Global
@@ -75,4 +76,16 @@ void __fastcall TStockMainF::btnDebugClick(TObject *Sender)
 	if( STDebugF->WindowState == wsMinimized ) STDebugF->WindowState = wsNormal;
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TStockMainF::FormShow(TObject *Sender)
+{
+	long Result = KHOpenAPI->CommConnect();
+
+	if(Result != 0)
+		StatusBar->Panels->Items[2]->Text = "Login창 불러오기 실패";
+	else
+		StatusBar->Panels->Items[2]->Text = "Login창 열림";
+}
+//---------------------------------------------------------------------------
+
 

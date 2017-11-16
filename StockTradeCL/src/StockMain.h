@@ -9,6 +9,8 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.ComCtrls.hpp>
+#include "KHOpenAPILib_OCX.h"
+#include <Vcl.OleCtrls.hpp>
 //---------------------------------------------------------------------------
 // User Message
 //---------------------------------------------------------------------------
@@ -25,8 +27,10 @@ __published:	// IDE-managed Components
 	TPanel *pnlTopMenu;
 	TLabel *Label1;
 	TButton *btnDebug;
+	TKHOpenAPI *KHOpenAPI;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
