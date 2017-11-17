@@ -28,21 +28,21 @@ __fastcall SigCommServer::SigCommServer( int port ) : TThread(true)
     FreeOnTerminate = true;
 	localPort   = port;
     hDumpFile   = NULL;
-    connectWaiting  = false;
+	connectWaiting  = false;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall SigCommServer::SetStop( bool waiting )
 {
 	SigCommWorker **pWorker;
-    connectWaiting = waiting;
+	connectWaiting = waiting;
 	if( connectWaiting )
     {
-        pWorker = activeWorkers.navFirst();
-        while( pWorker!=NULL )
+		pWorker = activeWorkers.navFirst();
+		while( pWorker!=NULL )
         {
-            (*pWorker)->running = false;
-            pWorker = activeWorkers.navNext();
+			(*pWorker)->running = false;
+			pWorker = activeWorkers.navNext();
         }
     }
 }
@@ -116,6 +116,8 @@ void __fastcall SigCommServer::Execute()
 			if( !connectWaiting )      		// setSTOP이 있기전까지 true
 			{
 				cSock = new TcpSocket();    // TCP 소켓 생성
+				strLog.sprintf(L"accepting....");
+				MainF->SysLog(strLog.c_str(), 1, true);
 				sSocket->accept(cSock);     // sSocket(서버소켓)에서 accept 전까지[대기]
 
 				if( connectWaiting )        // setSTOP 요청시 클라이언트 소켓 닫기
@@ -124,13 +126,15 @@ void __fastcall SigCommServer::Execute()
 					delete cSock;
 					continue;
 				}
+				strLog.sprintf(L"accepted");
+				MainF->SysLog(strLog.c_str(), 1, true);
 				worker = new SigCommWorker(cSock); 	// 연결된 cSock, worker쓰레드로 생성
-				pendingWorkers.push( worker->ThreadID, worker);
+				pendingWorkers.push( worker->ThreadID, worker);         // 대기중인 (쓰레드Id, 소켓)
 				worker->SetPendingID( worker->ThreadID );
-				worker->StartProcess();
+				worker->StartProcess();                               // worker 쓰레드 동작
 
 				String convChartoStr = worker->GetAddress();
-				strLog.sprintf( L"[SIG_Client] 통신접속PND[%d] %s : %d", worker->ThreadID,convChartoStr, cSock->getPort());
+				strLog.sprintf( L"[SIG_Client] 통신접속PND[%d] %s : %d", worker->ThreadID,convChartoStr/*IP*/, cSock->getPort());
 				if( MainF != NULL ) MainF->SysLog(strLog.c_str(), 1, true);
 			}
 		}
@@ -180,11 +184,11 @@ bool __fastcall SigCommServer::AddSendToMdt(int mdtID, const SgPacket *p)
 SigCommWorker* SigCommServer::GetWorker(int bitID)
 {
 	SigCommWorker *pWorker;
-    if( activeWorkers.get( bitID, &pWorker ) ) {
+	if( activeWorkers.get( bitID, &pWorker ) ) {
         return pWorker;
     }
 
-    return NULL;
+	return NULL;
 }
 
 //---------------------------------------------------------------------------
@@ -192,7 +196,7 @@ SigCommWorker* SigCommServer::SetActiveWorker(int pendingID, int runningID)
 {
 	SigCommWorker* pWorker = NULL;
 
-    if( pendingWorkers.pop( pendingID, &pWorker ) )
+	if( pendingWorkers.pop( pendingID, &pWorker ) )
     {
 		sigCommSvr->activeWorkers.push( runningID, pWorker );
         pWorker->SetRunningID( runningID );

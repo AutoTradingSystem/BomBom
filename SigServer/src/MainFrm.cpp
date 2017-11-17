@@ -12,10 +12,7 @@ TMainF *MainF;
 wzMQueue<int, String>    SysLogQ;
 wzMQueue<int, SIG_COMMLOG>  SigCommLogQ;
 //---------------------------------------------------------------------------
-//  브랜치 테스트
-// 내저정소 먼저 Push
-// pushpush
-// 길동아 보봐
+//
 //---------------------------------------------------------------------------
 __fastcall TMainF::TMainF(TComponent* Owner)
 	: TForm(Owner)
@@ -244,6 +241,13 @@ void __fastcall TMainF::FormShow(TObject *Sender)
 		ShowMessage("program is already running or the port is being used by another application.");
         Close();
 	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TMainF::Button1Click(TObject *Sender)
+{
+	static bool threadStop = true;
+	sigCommSvr->SetStop(threadStop);
+	threadStop =!threadStop;
 }
 //---------------------------------------------------------------------------
 

@@ -641,8 +641,8 @@ void __fastcall SigCommWorker::ProcessPacket(LP_IOPACKET_HEADER h, SgPacket* p)
 			strLog.sprintf( "[DEV_%05d] RECV [%02X:%4d] HeartBeat수신", connDevID, h->opCode, h->length );
 			MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
 
-//			SendHeartBeatRes(h);
-			SendMeasuSig(h,'b',10271805,"005930","삼성전자",2645000);
+			SendHeartBeatRes(h);
+//			SendMeasuSig(h,'b',10271805,"005930","삼성전자",2645000);
 			break;
 
 		// 로그아웃
@@ -1301,11 +1301,35 @@ void __fastcall SigCommWorker::SendHeartBeatRes(const LP_IOPACKET_HEADER h)
 
 //----------------------------------------------------------------------
 // SendMeasuSig
-//
-// OPCODE : 0x01
+// OPCODE : 0x20
+// Input Value Send
 //----------------------------------------------------------------------
 void __fastcall SigCommWorker::SendMeasuSig(const LP_IOPACKET_HEADER h, char sigType, int eventTime, AnsiString code, AnsiString jName, int price)
 {
+	SgPacket p;
+	int off;
+	unsigned char dataBuf[48];
+	dataBuf[0] = sigType;  						// 구분
+	setInt4(dataBuf,1,eventTime);  				// 시간
+	snprintf(&dataBuf[5],7,"%s",code);  		// 코드
+	snprintf(&dataBuf[12],32,"%s",jName);  		// 종목명
+	setInt4(dataBuf,44,price);                  // 가격
+
+	// HEADER
+	p.setSTX(0x7E,0);
+	p.setSTX(0x7E,1);
+	p.setDataLength(49);	// Define 할것
+	p.setStatus(0);
+	p.setOpCode(0x20);
+	p.setSeqNo(h->seqNo);
+	// DATA
+	p.setBytes(7,dataBuf,0,48);
+	p.setLRC(0);
+
+	qSendPacket.push(p);
+
+	//=============================================================================== Old ======
+	/*
 	AnsiString strLog;
 	unsigned char txBuf[IOP_HEADER_SIZE+49];
 	unsigned char sigBuf[48];
@@ -1328,13 +1352,11 @@ void __fastcall SigCommWorker::SendMeasuSig(const LP_IOPACKET_HEADER h, char sig
 
 	memcpy(&txBuf[7], sigBuf, 48);
 	txBuf[55] = 0;
+//	cSock->send( (char *)txBuf, IOP_HEADER_SIZE + 49);  */
 
-
-
-	cSock->send( (char *)txBuf, IOP_HEADER_SIZE + 49);
-
-	strLog.sprintf( "[DEV_%05d] SEND [%02X:%4d] SendMeasuSig", connDevID, 0x80, 2 );
-	MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
+	AnsiString strLog;
+	strLog.sprintf( "[DEV_%05d] SEND [%02X] SendMeasuSig", connDevID, 0x20);
+	MainF->SysLog( strLog.c_str(), 1, true);
 }
 
 
@@ -1344,10 +1366,10 @@ void __fastcall SigCommWorker::SendMeasuSig(const LP_IOPACKET_HEADER h, char sig
 void __fastcall SigCommWorker::SendPacketToIDev(const SgPacket* p)
 {
 /*
-    AnsiString strLog;
+	AnsiString strLog;
 	unsigned short seqNo;
 
-	char* buf = (char *)( p->getBytes() );
+	char* buf = (char *)( p->getBytes());
 	unsigned short len = p->getLength();
 
 	if( !p->staticSeq ) {
@@ -1360,13 +1382,14 @@ void __fastcall SigCommWorker::SendPacketToIDev(const SgPacket* p)
 	}
 	catch (...) {
 		strLog.sprintf( "[DEV_%05d] SEND [%02X:%4d] Failed", connDevID, p->getOpCode(), len );
-		MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
+//		MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
+		MainF->SysLog(strLog.c_str(), 1, true);
 	}
+              */
 
-
-	if( MainF->ckSigCommLog->Checked ) {
-		CommDump( connDevID, (char *)p->getBytes(), len, "SEND");
-	}         */
+//	if( MainF->ckSigCommLog->Checked ) {
+//		CommDump( connDevID, (char *)p->getBytes(), len, "SEND");
+//	}
 }
 
 //---------------------------------------------------------------------------
@@ -1404,7 +1427,7 @@ void __fastcall SigCommWorker::Finalize()
 //	IDevInfoLock->rdUnlock();    // rdUnlock
 	//==============================================
 
-    qSendPacket.clear();
+	qSendPacket.clear();
 	qWaitPacket.clear();
 
     delete qrySel;

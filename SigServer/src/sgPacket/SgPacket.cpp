@@ -63,8 +63,34 @@ unsigned char SgPacket::getOpCode()
 //---------------------------------------------------------------------
 void SgPacket::setOpCode(unsigned char opcode)
 {
-	buf[1] = opcode;
+	buf[5] = opcode;
 }
+
+//---------------------------------------------------------------------
+void SgPacket::setSTX(unsigned char stxCode, int off)
+{
+	buf[off] = stxCode;
+}
+
+//---------------------------------------------------------------------
+void SgPacket::setStatus(unsigned char status)
+{
+	buf[4] = status;
+}
+
+//---------------------------------------------------------------------
+void SgPacket::setMesuMark(int off)
+{
+	buf[off] = 'B';
+}
+
+//---------------------------------------------------------------------
+void SgPacket::setMeDoMark(int off)
+{
+	buf[off] = 'S';
+}
+
+
 
 //---------------------------------------------------------------------
 unsigned short int SgPacket::getSeqNo()
@@ -75,7 +101,15 @@ unsigned short int SgPacket::getSeqNo()
 //---------------------------------------------------------------------
 void SgPacket::setSeqNo( unsigned short seqNo )
 {
-	setUInt2( buf, 2, seqNo );
+	buf[6] = seqNo;
+//	setUInt2( buf, 2, seqNo );
+}
+
+//---------------------------------------------------------------------
+void SgPacket::setLRC( unsigned short lrc )
+{
+	buf[55] = lrc;
+//	setUInt2( buf, 2, seqNo );
 }
 
 
@@ -92,9 +126,12 @@ void SgPacket::setDeviceID( unsigned int deviceID )
 }
 
 //---------------------------------------------------------------------
+// 패킷 전체길이
+//---------------------------------------------------------------------
 unsigned short SgPacket::getLength()
 {
-	return IOP_HEADER_SIZE + getUInt2( buf, 7 );
+	return IOP_HEADER_SIZE + getUInt2(buf,2);
+//	return IOP_HEADER_SIZE + getUInt2( buf, 7 );
 }
 
 //---------------------------------------------------------------------
@@ -106,7 +143,7 @@ unsigned short SgPacket::getDataLength()
 //---------------------------------------------------------------------
 void SgPacket::setDataLength( unsigned short len )
 {
-	setUInt2( buf, 7, len );
+	setUInt2( buf, 2, len );
 }
 
 //---------------------------------------------------------------------

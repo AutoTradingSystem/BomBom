@@ -47,8 +47,10 @@ __published:	// IDE-managed Components
 	TEdit *Edit3;
 	TEdit *Edit4;
 	TEdit *Edit5;
+	TButton *Button1;
 	void __fastcall tmClockTimer(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
+	void __fastcall Button1Click(TObject *Sender);
 private:	// User declarations
 	void __fastcall fnSysLog(TMessage Msg);
 	void __fastcall fnSysLog(AnsiString strLog, int iMsgLevel);

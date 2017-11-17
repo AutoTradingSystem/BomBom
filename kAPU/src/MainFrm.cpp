@@ -330,7 +330,7 @@ void __fastcall TMecaBackF::SendOrderVictory(bool buy, String code, int price)
 	{
         pOrderType = 2;
     }
-	long pOrderType = cbOrderType->ItemIndex + 1;
+	pOrderType = cbOrderType->ItemIndex + 1;
 
 	long pQuantity = 1;//StrToIntDef(edOrder3->Text,0);
 	long pPrice = price;

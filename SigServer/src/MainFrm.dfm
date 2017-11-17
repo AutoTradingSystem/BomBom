@@ -54,6 +54,15 @@ object MainF: TMainF
     TabOrder = 4
     Text = 'Edit1'
   end
+  object Button1: TButton
+    Left = 360
+    Top = 16
+    Width = 73
+    Height = 17
+    Caption = 'Button1'
+    TabOrder = 5
+    OnClick = Button1Click
+  end
   object tmClock: TTimer
     Enabled = False
     OnTimer = tmClockTimer

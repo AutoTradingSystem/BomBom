@@ -60,6 +60,11 @@ public:
 	unsigned short getSeqNo();
 
 	void setSeqNo( unsigned short seqNo );
+	void setSTX(unsigned char stxCode, int off);
+	void setStatus(unsigned char status);
+	void setMesuMark(int off);
+	void setMeDoMark(int off);
+    void setLRC( unsigned short lrc );
 
 	unsigned char getByte(int idx);
 
