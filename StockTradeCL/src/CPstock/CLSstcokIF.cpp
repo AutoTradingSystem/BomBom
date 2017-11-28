@@ -322,22 +322,22 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	int sigTime;
 	char buffer[TCPBUF_LEN];
 	memcpy(buffer, &m_message[DATA], m_length-HEARD_LEN);
-	TDINFO.type = buffer[idx];      idx += 1;
+	TDSINFO.type = buffer[idx];      idx += 1;
 
 	sigTime = GetNumber(&buffer[idx], 4);
-	TDINFO.minute = sigTime % 100;    sigTime /= 100;
-	TDINFO.hour = sigTime % 100;      sigTime /= 100;
-	TDINFO.day = sigTime % 100;   	  sigTime /= 100;
-	TDINFO.mon = sigTime % 100;		  idx += 4;
-	memcpy(TDINFO.stockCode, &buffer[idx], 7);      idx += 7;
-	memcpy(TDINFO.stockNm, &buffer[idx], 32);    	idx += 32;
-	TDINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
+	TDSINFO.minute = sigTime % 100;    sigTime /= 100;
+	TDSINFO.hour = sigTime % 100;      sigTime /= 100;
+	TDSINFO.day = sigTime % 100;   	  sigTime /= 100;
+	TDSINFO.mon = sigTime % 100;		  idx += 4;
+	memcpy(TDSINFO.stockCode, &buffer[idx], 7);      idx += 7;
+	memcpy(TDSINFO.stockNm, &buffer[idx], 32);    	idx += 32;
+	TDSINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
 
 	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
-		, TDINFO.type, TDINFO.mon, TDINFO.day, TDINFO.hour, TDINFO.minute, TDINFO.stockCode,TDINFO.stockNm, TDINFO.price);
+		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);
 
 	RecvMsgLog.str.printf("[TradeSignal] [%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
-		, TDINFO.type, TDINFO.mon, TDINFO.day, TDINFO.hour, TDINFO.minute, TDINFO.stockCode,TDINFO.stockNm, TDINFO.price);
+		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);
 	PostMessage(StockMainF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
 
 	SendACK(m_message[OPCODE]);

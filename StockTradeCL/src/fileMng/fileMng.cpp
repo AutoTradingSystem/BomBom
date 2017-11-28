@@ -14,7 +14,7 @@ CLSlog fileMngLog;
 //---------------------------------------------------------------------------
 int SetFileMngLogDir(const char *logDir)
 {
-	fileMngLog = CLSlog("FileMng", logDir);
+	fileMngLog = CLSlog(_T("FileMng"), logDir);
 }
 //---------------------------------------------------------------------------
 // removeFile
@@ -22,10 +22,10 @@ int SetFileMngLogDir(const char *logDir)
 int CreateDir(const char *path)
 {
 	TCHAR logMsg[1024];
-	_tcscpy(logMsg,"[mkdir]");
+	_tcscpy(logMsg,_T("[mkdir]"));
 	_tcscat(logMsg, path);
 
-	fileMngLog.Write("mkdir...");
+	fileMngLog.Write(_T("mkdir..."));
 	if(CreateDirectory(path, NULL) != 0)
 	{
 		fileMngLog.Write(logMsg);
@@ -57,7 +57,7 @@ int SearchDir(const char *root, const char *targetDir)
 	hFind = FindFirstFile(DirSpec, &FindData);
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
-		fileMngLog.Write("[FILE] INVALID_HANDLE_VALUE");
+		fileMngLog.Write(_T("[FILE] INVALID_HANDLE_VALUE"));
 		return -1;
 	}
 	else
@@ -100,7 +100,7 @@ int removeFileFromCurDIR(const char *dir)
 	hFind = FindFirstFile(DirSpec, &FindData);
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
-		fileMngLog.Write("[FILE] INVALID_HANDLE_VALUE");
+		fileMngLog.Write(_T("[FILE] INVALID_HANDLE_VALUE"));
 		return -1;
 	}
 	else
@@ -112,7 +112,7 @@ int removeFileFromCurDIR(const char *dir)
 			{
 				//remove file
 				remove(FindData.cFileName);
-				_tcscpy(logMsg, "[remove file]");
+				_tcscpy(logMsg, _T("[remove file]"));
 				_tcscat(logMsg, FindData.cFileName);
 
 				fileMngLog.Write(logMsg);
@@ -149,8 +149,8 @@ DWORD FileType (LPWIN32_FIND_DATA pFileData)
 	FType = TYPE_FILE;
 	IsDir = (pFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 	if (IsDir)
-		if (lstrcmp (pFileData->cFileName,  (".")) == 0
-				|| lstrcmp (pFileData->cFileName,  ("..")) == 0)
+		if (lstrcmp (pFileData->cFileName,  (_T("."))) == 0
+				|| lstrcmp (pFileData->cFileName,  (_T(".."))) == 0)
 			FType = TYPE_DOT;
 		else FType = TYPE_DIR;
 	return FType;

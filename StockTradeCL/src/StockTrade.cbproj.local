@@ -3,11 +3,11 @@
 	<Transactions>
     <Transaction>1899-12-30 00:00:00.000.107,C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.dfm</Transaction>
     <Transaction>1899-12-30 00:00:00.000.672,C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Project1PCH1.h=D:\work\Builder\Berlin\01.Study PJT\src\Project1PCH1.h</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.296,=C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.883,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.940,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.218,D:\Work\Study\01.Study PJT\src\StockTrade.cbproj=D:\Work\Study\01.Study PJT\src\StockDeal.cbproj</Transaction>
     <Transaction>1899-12-30 00:00:00.000.653,=C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.310,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.073,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.218,D:\Work\Study\01.Study PJT\src\StockTrade.cbproj=D:\Work\Study\01.Study PJT\src\StockDeal.cbproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.296,=C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
     <Transaction>1899-12-30 00:00:00.000.482,=D:\work\Builder\Berlin\01.Study PJT\src\GenLib\CLStbObject.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.613,D:\Work\Study\BomBom\StockTradeCL\src\Unit1.cpp=D:\Work\Study\BomBom\StockTradeCL\src\STDebug.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.237,=D:\Work\Study\BomBom\StockTradeCL\src\Unit1.cpp</Transaction>
@@ -17,12 +17,12 @@
     <Transaction>1899-12-30 00:00:00.000.082,D:\Work\Study\01.Study PJT\src\Define.h=D:\Work\Study\01.Study PJT\src\File1.h</Transaction>
     <Transaction>1899-12-30 00:00:00.000.132,D:\Work\Study\01.Study PJT\src\StockTradePCH1.h=D:\Work\Study\01.Study PJT\src\StockDealPCH1.h</Transaction>
     <Transaction>1899-12-30 00:00:00.000.107,C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Unit1.h=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.h</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.753,=D:\Work\Study\StockTradeCL\src\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.214,D:\Work\Study\StockTradeCL\src\Unit1.cpp=D:\Work\Study\StockTradeCL\src\fileMng.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.753,=D:\Work\Study\StockTradeCL\src\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.616,D:\work\Builder\Berlin\01.Study PJT\src\Unit1.dfm=D:\work\Builder\Berlin\01.Study PJT\src\StockMain.dfm</Transaction>
     <Transaction>1899-12-30 00:00:00.000.806,D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp=D:\work\Builder\Berlin\01.Study PJT\src\CPstock.cpp</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.310,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.073,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.883,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.940,=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.488,D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp=D:\work\Builder\Berlin\01.Study PJT\src\StockDB.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.650,D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp=D:\work\Builder\Berlin\01.Study PJT\src\THRclient.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.616,D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp=D:\work\Builder\Berlin\01.Study PJT\src\StockMain.cpp</Transaction>
@@ -40,8 +40,8 @@
     <Transaction>1899-12-30 00:00:00.000.492,=D:\work\Builder\Berlin\01.Study PJT\src\GenLib\CLStcp.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.650,D:\work\Builder\Berlin\01.Study PJT\src\Unit1.h=D:\work\Builder\Berlin\01.Study PJT\src\THRclient.h</Transaction>
     <Transaction>1899-12-30 00:00:00.000.806,D:\work\Builder\Berlin\01.Study PJT\src\Unit1.h=D:\work\Builder\Berlin\01.Study PJT\src\CPstock.h</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.353,=C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.107,C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Unit1.cpp=D:\work\Builder\Berlin\01.Study PJT\src\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.353,=C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.670,=C:\Users\gildong\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.784,D:\Work\Study\StockTradeCL\src\fileMng.h=D:\Work\Study\StockTradeCL\src\fileMng\fileMng.h</Transaction>
     <Transaction>1899-12-30 00:00:00.000.243,D:\work\Builder\Berlin\01.Study PJT\src\StockDB.h=D:\work\Builder\Berlin\01.Study PJT\src\inc\StockDB.h</Transaction>
