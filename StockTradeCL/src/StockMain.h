@@ -66,7 +66,13 @@ __published:	// IDE-managed Components
 	TEdit *edOrderNumber;
 	TPanel *Panel3;
 	TLabel *Label15;
+	TPanel *Panel4;
+	TLabel *Label16;
 	TStringGrid *sgSiglog;
+	TButton *btnOutstandingLog;
+	TButton *Button1;
+	TButton *Button2;
+	TStringGrid *sgTradeLog;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -85,6 +91,8 @@ public:		// User declarations
 
 	void __fastcall SetSigLogGrid();
 	void __fastcall SetSigLogGridTitle();
+	void __fastcall SetTradeLogGrid();
+	void __fastcall SetTradeLogGridTitle();
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TStockMainF *StockMainF;

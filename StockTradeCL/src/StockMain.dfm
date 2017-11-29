@@ -3,7 +3,7 @@ object StockMainF: TStockMainF
   Top = 0
   Caption = 'StockMainF'
   ClientHeight = 803
-  ClientWidth = 1413
+  ClientWidth = 1808
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object StockMainF: TStockMainF
   object StatusBar: TStatusBar
     Left = 0
     Top = 784
-    Width = 1413
+    Width = 1808
     Height = 19
     Panels = <
       item
@@ -35,34 +35,32 @@ object StockMainF: TStockMainF
         Alignment = taRightJustify
         Width = 100
       end>
-    ExplicitTop = 649
-    ExplicitWidth = 1020
+    ExplicitWidth = 1413
   end
   object pnlBgd: TPanel
     Left = 0
     Top = 0
-    Width = 1413
+    Width = 1808
     Height = 784
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1020
-    ExplicitHeight = 649
+    ExplicitWidth = 1413
     object pnlTop: TPanel
       Left = 1
       Top = 1
-      Width = 1411
+      Width = 1806
       Height = 90
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 1018
+      ExplicitWidth = 1411
       object pnlTopMenu: TPanel
         Left = 1
         Top = 42
-        Width = 1409
+        Width = 1804
         Height = 47
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 1336
+        ExplicitWidth = 1409
         object btnDebug: TButton
           Left = 8
           Top = 4
@@ -72,19 +70,61 @@ object StockMainF: TStockMainF
           TabOrder = 0
           OnClick = btnDebugClick
         end
+        object btnOutstandingLog: TButton
+          Left = 89
+          Top = 4
+          Width = 114
+          Height = 37
+          Caption = #48120#52404#44208' '#45236#50669
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+        end
+        object Button1: TButton
+          Left = 209
+          Top = 4
+          Width = 114
+          Height = 37
+          Caption = #44228#51340#51092#44256'('#49345#49464')'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+        end
+        object Button2: TButton
+          Left = 329
+          Top = 4
+          Width = 114
+          Height = 37
+          Caption = #49444#51221
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 3
+        end
       end
       object pnlTitle: TPanel
         Left = 1
         Top = 1
-        Width = 1409
+        Width = 1804
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 1016
+        ExplicitWidth = 1409
         object Label1: TLabel
           Left = 0
           Top = 5
-          Width = 1337
+          Width = 171
           Height = 25
           Alignment = taCenter
           Caption = 'AutoTrading Client'
@@ -114,9 +154,6 @@ object StockMainF: TStockMainF
       Height = 692
       Align = alLeft
       TabOrder = 2
-      ExplicitLeft = 2
-      ExplicitTop = 90
-      ExplicitHeight = 689
       object pnlUserInfo: TPanel
         Left = 1
         Top = 1
@@ -282,10 +319,6 @@ object StockMainF: TStockMainF
         Color = 14540253
         ParentBackground = False
         TabOrder = 2
-        ExplicitLeft = 9
-        ExplicitTop = 264
-        ExplicitWidth = 185
-        ExplicitHeight = 41
         object Label8: TLabel
           Left = 8
           Top = 1
@@ -481,7 +514,6 @@ object StockMainF: TStockMainF
         Align = alBottom
         ParentBackground = False
         TabOrder = 3
-        ExplicitTop = 576
         object Label13: TLabel
           Left = 8
           Top = 1
@@ -500,22 +532,54 @@ object StockMainF: TStockMainF
     object pnlMain: TPanel
       Left = 217
       Top = 91
-      Width = 1195
+      Width = 1590
       Height = 692
       Align = alClient
       TabOrder = 3
-      ExplicitLeft = 185
-      ExplicitTop = 86
-      ExplicitWidth = 1153
-      ExplicitHeight = 689
+      ExplicitWidth = 1195
       object Panel3: TPanel
+        Left = 683
+        Top = 1
+        Width = 906
+        Height = 690
+        Align = alClient
+        TabOrder = 0
+        ExplicitTop = -3
+        object Label15: TLabel
+          Left = 7
+          Top = 1
+          Width = 109
+          Height = 21
+          Caption = #47588#49688'/'#47588#46020' '#45236#50669
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object sgTradeLog: TStringGrid
+          Tag = 1
+          Left = 6
+          Top = 28
+          Width = 892
+          Height = 655
+          ColCount = 8
+          FixedCols = 0
+          TabOrder = 0
+          OnDrawCell = sgSiglogDrawCell
+        end
+      end
+      object Panel4: TPanel
         Left = 1
         Top = 1
-        Width = 744
+        Width = 682
         Height = 690
         Align = alLeft
-        TabOrder = 0
-        object Label15: TLabel
+        TabOrder = 1
+        ExplicitLeft = 9
+        ExplicitTop = 2
+        object Label16: TLabel
           Left = 7
           Top = 1
           Width = 124
@@ -529,14 +593,28 @@ object StockMainF: TStockMainF
           ParentFont = False
         end
         object sgSiglog: TStringGrid
-          Left = 5
+          Left = 6
           Top = 28
-          Width = 700
+          Width = 670
           Height = 655
           ColCount = 6
           FixedCols = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goTabs, goThumbTracking, goFixedRowClick]
           TabOrder = 0
           OnDrawCell = sgSiglogDrawCell
+          ColWidths = (
+            64
+            64
+            64
+            64
+            64
+            64)
+          RowHeights = (
+            24
+            24
+            24
+            24
+            24)
         end
       end
     end

@@ -44,12 +44,14 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::SetSigLogGrid()
 {
+	int w0 = 150, w1 = 70, w2 = 130, w3 = 70, w4 = 120, w5 = 120;
+	int sgWidth = w0 + w1 + w2 + w3 + w4 + w5+4;
 	sgSiglog->ColWidths[0] = 150;
 	sgSiglog->ColWidths[1] = 70;
 	sgSiglog->ColWidths[2] = 130;
-	sgSiglog->ColWidths[3] = 70;
 	sgSiglog->ColWidths[4] = 120;
 	sgSiglog->ColWidths[5] = 120;
+	sgSiglog->Width = sgWidth;
 }
 //---------------------------------------------------------------------------
 // SetSigLogGridTitle
@@ -67,12 +69,50 @@ void __fastcall TStockMainF::SetSigLogGridTitle()
 	pRow[0].Strings[5]="현제가";
 }
 //---------------------------------------------------------------------------
+// SetTradeLogGrid
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::SetTradeLogGrid()
+{
+	//sgTradeLog 892
+	int w0 = 100, w1 = 100, w2 = 130, w3 = 100, w4 = 100, w5 = 100, w6 = 100, w7 = 150;
+	int sgWidth = w0 + w1 + w2 + w3 + w4 + w5+ w6 + w7 + 12;
+	sgTradeLog->ColWidths[0] = 100;
+	sgTradeLog->ColWidths[1] = 100;
+	sgTradeLog->ColWidths[2] = 130;
+	sgTradeLog->ColWidths[3] = 100;
+	sgTradeLog->ColWidths[4] = 100;
+	sgTradeLog->ColWidths[5] = 100;
+	sgTradeLog->ColWidths[6] = 100;
+	sgTradeLog->ColWidths[7] = 150;
+	sgTradeLog->Width = sgWidth;
+}
+//---------------------------------------------------------------------------
+// SetTradeLogGridTitle
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::SetTradeLogGridTitle()
+{
+
+	sgTradeLog->RowCount = 1;
+	TStrings *pRow = sgTradeLog->Rows[0];
+
+	pRow[0].Strings[0]="시간";
+	pRow[0].Strings[1]="종목코드";
+	pRow[0].Strings[2]="종목명";
+	pRow[0].Strings[3]="주문량";
+	pRow[0].Strings[4]="체결량";
+	pRow[0].Strings[5]="주문가";
+	pRow[0].Strings[6]="체결가";
+	pRow[0].Strings[7]="매매상태";
+}
+//---------------------------------------------------------------------------
 // Init
 //---------------------------------------------------------------------------
 bool __fastcall TStockMainF::Init()
 {
 	SetSigLogGrid();
 	SetSigLogGridTitle();
+	SetTradeLogGrid();
+	SetTradeLogGridTitle();
 }
 //---------------------------------------------------------------------------
 // MakeDirectory
@@ -92,7 +132,7 @@ void __fastcall TStockMainF::tmStatusTimer(TObject *Sender)
 		StatusBar->Panels->Items[3]->Text = (mTcpSt)?"ON":"OFF";
 	}
 
-    // time set
+	// time set
 	m_curTime = Now();
 	m_curTime.DecodeDate(&sTime.year, &sTime.mon, &sTime.day);
 	m_curTime.DecodeTime(&sTime.hour, &sTime.min, &sTime.sec, &sTime.mSec);
@@ -129,29 +169,33 @@ void __fastcall TStockMainF::sgSiglogDrawCell(TObject *Sender, int ACol, int ARo
           TRect &Rect, TGridDrawState State)
 {
 //
-	TStringGrid *pGrid = dynamic_cast<TStringGrid *>(Sender);
-	TRect rtDraw = Rect;
+	TStringGrid * pGrid = static_cast<TStringGrid *>(Sender);
+	TCanvas *pCanvas = pGrid->Canvas;
 
-//	wchar_t* wcstr = widen(cstr).c_str() ;
+	UINT Flags = DT_SINGLELINE | DT_VCENTER;
+	AnsiString sText = pGrid->Cells[ ACol ][ ARow ];
 
-	UINT uFormat = DT_RIGHT;
-	AnsiString sText = pGrid->Cells[ACol][ARow];
-	if (ARow >= pGrid->FixedRows)
+	AnsiString sTitle="";
+
+	// Title setting
+	if(ARow == 0)
 	{
-		switch (ACol)
+		Flags |= DT_CENTER;  // center the text
+		//pCanvas->Font->Style = fsBold;
+		Flags |= DT_CENTER;  // center the text
+
+		switch(pGrid->Tag)
 		{
-		case 2:
-			uFormat = DT_CENTER;
+		case 0:	// Sig Grid
+			pCanvas->Font->Color = clHighlight;
 			break;
-		case 3:
-			uFormat = DT_LEFT;
+		case 1:	// TradeLog Grid
+			pCanvas->Font->Color = clHighlight;
 			break;
 		}
+		pCanvas->FillRect( Rect );
+		DrawText( pCanvas->Handle, sText.c_str(), -1, &Rect, Flags );
 	}
-	::InflateRect(&rtDraw, -2, -2);
-
-	//::DrawText(pGrid->Canvas->Handle, sText.c_str(), sText.Length(), &rtDraw, DT_SINGLELINE | DT_VCENTER | uFormat);
-	::DrawText(pGrid->Canvas->Handle, NULL, sText.Length(), &rtDraw, DT_SINGLELINE | DT_VCENTER | uFormat);
 }
 //---------------------------------------------------------------------------
 
