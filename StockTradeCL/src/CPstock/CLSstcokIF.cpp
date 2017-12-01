@@ -175,7 +175,7 @@ bool __fastcall CLSstockIF::ManageRX(void)
 	//Log.Write("RECV : %s [%d]", buffer, count);
 	//Log.FLdump("RX DATA", buffer, count, count);
 	RecvMsgLog.str.printf("RECV:[%s]", buffer);
-	PostMessage(StockMainF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
+	PostMessage(STDebugF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
 	return (true);
 }
 //---------------------------------------------------------------------------
@@ -308,7 +308,7 @@ bool __fastcall CLSstockIF::SendMessage(BYTE code, int length, char *info)
 	}
 	Log.FLdump("TX DATA", message, txLength, txLength);
 	SendMsgLog.str.printf("TX DATA [%02x] [%02x]", message[OPCODE], message[SEQ]);
-	PostMessage(StockMainF->Handle, WM_SENDLOG, (WPARAM)0, (LPARAM)0);
+	PostMessage(STDebugF->Handle, WM_SENDLOG, (WPARAM)0, (LPARAM)0);
 	if(m_txSeq == 255)  m_txSeq = 0;
 
 	return (true);
@@ -338,7 +338,10 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 
 	RecvMsgLog.str.printf("[TradeSignal] [%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
 		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);
-	PostMessage(StockMainF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
+	PostMessage(STDebugF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
+
+	PostMessage(StockMainF->Handle, WM_SHOW_GRD_SIG, (WPARAM)0, (LPARAM)0);
+	PostMessage(StockMainF->Handle, WM_SAVE_RT_SIG, (WPARAM)0, (LPARAM)0);
 
 	SendACK(m_message[OPCODE]);
 }

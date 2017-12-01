@@ -35,7 +35,6 @@ object StockMainF: TStockMainF
         Alignment = taRightJustify
         Width = 100
       end>
-    ExplicitWidth = 1413
   end
   object pnlBgd: TPanel
     Left = 0
@@ -44,7 +43,6 @@ object StockMainF: TStockMainF
     Height = 784
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1413
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -52,7 +50,6 @@ object StockMainF: TStockMainF
       Height = 90
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 1411
       object pnlTopMenu: TPanel
         Left = 1
         Top = 42
@@ -60,7 +57,6 @@ object StockMainF: TStockMainF
         Height = 47
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 1409
         object btnDebug: TButton
           Left = 8
           Top = 4
@@ -112,6 +108,21 @@ object StockMainF: TStockMainF
           ParentFont = False
           TabOrder = 3
         end
+        object btnSaveCsv: TButton
+          Left = 449
+          Top = 4
+          Width = 114
+          Height = 37
+          Caption = 'Save CSV'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 4
+          OnClick = btnSaveCsvClick
+        end
       end
       object pnlTitle: TPanel
         Left = 1
@@ -120,7 +131,6 @@ object StockMainF: TStockMainF
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 1409
         object Label1: TLabel
           Left = 0
           Top = 5
@@ -536,7 +546,6 @@ object StockMainF: TStockMainF
       Height = 692
       Align = alClient
       TabOrder = 3
-      ExplicitWidth = 1195
       object Panel3: TPanel
         Left = 683
         Top = 1
@@ -544,7 +553,6 @@ object StockMainF: TStockMainF
         Height = 690
         Align = alClient
         TabOrder = 0
-        ExplicitTop = -3
         object Label15: TLabel
           Left = 7
           Top = 1
@@ -568,6 +576,21 @@ object StockMainF: TStockMainF
           FixedCols = 0
           TabOrder = 0
           OnDrawCell = sgSiglogDrawCell
+          ColWidths = (
+            64
+            64
+            64
+            64
+            64
+            64
+            64
+            64)
+          RowHeights = (
+            24
+            24
+            24
+            24
+            24)
         end
       end
       object Panel4: TPanel
@@ -577,8 +600,6 @@ object StockMainF: TStockMainF
         Height = 690
         Align = alLeft
         TabOrder = 1
-        ExplicitLeft = 9
-        ExplicitTop = 2
         object Label16: TLabel
           Left = 7
           Top = 1
