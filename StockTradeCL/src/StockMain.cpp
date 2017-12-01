@@ -41,7 +41,7 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 
 	mTcpSt = false;
 //	Pstock = new CPstock("210.220.167.67", 12000);
-	Pstock = new CPstock("127.0.0.1", 12000);
+	Pstock = new CPstock("192.168.6.129", 12000);
 	tmStatus->Enabled = true;
 	sgSiglog->FixedRows=1;
 	Init();
@@ -272,7 +272,7 @@ void __fastcall TStockMainF::tmStatusTimer(TObject *Sender)
 	if(mTcpSt != Pstock->GetTcpStatus())
 	{
 		mTcpSt = Pstock->GetTcpStatus();
-		StatusBar->Panels->Items[3]->Text = (mTcpSt)?"ON":"OFF";
+		StatusBar->Panels->Items[1]->Text = (mTcpSt)?"ON":"OFF";
 	}
 
 	// time set
