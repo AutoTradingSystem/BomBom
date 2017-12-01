@@ -175,7 +175,7 @@ bool __fastcall CLSstockIF::ManageRX(void)
 	//Log.Write("RECV : %s [%d]", buffer, count);
 	//Log.FLdump("RX DATA", buffer, count, count);
 	RecvMsgLog.str.printf("RECV:[%s]", buffer);
-	PostMessage(StockMainF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
+	PostMessage(STDebugF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
 	return (true);
 }
 //---------------------------------------------------------------------------
@@ -308,7 +308,7 @@ bool __fastcall CLSstockIF::SendMessage(BYTE code, int length, char *info)
 	}
 	Log.FLdump("TX DATA", message, txLength, txLength);
 	SendMsgLog.str.printf("TX DATA [%02x] [%02x]", message[OPCODE], message[SEQ]);
-	PostMessage(StockMainF->Handle, WM_SENDLOG, (WPARAM)0, (LPARAM)0);
+	PostMessage(STDebugF->Handle, WM_SENDLOG, (WPARAM)0, (LPARAM)0);
 	if(m_txSeq == 255)  m_txSeq = 0;
 
 	return (true);
@@ -322,23 +322,26 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	int sigTime;
 	char buffer[TCPBUF_LEN];
 	memcpy(buffer, &m_message[DATA], m_length-HEARD_LEN);
-	TDINFO.type = buffer[idx];      idx += 1;
+	TDSINFO.type = buffer[idx];      idx += 1;
 
 	sigTime = GetNumber(&buffer[idx], 4);
-	TDINFO.minute = sigTime % 100;    sigTime /= 100;
-	TDINFO.hour = sigTime % 100;      sigTime /= 100;
-	TDINFO.day = sigTime % 100;   	  sigTime /= 100;
-	TDINFO.mon = sigTime % 100;		  idx += 4;
-	memcpy(TDINFO.stockCode, &buffer[idx], 7);      idx += 7;
-	memcpy(TDINFO.stockNm, &buffer[idx], 32);    	idx += 32;
-	TDINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
+	TDSINFO.minute = sigTime % 100;    sigTime /= 100;
+	TDSINFO.hour = sigTime % 100;      sigTime /= 100;
+	TDSINFO.day = sigTime % 100;   	  sigTime /= 100;
+	TDSINFO.mon = sigTime % 100;		  idx += 4;
+	memcpy(TDSINFO.stockCode, &buffer[idx], 7);      idx += 7;
+	memcpy(TDSINFO.stockNm, &buffer[idx], 32);    	idx += 32;
+	TDSINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
 
 	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
-		, TDINFO.type, TDINFO.mon, TDINFO.day, TDINFO.hour, TDINFO.minute, TDINFO.stockCode,TDINFO.stockNm, TDINFO.price);
+		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);
 
 	RecvMsgLog.str.printf("[TradeSignal] [%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
-		, TDINFO.type, TDINFO.mon, TDINFO.day, TDINFO.hour, TDINFO.minute, TDINFO.stockCode,TDINFO.stockNm, TDINFO.price);
-	PostMessage(StockMainF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
+		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);
+	PostMessage(STDebugF->Handle, WM_MSGLOG, (WPARAM)0, (LPARAM)0);
+
+	PostMessage(StockMainF->Handle, WM_SHOW_GRD_SIG, (WPARAM)0, (LPARAM)0);
+	PostMessage(StockMainF->Handle, WM_SAVE_RT_SIG, (WPARAM)0, (LPARAM)0);
 
 	SendACK(m_message[OPCODE]);
 }

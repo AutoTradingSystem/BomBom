@@ -27,7 +27,9 @@ typedef struct
 } TestMSG;
 extern PACKAGE TestMSG RecvMsgLog;
 extern PACKAGE TestMSG SendMsgLog;
-
+//---------------------------------------------------------------------------
+// TradeInfo SIG
+//---------------------------------------------------------------------------
 typedef struct
 {
 	char type;
@@ -39,9 +41,9 @@ typedef struct
 	char stockNm[32];
 	unsigned int price;
 	bool valid;
-} TradeInfo;
+} TradeSigInfo;
 
-extern TradeInfo TDINFO;
+extern TradeSigInfo TDSINFO;
 
 //---------------------------------------------------------------------------
 #endif
