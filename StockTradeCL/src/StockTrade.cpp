@@ -14,6 +14,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->Initialize();
 		Application->MainFormOnTaskBar = true;
 		Application->CreateForm(__classid(TStockMainF), &StockMainF);
+		Application->CreateForm(__classid(TSTDebugF), &STDebugF);
 		Application->Run();
 	}
 	catch (Exception &exception)

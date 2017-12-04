@@ -41,7 +41,9 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 
 	mTcpSt = false;
 //	Pstock = new CPstock("210.220.167.67", 12000);
-	Pstock = new CPstock("192.168.6.129", 12000);
+//	Pstock = new CPstock("192.168.6.129", 12000);   // home
+	Pstock = new CPstock("192.168.42.128", 12000);  // lux
+//	Pstock = new CPstock("127.0.0.1", 12000);
 	tmStatus->Enabled = true;
 	sgSiglog->FixedRows=1;
 	Init();
@@ -354,6 +356,25 @@ void __fastcall TStockMainF::btnSaveCsvClick(TObject *Sender)
 //
 	SaveSigCSV_Grid();
 
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TStockMainF::mn100Click(TObject *Sender)
+{
+//
+	TMenuItem *pItem = static_cast<TMenuItem*>(Sender);
+	switch(pItem->Tag)
+	{
+	case 1:	// sys config;
+		break;
+	case 2: // login & logout
+		break;
+	case 3: // program exit
+        Close();
+    	break;
+    }
 }
 //---------------------------------------------------------------------------
 

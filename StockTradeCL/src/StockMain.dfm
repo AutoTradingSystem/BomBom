@@ -10,6 +10,7 @@ object StockMainF: TStockMainF
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = MainMenu1
   OldCreateOrder = False
   OnShow = FormShow
   PixelsPerInch = 96
@@ -59,7 +60,7 @@ object StockMainF: TStockMainF
         TabOrder = 0
         object btnDebug: TButton
           Left = 8
-          Top = 4
+          Top = 5
           Width = 75
           Height = 37
           Caption = 'Debug'
@@ -646,5 +647,28 @@ object StockMainF: TStockMainF
     OnTimer = tmStatusTimer
     Left = 880
     Top = 32
+  end
+  object MainMenu1: TMainMenu
+    Left = 896
+    Top = 408
+    object mn100: TMenuItem
+      Caption = #54028#51068
+      OnClick = mn100Click
+      object mn101: TMenuItem
+        Tag = 1
+        Caption = #49884#49828#53596' '#49444#51221
+        OnClick = mn100Click
+      end
+      object mn102: TMenuItem
+        Tag = 2
+        Caption = #47196#44536#51064'/'#47196#44536#50500#50883
+        OnClick = mn100Click
+      end
+      object mn104: TMenuItem
+        Tag = 3
+        Caption = #51333#47308
+        OnClick = mn100Click
+      end
+    end
   end
 end

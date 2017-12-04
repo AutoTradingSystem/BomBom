@@ -135,6 +135,7 @@ bool __fastcall  CLSstockIF::Manage(void)
 	default: break;
 	}
 
+
 	if(!ManageRX())
 	{
 		Log.Write("RX fail");
@@ -144,7 +145,7 @@ bool __fastcall  CLSstockIF::Manage(void)
 
 	if (!ManageTX())
 	{
-        Log.Write("TX fail");
+		Log.Write("TX fail");
 		Close();
 		return (false);
 	}

@@ -254,6 +254,7 @@ int __fastcall CLStcp::Recv(char *ptr, int length)
 
 	if ((count = recv(ID, ptr, length, 0)) < 0)
 	{
+        Log.Write("Abnomal read [%d]", WSAGetLastError());
 		return(-1);
 	}
 	// recv 오류체크 (temp)

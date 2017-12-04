@@ -12,6 +12,7 @@
 #include "KHOpenAPILib_OCX.h"
 #include <Vcl.OleCtrls.hpp>
 #include <Vcl.Grids.hpp>
+#include <Vcl.Menus.hpp>
 //---------------------------------------------------------------------------
 // User Message
 //---------------------------------------------------------------------------
@@ -77,12 +78,18 @@ __published:	// IDE-managed Components
 	TButton *Button2;
 	TStringGrid *sgTradeLog;
 	TButton *btnSaveCsv;
+	TMainMenu *MainMenu1;
+	TMenuItem *mn100;
+	TMenuItem *mn101;
+	TMenuItem *mn102;
+	TMenuItem *mn104;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall sgSiglogDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
 	void __fastcall btnSaveCsvClick(TObject *Sender);
+	void __fastcall mn100Click(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
