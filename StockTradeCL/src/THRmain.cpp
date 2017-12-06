@@ -2,92 +2,103 @@
 
 #pragma hdrstop
 
-#include "CPstock.h"
+#include "THRmain.h"
+#include "StockDB.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 //---------------------------------------------------------------------------
-// Global Variable
+// External
 //---------------------------------------------------------------------------
-int global;
+THRclient *ThrClient;
+extern THRmain *ThrMain;
 extern CLSlog Log;
-CLSstockIF TcpClient;
-CPstock *Pstock;
 //---------------------------------------------------------------------------
-// Constuctor
+// THRmain
 //---------------------------------------------------------------------------
-CPstock::CPstock(void)
+__fastcall THRmain::THRmain(void) : TThread(true)
 {
-	Log.Write("CPstock start");
+	needTerminate = false;
 }
 //---------------------------------------------------------------------------
-CPstock::CPstock(const char *ipAddr, int port)
+// ~THRmain
+//---------------------------------------------------------------------------
+__fastcall THRmain::~THRmain()
 {
-	Log.Write("CPstock start");
-	TcpClient = CLSstockIF("STOCKTCP",port, ipAddr, TCP_CLIENT);
-	InitEnv();  //작업환경 초기화
-}
-//---------------------------------------------------------------------------
-// ~CPstock
-//---------------------------------------------------------------------------
-CPstock::~CPstock(void)
-{
-	//
-}
-//---------------------------------------------------------------------------
-// InitNetwork
-//---------------------------------------------------------------------------
-bool __fastcall CPstock::InitNetwork()
-{
-	//open client socket
-	if(!TcpClient.Open())
-		return (false);
 
-    Log.Write("socket open");
-	return (true);
+}
+bool __fastcall THRmain::InitEnv()
+{
+	InitThread();
+    return true;
 }
 //---------------------------------------------------------------------------
-// InitEnv
+// start
 //---------------------------------------------------------------------------
-bool __fastcall CPstock::InitEnv()
+void __fastcall THRmain::start()
 {
-    //Network 초기화
-	if(!InitNetwork())
+    Start();
+}
+//---------------------------------------------------------------------------
+// stop
+//---------------------------------------------------------------------------
+void __fastcall THRmain::stop()
+{
+	needTerminate = true;
+}
+//---------------------------------------------------------------------------
+// InitThread
+//---------------------------------------------------------------------------
+bool __fastcall THRmain::InitThread()
+{
+	ThrClient = new THRclient();
+	Log.Write("Sub Thread[THRclient] Start");
+	ThrClient->start();
+}
+//---------------------------------------------------------------------------
+// CLmanage
+//---------------------------------------------------------------------------
+bool __fastcall THRmain::CLmanage(void)
+{
+	// Sub thread manage
+	if(ThrClient!=NULL)
 	{
-		return (false);
+		if(!ThrClient->IsRunning())
+		{
+			delete ThrClient;
+			ThrClient = new THRclient();
+			Log.Write("Manage [THRclient] Start");
+			ThrClient->start();
+		}
 	}
 }
 //---------------------------------------------------------------------------
-// ClearEnv
+// CLclearEnv
 //---------------------------------------------------------------------------
-void __fastcall CPstock::ClearEnv()
+void __fastcall THRmain::CLclearEnv(void)
 {
-	TcpClient.CloseNetwork("program exit");
+	StockSYS.Terminate = true;
+	Active = false;
 }
 //---------------------------------------------------------------------------
-// ManageThread
+// Execute(main)
 //---------------------------------------------------------------------------
-void __fastcall CPstock::ManageThread()
+void __fastcall THRmain::Execute(void)
 {
-
-}
-//---------------------------------------------------------------------------
-// GetTcpStatus
-//---------------------------------------------------------------------------
-bool __fastcall CPstock::GetTcpStatus()
-{
-	return (TcpClient.Connected);
-}
-//---------------------------------------------------------------------------
-// GetCommStatus
-//---------------------------------------------------------------------------
-bool __fastcall CPstock::GetCommStatus()
-{
-	return (TcpClient.Connected);
-}
-//---------------------------------------------------------------------------
-// SendEcho
-//---------------------------------------------------------------------------
-bool __fastcall CPstock::SendEcho(char *str)
-{
-	return (TcpClient.SendEcho(str));
+	Active = true;
+	int cycle = 0;
+	Log.Write("THRmain start");
+	InitEnv();
+	Sleep(100);
+	while( !Terminated && !needTerminate)
+	{
+//		if (cycle % 10 == 0) {
+//			cycle++;
+//			Log.Write("THRmain[%d]", cycle);
+//			if (cycle == 100000000) cycle = 0;
+//		}
+        CLmanage();	// thread manage
+		Sleep(500);
+	}
+	Log.Write("THRmain exit");
+	CLclearEnv();
 }

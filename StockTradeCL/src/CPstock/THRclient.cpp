@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include "THRclient.h"
+#include "StockDB.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
@@ -11,22 +12,25 @@
 //---------------------------------------------------------------------------
 extern int global;
 extern CLSlog Log;
+extern THRclient *ThrClient;
+extern CLSstockIF TcpClient;
 //---------------------------------------------------------------------------
 // THRclient
 //---------------------------------------------------------------------------
 __fastcall THRclient::THRclient(void) : TThread(true)
 {
-	ostringstream oss;
-	global = 5;
-	oss<<global;
-	string s=oss.str();
 
-	Log.Write(s.c_str());
 }
 //---------------------------------------------------------------------------
-__fastcall THRclient::THRclient(CLSstockIF *tcpClient) : TThread(true)
+// ~THRclient
+//---------------------------------------------------------------------------
+__fastcall THRclient::~THRclient()
 {
-	m_tcpClinet = tcpClient;
+
+}
+bool __fastcall THRclient::IsRunning(void)
+{
+    return (Active);
 }
 //---------------------------------------------------------------------------
 // test
@@ -53,31 +57,46 @@ void __fastcall THRclient::stop()
 {
 	Terminate();
 }
+void __fastcall THRclient::Kill(void)
+{
+	Terminate();
+	TCLclearEnv();
+}
+bool __fastcall THRclient::NeedTerminate()
+{
+	return (StockSYS.Terminate);
+}
 //---------------------------------------------------------------------------
 // TCLmanage
 //---------------------------------------------------------------------------
 bool __fastcall THRclient::TCLmanage(void)
 {
-	return (m_tcpClinet->Manage());
+	return (TcpClient.Manage());
 	//return (true);
 }
 void __fastcall THRclient::TCLclearEnv(void)
 {
-    m_tcpClinet->CloseNetwork("Socket Close");
+	TcpClient.CloseNetwork("Socket Close");
+}
+void __fastcall THRclient::ExitThread()
+{
+	Active = false;
 }
 //---------------------------------------------------------------------------
 // Execute
 //---------------------------------------------------------------------------
 void __fastcall THRclient::Execute()
 {
+	Active = true;
 	int cycle = 0;
-	while( !Terminated )
+	Log.Write("THRclient start");
+	while( !Terminated && !NeedTerminate())
 	{
-		if (cycle % 10 == 0) {
-			cycle++;
-			Log.Write("thread run[%d]", cycle);
-			if (cycle == 100000000) cycle = 0;
-		}
+//		if (cycle % 10 == 0) {
+//			cycle++;
+//			Log.Write("thread run[%d]", cycle);
+//			if (cycle == 100000000) cycle = 0;
+//		}
 
 		// 立加 包府
 		if (!TCLmanage())
@@ -89,6 +108,7 @@ void __fastcall THRclient::Execute()
 
 		Sleep(1000);
 	}
-	Log.Write("Thread exit");
+	Log.Write("THRclient start");
 	TCLclearEnv();
+	ExitThread();
 }

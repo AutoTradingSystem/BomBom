@@ -7,7 +7,6 @@
 //---------------------------------------------------------------------------
 #include "CLSstcokIF.h"
 #include "CLSlog.h"
-#include "THRclient.h"
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // Class
@@ -15,11 +14,9 @@
 class CPstock
 {
 private:
-	CLSstockIF *m_tcpClinet;
 	char *m_tcpClientIP;
 	int port;
 	CLSlog	m_log;
-	THRclient *m_thr;
     BYTE m_seq;
 
 	bool __fastcall InitNetwork();

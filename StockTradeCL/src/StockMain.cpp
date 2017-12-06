@@ -4,19 +4,25 @@
 #pragma hdrstop
 
 #include "StockMain.h"
+//---------------------------------------------------------------------------
 #include "STDebug.h"
+#include "SysConfFrm.h"
 //---------------------------------------------------------------------------
 #include "StockDB.h"
 #include "CPstock.h"
+#include "THRmain.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "KHOpenAPILib_OCX"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
-// Global
+// Global Variable
 //---------------------------------------------------------------------------
 TStockMainF *StockMainF;
+THRmain *ThrMain; 		// main thread
 CLSlog Log;
+
+extern THRclient *ThrClient;
 //---------------------------------------------------------------------------
 // Local
 //---------------------------------------------------------------------------
@@ -44,6 +50,11 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 //	Pstock = new CPstock("192.168.6.129", 12000);   // home
 	Pstock = new CPstock("192.168.42.128", 12000);  // lux
 //	Pstock = new CPstock("127.0.0.1", 12000);
+
+	// Main thread init
+	ThrMain = new THRmain();
+	ThrMain->start();
+
 	tmStatus->Enabled = true;
 	sgSiglog->FixedRows=1;
 	Init();
@@ -114,6 +125,29 @@ void __fastcall TStockMainF::SetTradeLogGridTitle()
 	pRow[0].Strings[5]="주문가";
 	pRow[0].Strings[6]="체결가";
 	pRow[0].Strings[7]="매매상태";
+}
+//---------------------------------------------------------------------------
+// ShowUserInfo
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::ShowUserInfo()
+{
+	if(!m_KWLogSt)
+		return ;
+
+	edUserName->Text = UInfo.uName;
+	edAccNumber->Text = UInfo.accNo;
+	edAccCnt->Text = UInfo.accCnt;
+}
+//---------------------------------------------------------------------------
+// ShowSysStatus
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::ShowSysStatus()
+{
+	if(!m_KWLogSt)
+		return ;
+
+	lbKeyBs->Caption = (UInfo.keyBs=="0"?"정상":"해지");
+	lbFireSe->Caption = (UInfo.fireSe=="0"?"미설정":(UInfo.fireSe=="1")?"설정":"해지");
 }
 //---------------------------------------------------------------------------
 // ShowGridSigInfo
@@ -260,6 +294,45 @@ bool __fastcall TStockMainF::Init()
 	SetTradeLogGridTitle();
 }
 //---------------------------------------------------------------------------
+// KWLogin
+//---------------------------------------------------------------------------
+bool __fastcall TStockMainF::KWLogin(void)
+{
+	long Result = KHOpenAPI->CommConnect();
+
+	if(Result != 0)
+		StatusBar->Panels->Items[2]->Text = "Login창 불러오기 실패";
+	else
+		StatusBar->Panels->Items[2]->Text = "Login창 열림";
+}
+//---------------------------------------------------------------------------
+// GetUserInfo
+//---------------------------------------------------------------------------
+bool __fastcall TStockMainF::GetUserInfo()
+{
+	String str="";
+	str = KHOpenAPI->GetLoginInfo(_T(L"USER_NAME"));
+	UInfo.uName = str;
+
+	str = KHOpenAPI->GetLoginInfo(_T(L"USER_ID"));
+	UInfo.uID = str;
+
+	str = KHOpenAPI->GetLoginInfo(_T(L"ACCNO"));
+	UInfo.accNo = str;
+
+	str = KHOpenAPI->GetLoginInfo(_T(L"ACCOUNT_CNT"));
+	UInfo.accCnt = str;
+
+	str = KHOpenAPI->GetLoginInfo(_T(L"KEY_BSECGB"));
+	UInfo.keyBs = str;
+
+	str = KHOpenAPI->GetLoginInfo(_T(L"FIREW_SECGB"));
+	UInfo.fireSe = str;
+
+	ShowUserInfo();
+	ShowSysStatus();
+}
+//---------------------------------------------------------------------------
 // MakeDirectory
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::MakeDirectory(const char* path)
@@ -368,13 +441,47 @@ void __fastcall TStockMainF::mn100Click(TObject *Sender)
 	switch(pItem->Tag)
 	{
 	case 1:	// sys config;
+		if (SysConfF == NULL) SysConfF = new TSysConfF(this);
+		if( !SysConfF->Visible ) SysConfF->Show();
+		if( SysConfF->WindowState == wsMinimized ) SysConfF->WindowState = wsNormal;
 		break;
 	case 2: // login & logout
+		KWLogin();
 		break;
 	case 3: // program exit
         Close();
-    	break;
+		break;
     }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TStockMainF::KHOpenAPIEventConnect(TObject *Sender, long nErrCode)
+{
+//
+	if(nErrCode == 0)
+	{
+		StatusBar->Panels->Items[2]->Text = "Login 성공";
+		m_KWLogSt = true;
+		GetUserInfo();
+	}
+	else
+        m_KWLogSt = false;
+        StatusBar->Panels->Items[2]->Text = "Login 실패";
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
+{
+//
+	Log.Write("Process exit");
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TStockMainF::Button3Click(TObject *Sender)
+{
+//
+	ThrClient->Kill();
 }
 //---------------------------------------------------------------------------
 

@@ -83,6 +83,11 @@ __published:	// IDE-managed Components
 	TMenuItem *mn101;
 	TMenuItem *mn102;
 	TMenuItem *mn104;
+	TLabel *Label17;
+	TLabel *Label18;
+	TLabel *lbKeyBs;
+	TLabel *lbFireSe;
+	TButton *Button3;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -90,11 +95,17 @@ __published:	// IDE-managed Components
           TGridDrawState State);
 	void __fastcall btnSaveCsvClick(TObject *Sender);
 	void __fastcall mn100Click(TObject *Sender);
+	void __fastcall KHOpenAPIEventConnect(TObject *Sender, long nErrCode);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall Button3Click(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
+    bool m_KWLogSt;
 
-    bool __fastcall Init();
+	bool __fastcall Init();
+	bool __fastcall KWLogin(void);
+	bool __fastcall GetUserInfo();
 
 	void __fastcall MakeDirectory(const char* path);
 public:		// User declarations
@@ -106,7 +117,9 @@ public:		// User declarations
 	void __fastcall SetTradeLogGrid();
 	void __fastcall SetTradeLogGridTitle();
 
-    void __fastcall ShowGridSigInfo();
+	void __fastcall ShowUserInfo();
+	void __fastcall ShowSysStatus();
+	void __fastcall ShowGridSigInfo();
 
 	void __fastcall SaveSigCSV_Grid(void);
 	void __fastcall SaveSigCSV_RealTime(void);

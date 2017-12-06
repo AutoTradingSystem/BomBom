@@ -287,6 +287,15 @@ void __fastcall CLStcp::SetOption(void)
 //	ioctl(ID, FIONBIO, &flag);     //linux
 }
 //------------------------------------------------------------------------------
+// SetNetworkInfo
+//------------------------------------------------------------------------------
+void __fastcall CLStcp::SetNetworkInfo(const char *ipAddr, int port)
+{
+	Close();
+	m_port = port;
+	sprintf(m_ipAddr, "%s", ipAddr);
+}
+//------------------------------------------------------------------------------
 // Write
 //------------------------------------------------------------------------------
 bool __fastcall CLStcp::Send(char *buffer, int length)

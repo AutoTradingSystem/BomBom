@@ -6,6 +6,7 @@
 //---------------------------------------------------------------------------
 USEFORM("STDebug.cpp", STDebugF);
 USEFORM("StockMain.cpp", StockMainF);
+USEFORM("SysConfFrm.cpp", SysConfF);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

@@ -12,6 +12,7 @@ object StockMainF: TStockMainF
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
+  OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -124,6 +125,15 @@ object StockMainF: TStockMainF
           TabOrder = 4
           OnClick = btnSaveCsvClick
         end
+        object Button3: TButton
+          Left = 569
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'TEST'
+          TabOrder = 5
+          OnClick = Button3Click
+        end
       end
       object pnlTitle: TPanel
         Left = 1
@@ -150,21 +160,13 @@ object StockMainF: TStockMainF
         end
       end
     end
-    object KHOpenAPI: TKHOpenAPI
-      Left = 896
-      Top = 560
-      Width = 100
-      Height = 33
-      TabOrder = 1
-      ControlData = {02000100560A00006903000000000000}
-    end
     object pnlLeft: TPanel
       Left = 1
       Top = 91
       Width = 216
       Height = 692
       Align = alLeft
-      TabOrder = 2
+      TabOrder = 1
       object pnlUserInfo: TPanel
         Left = 1
         Top = 1
@@ -528,12 +530,64 @@ object StockMainF: TStockMainF
         object Label13: TLabel
           Left = 8
           Top = 1
-          Width = 69
+          Width = 108
           Height = 21
-          Caption = 'Reserved'
+          Caption = 'System Status'
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label17: TLabel
+          Left = 8
+          Top = 26
+          Width = 59
+          Height = 13
+          Caption = #53412#48372#46300' '#48372#50504
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label18: TLabel
+          Left = 8
+          Top = 45
+          Width = 59
+          Height = 13
+          Caption = #48169#54868#48317' '#49345#53468
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lbKeyBs: TLabel
+          Left = 89
+          Top = 26
+          Width = 49
+          Height = 13
+          Caption = #51221#49345'/'#54644#51648
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lbFireSe: TLabel
+          Left = 89
+          Top = 45
+          Width = 87
+          Height = 13
+          Caption = #48120#49444#51221'/'#49444#51221'/'#54644#51648
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
           Font.Name = #47569#51008' '#44256#46357
           Font.Style = [fsBold]
           ParentFont = False
@@ -546,7 +600,7 @@ object StockMainF: TStockMainF
       Width = 1590
       Height = 692
       Align = alClient
-      TabOrder = 3
+      TabOrder = 2
       object Panel3: TPanel
         Left = 683
         Top = 1
@@ -641,6 +695,16 @@ object StockMainF: TStockMainF
       end
     end
   end
+  object KHOpenAPI: TKHOpenAPI
+    Left = 40
+    Top = 734
+    Width = 100
+    Height = 33
+    TabOrder = 2
+    Visible = False
+    OnEventConnect = KHOpenAPIEventConnect
+    ControlData = {02000100560A00006903000000000000}
+  end
   object tmStatus: TTimer
     Enabled = False
     Interval = 300
@@ -649,8 +713,8 @@ object StockMainF: TStockMainF
     Top = 32
   end
   object MainMenu1: TMainMenu
-    Left = 896
-    Top = 408
+    Left = 832
+    Top = 32
     object mn100: TMenuItem
       Caption = #54028#51068
       OnClick = mn100Click
