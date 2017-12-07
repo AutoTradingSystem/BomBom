@@ -431,9 +431,6 @@ void __fastcall TStockMainF::btnSaveCsvClick(TObject *Sender)
 
 }
 //---------------------------------------------------------------------------
-
-
-
 void __fastcall TStockMainF::mn100Click(TObject *Sender)
 {
 //
@@ -454,7 +451,6 @@ void __fastcall TStockMainF::mn100Click(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TStockMainF::KHOpenAPIEventConnect(TObject *Sender, long nErrCode)
 {
 //
@@ -470,14 +466,12 @@ void __fastcall TStockMainF::KHOpenAPIEventConnect(TObject *Sender, long nErrCod
 
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
 {
 //
 	Log.Write("Process exit");
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TStockMainF::Button3Click(TObject *Sender)
 {
 //
