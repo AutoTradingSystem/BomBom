@@ -11,7 +11,9 @@
 int global;
 extern CLSlog Log;
 CLSstockIF TcpClient;
+CLSmap Map;
 CPstock *Pstock;
+PUBLIC_MEM PublicMem;
 //---------------------------------------------------------------------------
 // Constuctor
 //---------------------------------------------------------------------------
@@ -46,10 +48,22 @@ bool __fastcall CPstock::InitNetwork()
 	return (true);
 }
 //---------------------------------------------------------------------------
+// InitStock
+//---------------------------------------------------------------------------
+bool __fastcall CPstock::InitStock()
+{
+	CLSstockSig *pStock = (CLSstockSig *)&PublicMem.stock;
+	CLSsystem *pSys = (CLSsystem*)&PublicMem.system;
+    pSys->Sig = 0;
+}
+//---------------------------------------------------------------------------
 // InitEnv
 //---------------------------------------------------------------------------
 bool __fastcall CPstock::InitEnv()
 {
+    // Map 생성
+	Map = CLSmap();
+
     //Network 초기화
 	if(!InitNetwork())
 	{

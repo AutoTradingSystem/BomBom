@@ -68,9 +68,9 @@ __published:	// IDE-managed Components
 	TLabel *Label13;
 	TLabel *Label14;
 	TEdit *edOrderNumber;
-	TPanel *Panel3;
+	TPanel *pnlTradeLog;
 	TLabel *Label15;
-	TPanel *Panel4;
+	TPanel *pnlSigLog;
 	TLabel *Label16;
 	TStringGrid *sgSiglog;
 	TButton *btnOutstandingLog;
@@ -88,6 +88,12 @@ __published:	// IDE-managed Components
 	TLabel *lbKeyBs;
 	TLabel *lbFireSe;
 	TButton *Button3;
+	TPanel *Panel3;
+	TPanel *Panel4;
+	TPanel *Panel5;
+	TPanel *Panel6;
+	TButton *Button4;
+	TEdit *Edit1;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -98,6 +104,7 @@ __published:	// IDE-managed Components
 	void __fastcall KHOpenAPIEventConnect(TObject *Sender, long nErrCode);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Button3Click(TObject *Sender);
+	void __fastcall Button4Click(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;

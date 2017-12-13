@@ -11,6 +11,8 @@
 #include "StockDB.h"
 #include "CPstock.h"
 #include "THRmain.h"
+#include "CLSmap.h"
+#include "CLSstockSig.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "KHOpenAPILib_OCX"
@@ -23,6 +25,7 @@ THRmain *ThrMain; 		// main thread
 CLSlog Log;
 
 extern THRclient *ThrClient;
+extern CLSmap Map;
 //---------------------------------------------------------------------------
 // Local
 //---------------------------------------------------------------------------
@@ -476,6 +479,24 @@ void __fastcall TStockMainF::Button3Click(TObject *Sender)
 {
 //
 	ThrClient->Kill();
+}
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::Button4Click(TObject *Sender)
+{
+//
+	AnsiString codenm;
+	CLSstockSig *pSig;
+	AnsiString str = Edit1->Text;
+
+	if((pSig = Map.Get(str.c_str())) != NULL)
+	{
+		codenm = pSig->GetCodeName();
+		ShowMessage(codenm);
+	}
+	else
+	{
+        ShowMessage("Map NULL");
+    }
 }
 //---------------------------------------------------------------------------
 

@@ -8,14 +8,13 @@
 #include "StockDB.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-
 //---------------------------------------------------------------------------
 // Global Variable
 //---------------------------------------------------------------------------
 int global;
-//CLSlog Log("THR_TEST1","D:\\work\\Builder\\Berlin\\01.Study PJT\\bin\\log");
 extern CLSlog Log;
-//CPBsHl *PBsHl;
+extern CLSmap Map;
+extern PUBLIC_MEM PublicMem;
 
 //---------------------------------------------------------------------------
 // CLSstockIF
@@ -96,6 +95,24 @@ void __fastcall CLSstockIF::SetRxState(RX_STATE state, int delta)
 		m_tally += delta;
 		m_index += delta;
 		break;
+    }
+}
+//---------------------------------------------------------------------------
+// SetSigCode
+//---------------------------------------------------------------------------
+void __fastcall CLSstockIF::AddSigCode(const char * code)
+{
+	CLSstockSig *pSig;
+	CLSsystem *pSys = (CLSsystem*)&PublicMem.system;
+	int idx = pSys->Sig;
+	pSig = (CLSstockSig *)&PublicMem.stock[idx];
+
+	pSig = (pSig+pSys->Sig);
+
+	if((pSig = Map.Get(code)) == NULL)
+	{
+		Map.Add(code, pSig);
+		pSys->Sig += 1;	// 수신받은 종목 코드 수 1개 증가
     }
 }
 //---------------------------------------------------------------------------
@@ -333,6 +350,9 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	memcpy(TDSINFO.stockCode, &buffer[idx], 7);      idx += 7;
 	memcpy(TDSINFO.stockNm, &buffer[idx], 32);    	idx += 32;
 	TDSINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
+
+	// Map에 종목코드 추가
+	AddSigCode(TDSINFO.stockCode);
 
 	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
 		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);
