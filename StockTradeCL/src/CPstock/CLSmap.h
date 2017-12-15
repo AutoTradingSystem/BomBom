@@ -1,50 +1,42 @@
 //---------------------------------------------------------------------------
 
-#ifndef THRclientH
-#define THRclientH
+#ifndef CLSmapH
+#define CLSmapH
 //---------------------------------------------------------------------------
 // Include
 //---------------------------------------------------------------------------
-#include <System.Classes.hpp>
-#include "General.h"
+#include <map>
+#include <string>
+#include "CLSstockSig.h"
 #include "CLSlog.h"
-#include "CLSstcokIF.h"
 //---------------------------------------------------------------------------
-// Constant
+using namespace std;
 //---------------------------------------------------------------------------
-// Forward Declaration
+// Type definition
 //---------------------------------------------------------------------------
-//class CLSBsHlIF;
+// MAP_SIG
+//---------------------------------------------------------------------------
+typedef map <string, CLSstockSig *> MAP_SIG;
+typedef MAP_SIG::iterator           MASG_IT;
 //---------------------------------------------------------------------------
 // Class
 //---------------------------------------------------------------------------
-class THRclient : public TThread
+class CLSmap
 {
 private:
-	bool Active;
-
-
-	bool __fastcall TCLmanage(void);
-	void __fastcall TCLclearEnv(void);
-    void __fastcall ExitThread();
-protected:
-	virtual void __fastcall Execute(void);
 
 public:
-	__fastcall THRclient(void);
-	__fastcall ~THRclient();
+	MAP_SIG Sig;
 
-	bool __fastcall IsRunning(void);
-	void __fastcall start();
-	void __fastcall stop();
-	void __fastcall Kill(void);
-	bool __fastcall NeedTerminate();
+	CLSmap(void);
+	~CLSmap(void);
 
-
-	void __fastcall test();
+	bool Add(const char *code, CLSstockSig *pSig);
+	void Erase(const char *code);
+    CLSstockSig *Get(const char *code);
 };
 //---------------------------------------------------------------------------
-// External
+#endif // CLSmapH
 //---------------------------------------------------------------------------
-
-#endif
+// End of CLSmap.h
+//---------------------------------------------------------------------------

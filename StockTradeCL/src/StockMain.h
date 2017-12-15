@@ -12,6 +12,7 @@
 #include "KHOpenAPILib_OCX.h"
 #include <Vcl.OleCtrls.hpp>
 #include <Vcl.Grids.hpp>
+#include <Vcl.Menus.hpp>
 //---------------------------------------------------------------------------
 // User Message
 //---------------------------------------------------------------------------
@@ -67,9 +68,9 @@ __published:	// IDE-managed Components
 	TLabel *Label13;
 	TLabel *Label14;
 	TEdit *edOrderNumber;
-	TPanel *Panel3;
+	TPanel *pnlTradeLog;
 	TLabel *Label15;
-	TPanel *Panel4;
+	TPanel *pnlSigLog;
 	TLabel *Label16;
 	TStringGrid *sgSiglog;
 	TButton *btnOutstandingLog;
@@ -77,17 +78,41 @@ __published:	// IDE-managed Components
 	TButton *Button2;
 	TStringGrid *sgTradeLog;
 	TButton *btnSaveCsv;
+	TMainMenu *MainMenu1;
+	TMenuItem *mn100;
+	TMenuItem *mn101;
+	TMenuItem *mn102;
+	TMenuItem *mn104;
+	TLabel *Label17;
+	TLabel *Label18;
+	TLabel *lbKeyBs;
+	TLabel *lbFireSe;
+	TButton *Button3;
+	TPanel *Panel3;
+	TPanel *Panel4;
+	TPanel *Panel5;
+	TPanel *Panel6;
+	TButton *Button4;
+	TEdit *Edit1;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall sgSiglogDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
 	void __fastcall btnSaveCsvClick(TObject *Sender);
+	void __fastcall mn100Click(TObject *Sender);
+	void __fastcall KHOpenAPIEventConnect(TObject *Sender, long nErrCode);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall Button3Click(TObject *Sender);
+	void __fastcall Button4Click(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
+    bool m_KWLogSt;
 
-    bool __fastcall Init();
+	bool __fastcall Init();
+	bool __fastcall KWLogin(void);
+	bool __fastcall GetUserInfo();
 
 	void __fastcall MakeDirectory(const char* path);
 public:		// User declarations
@@ -99,7 +124,9 @@ public:		// User declarations
 	void __fastcall SetTradeLogGrid();
 	void __fastcall SetTradeLogGridTitle();
 
-    void __fastcall ShowGridSigInfo();
+	void __fastcall ShowUserInfo();
+	void __fastcall ShowSysStatus();
+	void __fastcall ShowGridSigInfo();
 
 	void __fastcall SaveSigCSV_Grid(void);
 	void __fastcall SaveSigCSV_RealTime(void);

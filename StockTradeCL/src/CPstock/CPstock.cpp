@@ -9,10 +9,11 @@
 // Global Variable
 //---------------------------------------------------------------------------
 int global;
-//CLSlog Log("THR_TEST1","D:\\work\\Builder\\Berlin\\01.Study PJT\\bin\\log");
-//CLSlog Log("THR_TEST1","..\\bin\\log");
 extern CLSlog Log;
+CLSstockIF TcpClient;
+CLSmap Map;
 CPstock *Pstock;
+PUBLIC_MEM PublicMem;
 //---------------------------------------------------------------------------
 // Constuctor
 //---------------------------------------------------------------------------
@@ -24,13 +25,8 @@ CPstock::CPstock(void)
 CPstock::CPstock(const char *ipAddr, int port)
 {
 	Log.Write("CPstock start");
-	m_tcpClinet = new CLSstockIF("STOCKTCP",port, ipAddr, TCP_CLIENT);
+	TcpClient = CLSstockIF("STOCKTCP",port, ipAddr, TCP_CLIENT);
 	InitEnv();  //작업환경 초기화
-//	m_thr = new THRclient(m_tcpClinet);
-//	Log.Write("Main Loop Start");
-//
-//	m_thr->start();
-	MainLoop();
 }
 //---------------------------------------------------------------------------
 // ~CPstock
@@ -45,16 +41,29 @@ CPstock::~CPstock(void)
 bool __fastcall CPstock::InitNetwork()
 {
 	//open client socket
-	if(!m_tcpClinet->Open())
+	if(!TcpClient.Open())
 		return (false);
 
+    Log.Write("socket open");
 	return (true);
+}
+//---------------------------------------------------------------------------
+// InitStock
+//---------------------------------------------------------------------------
+bool __fastcall CPstock::InitStock()
+{
+	CLSstockSig *pStock = (CLSstockSig *)&PublicMem.stock;
+	CLSsystem *pSys = (CLSsystem*)&PublicMem.system;
+    pSys->Sig = 0;
 }
 //---------------------------------------------------------------------------
 // InitEnv
 //---------------------------------------------------------------------------
 bool __fastcall CPstock::InitEnv()
 {
+    // Map 생성
+	Map = CLSmap();
+
     //Network 초기화
 	if(!InitNetwork())
 	{
@@ -66,7 +75,7 @@ bool __fastcall CPstock::InitEnv()
 //---------------------------------------------------------------------------
 void __fastcall CPstock::ClearEnv()
 {
-
+	TcpClient.CloseNetwork("program exit");
 }
 //---------------------------------------------------------------------------
 // ManageThread
@@ -80,29 +89,19 @@ void __fastcall CPstock::ManageThread()
 //---------------------------------------------------------------------------
 bool __fastcall CPstock::GetTcpStatus()
 {
-	return (m_tcpClinet->Connected);
+	return (TcpClient.Connected);
 }
 //---------------------------------------------------------------------------
 // GetCommStatus
 //---------------------------------------------------------------------------
 bool __fastcall CPstock::GetCommStatus()
 {
-	return (m_tcpClinet->Connected);
-}
-//---------------------------------------------------------------------------
-// MainLoop
-//---------------------------------------------------------------------------
-int __fastcall CPstock::MainLoop()
-{
-	m_thr = new THRclient(m_tcpClinet);
-	Log.Write("Main Loop Start");
-
-	m_thr->start();
+	return (TcpClient.Connected);
 }
 //---------------------------------------------------------------------------
 // SendEcho
 //---------------------------------------------------------------------------
 bool __fastcall CPstock::SendEcho(char *str)
 {
-    return (m_tcpClinet->SendEcho(str));
+	return (TcpClient.SendEcho(str));
 }

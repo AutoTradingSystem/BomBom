@@ -6,6 +6,7 @@
 //---------------------------------------------------------------------------
 USEFORM("STDebug.cpp", STDebugF);
 USEFORM("StockMain.cpp", StockMainF);
+USEFORM("SysConfFrm.cpp", SysConfF);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -14,6 +15,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->Initialize();
 		Application->MainFormOnTaskBar = true;
 		Application->CreateForm(__classid(TStockMainF), &StockMainF);
+		Application->CreateForm(__classid(TSTDebugF), &STDebugF);
 		Application->Run();
 	}
 	catch (Exception &exception)

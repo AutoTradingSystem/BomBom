@@ -52,6 +52,7 @@ public:
 	int	 __fastcall Recv(char *ptr, int length);
 	bool __fastcall	Send(char *ptr, int length);
 
+    void __fastcall SetNetworkInfo(const char *ipAddr, int port);
 	void __fastcall SetComState(COM_STATE state);
 
 	UINT 	GetNumber(char *ptr, int length = 2, COM_ENDIAN endian = ENDIAN_BIG);

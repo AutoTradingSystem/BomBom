@@ -1,50 +1,44 @@
 //---------------------------------------------------------------------------
 
-#ifndef THRclientH
-#define THRclientH
+#pragma hdrstop
 //---------------------------------------------------------------------------
 // Include
 //---------------------------------------------------------------------------
-#include <System.Classes.hpp>
-#include "General.h"
-#include "CLSlog.h"
-#include "CLSstcokIF.h"
+#include "CLSstockSig.h"
 //---------------------------------------------------------------------------
-// Constant
+#pragma package(smart_init)
 //---------------------------------------------------------------------------
-// Forward Declaration
+// CLSstockSig
 //---------------------------------------------------------------------------
-//class CLSBsHlIF;
-//---------------------------------------------------------------------------
-// Class
-//---------------------------------------------------------------------------
-class THRclient : public TThread
+__fastcall CLSstockSig::CLSstockSig(void)
 {
-private:
-	bool Active;
 
-
-	bool __fastcall TCLmanage(void);
-	void __fastcall TCLclearEnv(void);
-    void __fastcall ExitThread();
-protected:
-	virtual void __fastcall Execute(void);
-
-public:
-	__fastcall THRclient(void);
-	__fastcall ~THRclient();
-
-	bool __fastcall IsRunning(void);
-	void __fastcall start();
-	void __fastcall stop();
-	void __fastcall Kill(void);
-	bool __fastcall NeedTerminate();
-
-
-	void __fastcall test();
-};
+}
 //---------------------------------------------------------------------------
-// External
+// ~CLSstockSig
 //---------------------------------------------------------------------------
+__fastcall CLSstockSig::~CLSstockSig(void)
+{
+}
+//---------------------------------------------------------------------------
+// Init
+//---------------------------------------------------------------------------
+void CLSstockSig::Init(TradeSigInfo *pInfo)
+{
+	memset(&TSInfo, 0, TSIG_INFO_SIZE);
+	TSInfo.type = pInfo->type;
+	TSInfo.mon = pInfo->mon;
+	TSInfo.day = pInfo->day;
+	TSInfo.hour = pInfo->hour;
+	TSInfo.minute = pInfo->minute;
+	sprintf(TSInfo.stockCode, "%s", pInfo->stockCode);
+	sprintf(TSInfo.stockNm, "%s", pInfo->stockNm);
+	TSInfo.price = pInfo->price;
+}
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
+char *CLSstockSig::GetCodeName()
+{
 
-#endif
+}

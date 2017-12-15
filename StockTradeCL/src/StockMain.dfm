@@ -3,21 +3,25 @@ object StockMainF: TStockMainF
   Top = 0
   Caption = 'StockMainF'
   ClientHeight = 803
-  ClientWidth = 1808
+  ClientWidth = 1806
   Color = clBtnFace
+  Constraints.MaxWidth = 1822
+  Constraints.MinWidth = 1822
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = MainMenu1
   OldCreateOrder = False
+  OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
     Top = 784
-    Width = 1808
+    Width = 1806
     Height = 19
     Panels = <
       item
@@ -35,31 +39,36 @@ object StockMainF: TStockMainF
         Alignment = taRightJustify
         Width = 100
       end>
+    ExplicitWidth = 1808
   end
   object pnlBgd: TPanel
     Left = 0
     Top = 0
-    Width = 1808
+    Width = 1806
     Height = 784
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 1808
     object pnlTop: TPanel
       Left = 1
       Top = 1
-      Width = 1806
+      Width = 1804
       Height = 90
       Align = alTop
       TabOrder = 0
+      ExplicitWidth = 1806
       object pnlTopMenu: TPanel
         Left = 1
         Top = 42
-        Width = 1804
+        Width = 1802
         Height = 47
         Align = alClient
         TabOrder = 0
+        ExplicitLeft = 2
+        ExplicitTop = 40
         object btnDebug: TButton
           Left = 8
-          Top = 4
+          Top = 5
           Width = 75
           Height = 37
           Caption = 'Debug'
@@ -123,14 +132,40 @@ object StockMainF: TStockMainF
           TabOrder = 4
           OnClick = btnSaveCsvClick
         end
+        object Button3: TButton
+          Left = 569
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'TEST'
+          TabOrder = 5
+          OnClick = Button3Click
+        end
+        object Button4: TButton
+          Left = 680
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'MAP TEST'
+          TabOrder = 6
+          OnClick = Button4Click
+        end
+        object Edit1: TEdit
+          Left = 775
+          Top = 6
+          Width = 121
+          Height = 21
+          TabOrder = 7
+        end
       end
       object pnlTitle: TPanel
         Left = 1
         Top = 1
-        Width = 1804
+        Width = 1802
         Height = 41
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 1804
         object Label1: TLabel
           Left = 0
           Top = 5
@@ -149,21 +184,13 @@ object StockMainF: TStockMainF
         end
       end
     end
-    object KHOpenAPI: TKHOpenAPI
-      Left = 896
-      Top = 560
-      Width = 100
-      Height = 33
-      TabOrder = 1
-      ControlData = {02000100560A00006903000000000000}
-    end
     object pnlLeft: TPanel
       Left = 1
       Top = 91
       Width = 216
       Height = 692
       Align = alLeft
-      TabOrder = 2
+      TabOrder = 1
       object pnlUserInfo: TPanel
         Left = 1
         Top = 1
@@ -527,12 +554,64 @@ object StockMainF: TStockMainF
         object Label13: TLabel
           Left = 8
           Top = 1
-          Width = 69
+          Width = 108
           Height = 21
-          Caption = 'Reserved'
+          Caption = 'System Status'
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label17: TLabel
+          Left = 8
+          Top = 26
+          Width = 59
+          Height = 13
+          Caption = #53412#48372#46300' '#48372#50504
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label18: TLabel
+          Left = 8
+          Top = 45
+          Width = 59
+          Height = 13
+          Caption = #48169#54868#48317' '#49345#53468
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lbKeyBs: TLabel
+          Left = 89
+          Top = 26
+          Width = 49
+          Height = 13
+          Caption = #51221#49345'/'#54644#51648
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lbFireSe: TLabel
+          Left = 89
+          Top = 45
+          Width = 87
+          Height = 13
+          Caption = #48120#49444#51221'/'#49444#51221'/'#54644#51648
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
           Font.Name = #47569#51008' '#44256#46357
           Font.Style = [fsBold]
           ParentFont = False
@@ -542,109 +621,189 @@ object StockMainF: TStockMainF
     object pnlMain: TPanel
       Left = 217
       Top = 91
-      Width = 1590
+      Width = 1588
       Height = 692
       Align = alClient
-      TabOrder = 3
-      object Panel3: TPanel
-        Left = 683
+      TabOrder = 2
+      ExplicitWidth = 1590
+      object pnlTradeLog: TPanel
+        Left = 681
         Top = 1
         Width = 906
         Height = 690
         Align = alClient
         TabOrder = 0
-        object Label15: TLabel
-          Left = 7
+        ExplicitLeft = 683
+        object Panel5: TPanel
+          Left = 1
           Top = 1
-          Width = 109
-          Height = 21
-          Caption = #47588#49688'/'#47588#46020' '#45236#50669
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = #47569#51008' '#44256#46357
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object sgTradeLog: TStringGrid
-          Tag = 1
-          Left = 6
-          Top = 28
-          Width = 892
-          Height = 655
-          ColCount = 8
-          FixedCols = 0
+          Width = 904
+          Height = 25
+          Align = alTop
+          BevelOuter = bvNone
           TabOrder = 0
-          OnDrawCell = sgSiglogDrawCell
-          ColWidths = (
-            64
-            64
-            64
-            64
-            64
-            64
-            64
-            64)
-          RowHeights = (
-            24
-            24
-            24
-            24
-            24)
+          object Label15: TLabel
+            Left = 7
+            Top = 1
+            Width = 109
+            Height = 21
+            Caption = #47588#49688'/'#47588#46020' '#45236#50669
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = #47569#51008' '#44256#46357
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+        end
+        object Panel6: TPanel
+          Left = 1
+          Top = 26
+          Width = 904
+          Height = 663
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 1
+          ExplicitLeft = 360
+          ExplicitTop = 328
+          ExplicitWidth = 185
+          ExplicitHeight = 41
+          object sgTradeLog: TStringGrid
+            Tag = 1
+            Left = 6
+            Top = 8
+            Width = 892
+            Height = 655
+            ColCount = 8
+            FixedCols = 0
+            TabOrder = 0
+            OnDrawCell = sgSiglogDrawCell
+            ColWidths = (
+              64
+              64
+              64
+              64
+              64
+              64
+              64
+              64)
+            RowHeights = (
+              24
+              24
+              24
+              24
+              24)
+          end
         end
       end
-      object Panel4: TPanel
+      object pnlSigLog: TPanel
         Left = 1
         Top = 1
-        Width = 682
+        Width = 680
         Height = 690
         Align = alLeft
         TabOrder = 1
-        object Label16: TLabel
-          Left = 7
+        object Panel3: TPanel
+          Left = 1
           Top = 1
-          Width = 124
-          Height = 21
-          Caption = #49884#44536#45328' '#48156#49373' '#45236#50669
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = #47569#51008' '#44256#46357
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object sgSiglog: TStringGrid
-          Left = 6
-          Top = 28
-          Width = 670
-          Height = 655
-          ColCount = 6
-          FixedCols = 0
-          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goTabs, goThumbTracking, goFixedRowClick]
+          Width = 678
+          Height = 25
+          Align = alTop
+          BevelOuter = bvNone
           TabOrder = 0
-          OnDrawCell = sgSiglogDrawCell
-          ColWidths = (
-            64
-            64
-            64
-            64
-            64
-            64)
-          RowHeights = (
-            24
-            24
-            24
-            24
-            24)
+          ExplicitWidth = 680
+          object Label16: TLabel
+            Left = 7
+            Top = 1
+            Width = 124
+            Height = 21
+            Caption = #49884#44536#45328' '#48156#49373' '#45236#50669
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = #47569#51008' '#44256#46357
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+        end
+        object Panel4: TPanel
+          Left = 1
+          Top = 26
+          Width = 678
+          Height = 663
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 1
+          ExplicitLeft = 248
+          ExplicitTop = 328
+          ExplicitWidth = 185
+          ExplicitHeight = 41
+          object sgSiglog: TStringGrid
+            Left = 6
+            Top = 8
+            Width = 670
+            Height = 655
+            ColCount = 6
+            FixedCols = 0
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goTabs, goThumbTracking, goFixedRowClick]
+            TabOrder = 0
+            OnDrawCell = sgSiglogDrawCell
+            ColWidths = (
+              64
+              64
+              64
+              64
+              64
+              64)
+            RowHeights = (
+              24
+              24
+              24
+              24
+              24)
+          end
         end
       end
     end
+  end
+  object KHOpenAPI: TKHOpenAPI
+    Left = 40
+    Top = 734
+    Width = 100
+    Height = 33
+    TabOrder = 2
+    Visible = False
+    OnEventConnect = KHOpenAPIEventConnect
+    ControlData = {02000100560A00006903000000000000}
   end
   object tmStatus: TTimer
     Enabled = False
     Interval = 300
     OnTimer = tmStatusTimer
-    Left = 880
-    Top = 32
+    Left = 1216
+    Top = 40
+  end
+  object MainMenu1: TMainMenu
+    Left = 1144
+    Top = 40
+    object mn100: TMenuItem
+      Caption = #54028#51068
+      OnClick = mn100Click
+      object mn101: TMenuItem
+        Tag = 1
+        Caption = #49884#49828#53596' '#49444#51221
+        OnClick = mn100Click
+      end
+      object mn102: TMenuItem
+        Tag = 2
+        Caption = #47196#44536#51064'/'#47196#44536#50500#50883
+        OnClick = mn100Click
+      end
+      object mn104: TMenuItem
+        Tag = 3
+        Caption = #51333#47308
+        OnClick = mn100Click
+      end
+    end
   end
 end

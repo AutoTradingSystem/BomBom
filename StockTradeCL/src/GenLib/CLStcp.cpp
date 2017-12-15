@@ -254,6 +254,7 @@ int __fastcall CLStcp::Recv(char *ptr, int length)
 
 	if ((count = recv(ID, ptr, length, 0)) < 0)
 	{
+        Log.Write("Abnomal read [%d]", WSAGetLastError());
 		return(-1);
 	}
 	// recv 오류체크 (temp)
@@ -284,6 +285,15 @@ void __fastcall CLStcp::SetOption(void)
 	// If iMode != 0, non-blocking mode is enabled.
 	ioctlsocket(ID, FIONBIO, &iMode);
 //	ioctl(ID, FIONBIO, &flag);     //linux
+}
+//------------------------------------------------------------------------------
+// SetNetworkInfo
+//------------------------------------------------------------------------------
+void __fastcall CLStcp::SetNetworkInfo(const char *ipAddr, int port)
+{
+	Close();
+	m_port = port;
+	sprintf(m_ipAddr, "%s", ipAddr);
 }
 //------------------------------------------------------------------------------
 // Write

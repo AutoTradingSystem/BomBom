@@ -1,73 +1,59 @@
 //---------------------------------------------------------------------------
-
-#ifndef StockDBH
-#define StockDBH
+#pragma hdrstop
 //---------------------------------------------------------------------------
 // Include
 //---------------------------------------------------------------------------
-#include <System.Classes.hpp>
+#include "CLSmap.h"
 //---------------------------------------------------------------------------
-// System
+#pragma package(smart_init)
 //---------------------------------------------------------------------------
-typedef struct
+// CLSmap
+//---------------------------------------------------------------------------
+CLSmap::CLSmap(void)
 {
-	bool Terminate;
-}SYSTEM;
-extern SYSTEM StockSYS;
-//---------------------------------------------------------------------------
-// Type Definition
-//---------------------------------------------------------------------------
-typedef struct
-{
-	unsigned short year;
-	unsigned short mon;
-	unsigned short day;
-	unsigned short hour;
-	unsigned short min;
-	unsigned short sec;
-	unsigned short mSec;
-} SysTime;
-extern SysTime sTime;
-//---------------------------------------------------------------------------
-typedef struct
-{
-	AnsiString str;
-} TestMSG;
-extern PACKAGE TestMSG RecvMsgLog;
-extern PACKAGE TestMSG SendMsgLog;
 
+}
 //---------------------------------------------------------------------------
-// User information
+// ~CLSmap
 //---------------------------------------------------------------------------
-typedef struct
+CLSmap::~CLSmap(void)
 {
-	String uName;
-	String uID;
-	String accNo;   // 계좌 반환
-	String accCnt;  // 계좌 수
-	String keyBs;   // 키보드 보안
-	String fireSe;  // 방화벽 설정여부
-}USERINFO;
-extern PACKAGE USERINFO UInfo;
 
+}
 //---------------------------------------------------------------------------
-// TradeInfo SIG
+// Add
 //---------------------------------------------------------------------------
-typedef struct
+bool CLSmap::Add(const char *code, CLSstockSig *pSig)
 {
-	char type;
-	BYTE mon;
-	BYTE day;
-	BYTE hour;
-	BYTE minute;
-	char stockCode[7];
-	char stockNm[32];
-	unsigned int price;
-	bool valid;
-} TradeSigInfo;
+	if (Sig.insert(pair<string, CLSstockSig *>(code, pSig)).second == false)
+		return (false);
 
-extern TradeSigInfo TDSINFO;
-
+	return (true);
+}
 //---------------------------------------------------------------------------
-#endif
+// Erase
+//---------------------------------------------------------------------------
+void CLSmap::Erase(const char *code)
+{
+	MASG_IT it;
+
+	if ((it = Sig.find(code)) == Sig.end())
+		return ;
+
+	Sig.erase(it);
+}
+//---------------------------------------------------------------------------
+// Get
+//---------------------------------------------------------------------------
+CLSstockSig *CLSmap::Get(const char *code)
+{
+	MASG_IT it;
+
+	if((it = Sig.find(code)) == Sig.end())
+		return (NULL);
+
+	return (it->second);
+}
+//---------------------------------------------------------------------------
+// End of CLSmap.cpp
 //---------------------------------------------------------------------------

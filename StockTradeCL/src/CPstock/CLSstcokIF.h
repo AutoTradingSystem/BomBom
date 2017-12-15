@@ -7,6 +7,8 @@
 //---------------------------------------------------------------------------
 #include "CLStcp.h"
 #include "CLSlog.h"
+#include "CLSmap.h"
+#include "PublicMem.h"
 #include <System.Classes.hpp>
 //---------------------------------------------------------------------------
 // Constant
@@ -69,6 +71,7 @@ private:
 	CON_RESULT	__fastcall ManageConnection(void);
 	BYTE __fastcall GenLRC(char *message, int length);
 	void __fastcall SetRxState(RX_STATE state, int delta = 0);
+	void __fastcall AddSigCode(const char * code);
     bool __fastcall ManageRX(void);
 	bool __fastcall ManageTX(void);
 	void __fastcall RxHandler(char *buffer, int length);

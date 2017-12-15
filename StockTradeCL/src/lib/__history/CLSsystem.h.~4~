@@ -1,45 +1,25 @@
 //---------------------------------------------------------------------------
-
-#ifndef CPstockH
-#define CPstockH
+#ifndef CLSsystemH
+#define CLSsystemH
 //---------------------------------------------------------------------------
 // Include
 //---------------------------------------------------------------------------
-#include "CLSstcokIF.h"
-#include "CLSmap.h"
-#include "CLSlog.h"
+#include "General.h"
 //---------------------------------------------------------------------------
 // Class
 //---------------------------------------------------------------------------
-class CPstock
+class CLSsystem
 {
 private:
-	char *m_tcpClientIP;
-	int port;
-	CLSlog	m_log;
-    BYTE m_seq;
 
-	bool __fastcall InitNetwork();
-	bool __fastcall InitStock();
-
-	int __fastcall MainLoop();
 public:
-	CPstock(void);
-	CPstock(const char *ipAddr, int port);
-	~CPstock(void);
+	int Sig;	// signal ¼ö
 
-	bool __fastcall InitEnv();
-	void __fastcall ClearEnv();
-	void __fastcall ManageThread();
-
-	bool __fastcall GetTcpStatus();
-	bool __fastcall GetCommStatus();
-
-	bool __fastcall SendEcho(char *str);
+	CLSsystem(void);
+    ~CLSsystem(void);
 };
 //---------------------------------------------------------------------------
-// External
+#endif CLSsystemH
 //---------------------------------------------------------------------------
-extern CPstock *Pstock;
-
-#endif
+// End of CLSsystem.h
+//---------------------------------------------------------------------------
