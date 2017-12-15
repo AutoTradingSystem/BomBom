@@ -21,7 +21,7 @@ __fastcall TSTDebugF::TSTDebugF(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TSTDebugF::btnEchoClick(TObject *Sender)
 {
-		if(Pstock->SendEcho("Hello world"))
+	if(Pstock->SendEcho("Hello world"))
 	{
 		ShowMessage("success");
 	}

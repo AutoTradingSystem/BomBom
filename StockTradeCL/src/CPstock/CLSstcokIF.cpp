@@ -111,6 +111,7 @@ void __fastcall CLSstockIF::AddSigCode(const char * code)
 
 	if((pSig = Map.Get(code)) == NULL)
 	{
+        Log.Write("MAP CODE[%s]", code);
 		Map.Add(code, pSig);
 		pSys->Sig += 1;	// 수신받은 종목 코드 수 1개 증가
     }
@@ -352,7 +353,9 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	TDSINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
 
 	// Map에 종목코드 추가
-	AddSigCode(TDSINFO.stockCode);
+	AnsiString scode = TDSINFO.stockCode;
+	//AddSigCode(TDSINFO.stockCode);
+	AddSigCode(scode.c_str());
 
 	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
 		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);

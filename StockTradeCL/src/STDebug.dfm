@@ -117,8 +117,6 @@ object STDebugF: TSTDebugF
         Align = alBottom
         ItemHeight = 13
         TabOrder = 0
-        ExplicitLeft = 2
-        ExplicitTop = 34
       end
     end
     object pnlBottom: TPanel
