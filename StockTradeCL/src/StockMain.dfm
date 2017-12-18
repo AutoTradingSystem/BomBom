@@ -39,7 +39,6 @@ object StockMainF: TStockMainF
         Alignment = taRightJustify
         Width = 100
       end>
-    ExplicitWidth = 1808
   end
   object pnlBgd: TPanel
     Left = 0
@@ -48,7 +47,6 @@ object StockMainF: TStockMainF
     Height = 784
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1808
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -56,7 +54,6 @@ object StockMainF: TStockMainF
       Height = 90
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 1806
       object pnlTopMenu: TPanel
         Left = 1
         Top = 42
@@ -64,8 +61,6 @@ object StockMainF: TStockMainF
         Height = 47
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 2
-        ExplicitTop = 40
         object btnDebug: TButton
           Left = 8
           Top = 5
@@ -165,7 +160,6 @@ object StockMainF: TStockMainF
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 1804
         object Label1: TLabel
           Left = 0
           Top = 5
@@ -625,7 +619,6 @@ object StockMainF: TStockMainF
       Height = 692
       Align = alClient
       TabOrder = 2
-      ExplicitWidth = 1590
       object pnlTradeLog: TPanel
         Left = 681
         Top = 1
@@ -633,7 +626,6 @@ object StockMainF: TStockMainF
         Height = 690
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 683
         object Panel5: TPanel
           Left = 1
           Top = 1
@@ -664,10 +656,6 @@ object StockMainF: TStockMainF
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitLeft = 360
-          ExplicitTop = 328
-          ExplicitWidth = 185
-          ExplicitHeight = 41
           object sgTradeLog: TStringGrid
             Tag = 1
             Left = 6
@@ -711,7 +699,6 @@ object StockMainF: TStockMainF
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitWidth = 680
           object Label16: TLabel
             Left = 7
             Top = 1
@@ -734,10 +721,6 @@ object StockMainF: TStockMainF
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitLeft = 248
-          ExplicitTop = 328
-          ExplicitWidth = 185
-          ExplicitHeight = 41
           object sgSiglog: TStringGrid
             Left = 6
             Top = 8
@@ -767,8 +750,8 @@ object StockMainF: TStockMainF
     end
   end
   object KHOpenAPI: TKHOpenAPI
-    Left = 40
-    Top = 734
+    Left = 211
+    Top = 8
     Width = 100
     Height = 33
     TabOrder = 2

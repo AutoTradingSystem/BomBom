@@ -15,7 +15,7 @@ private:
 public:
 	int Sig;			// signal 수
 	bool Terminate;		// 시스템 종료
-	bool KWlogin;   	// 키움 API 로그인 상태
+	bool Kwlogin;   	// 키움 API 로그인 상태
 
 	CLSsystem(void);
     ~CLSsystem(void);

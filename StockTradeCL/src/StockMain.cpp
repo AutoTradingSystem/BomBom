@@ -157,12 +157,12 @@ void __fastcall TStockMainF::ShowSysStatus()
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::ShowGridSigInfo()
 {
-	sgSiglog->RowCount++;
 	int row = sgSiglog->RowCount;
+	sgSiglog->RowCount++;
 	TStrings *pRow = sgSiglog->Rows[row];
 
 	AnsiString str1="";
-	str1.printf("%d:%d:%d:%d,",TDSINFO.mon,TDSINFO.day,TDSINFO.hour,TDSINFO.minute);
+	str1.printf("%d/%d %d:%d",TDSINFO.mon,TDSINFO.day,TDSINFO.hour,TDSINFO.minute);
 	sgSiglog->Cells[0][row]=str1;
 
 	str1 = TDSINFO.stockCode;
@@ -174,7 +174,7 @@ void __fastcall TStockMainF::ShowGridSigInfo()
 	str1 = TDSINFO.type;
 	sgSiglog->Cells[3][row]=str1;
 
-	str1.printf("%d,",TDSINFO.price);
+	str1.printf("%d",TDSINFO.price);
 	sgSiglog->Cells[4][row]=str1;
 
 	sgSiglog->Cells[5][row]="-";
@@ -205,7 +205,7 @@ void __fastcall TStockMainF::SaveSigCSV_Grid(void)
 	//메시지 확인
 	if((length = sContent.Length())<=0)
 		return ;
-	sprintf(filename, "%s/%04d%02d%02d.csv",dbPath, sTime.year, sTime.mon, sTime.day);
+	sprintf(filename, "%s/[SIG_GRD]%04d%02d%02d.csv",dbPath, sTime.year, sTime.mon, sTime.day);
 	if((fp = fopen(filename, "w+")) == NULL)
 	{
 		return ;
@@ -228,7 +228,7 @@ void __fastcall TStockMainF::SaveSigCSV_RealTime(void)
 	//메시지 확인
 	if((length = sTitle.Length())<=0)
 		return ;
-	sprintf(filename, "%s/[SIG_GRD]%04d%02d%02d.csv",dbPath, sTime.year, sTime.mon, sTime.day);
+	sprintf(filename, "%s/[SIG_REAL]%04d%02d%02d.csv",dbPath, sTime.year, sTime.mon, sTime.day);
 
 	if(!FileExists(filename))
 	{
@@ -257,27 +257,26 @@ void __fastcall TStockMainF::SaveSigCSV_RealTime(void)
 	str1 = TDSINFO.stockNm; 	str1 += ","; sContent += str1;
 	str1 = TDSINFO.type;    	str1+=",";   sContent += str1;
 	str1.printf("%d,",TDSINFO.price);   	 sContent += str1;
-	str1=",";    // Current price; (no information)
+	str1=",\n";    // Current price; (no information)
 	sContent += str1;
 
 	//메시지 확인
 	if((length = sContent.Length())<=0)
 		return ;
 	sprintf(filename, "%s/[SIG_REAL]%04d%02d%02d.csv",dbPath, sTime.year, sTime.mon, sTime.day);
-	if((fp = fopen(filename, "w+")) == NULL)
+	if((fp = fopen(filename, "a+")) == NULL)
 	{
 		return ;
 	}
 	fwrite(sContent.c_str(), 1, length, fp);
 	fclose(fp);
-
 }
 //---------------------------------------------------------------------------
 // fnShowGrdSIGInfo
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::fnShowGrdSIGInfo(TMessage Msg)
 {
-
+	ShowGridSigInfo();
 }
 //---------------------------------------------------------------------------
 // fnSaveRealTimeSig
@@ -372,7 +371,6 @@ void __fastcall TStockMainF::btnDebugClick(TObject *Sender)
 	if( STDebugF->WindowState == wsMinimized ) STDebugF->WindowState = wsNormal;
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TStockMainF::FormShow(TObject *Sender)
 {
 //	long Result = KHOpenAPI->CommConnect();
@@ -385,7 +383,7 @@ void __fastcall TStockMainF::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::sgSiglogDrawCell(TObject *Sender, int ACol, int ARow,
-          TRect &Rect, TGridDrawState State)
+		  TRect &Rect, TGridDrawState State)
 {
 //
 	TStringGrid * pGrid = static_cast<TStringGrid *>(Sender);
@@ -487,15 +485,17 @@ void __fastcall TStockMainF::Button4Click(TObject *Sender)
 	AnsiString codenm;
 	CLSstockSig *pSig;
 	AnsiString str = Edit1->Text;
+    char *pCode = str.c_str();
 
-	if((pSig = Map.Get(str.c_str())) != NULL)
+//	if((pSig = Map.Get(str.c_str())) != NULL)
+	if((pSig = Map.Get(pCode)) != NULL)
 	{
 		codenm = pSig->GetCodeName();
 		ShowMessage(codenm);
 	}
 	else
 	{
-        ShowMessage("Map NULL");
+		ShowMessage("Map NULL");
     }
 }
 //---------------------------------------------------------------------------
