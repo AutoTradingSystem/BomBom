@@ -14,10 +14,7 @@
 #include <Vcl.Grids.hpp>
 #include <Vcl.Menus.hpp>
 //---------------------------------------------------------------------------
-// User Message
-//---------------------------------------------------------------------------
-#define WM_SHOW_GRD_SIG             (WM_USER + 0x01)    // Show Grid SIG Info
-#define WM_SAVE_RT_SIG             (WM_USER + 0x02)    // Save Realtime SIG info
+#include "Define.h"
 //---------------------------------------------------------------------------
 // Class
 //---------------------------------------------------------------------------
@@ -32,7 +29,6 @@ __published:	// IDE-managed Components
 	TPanel *pnlTopMenu;
 	TLabel *Label1;
 	TButton *btnDebug;
-	TKHOpenAPI *KHOpenAPI;
 	TPanel *pnlLeft;
 	TPanel *pnlMain;
 	TPanel *pnlUserInfo;
@@ -94,6 +90,21 @@ __published:	// IDE-managed Components
 	TPanel *Panel6;
 	TButton *Button4;
 	TEdit *Edit1;
+	TKHOpenAPI *KHOpenAPI;
+	TPanel *Panel7;
+	TLabel *Label19;
+	TLabel *Label20;
+	TLabel *Label21;
+	TLabel *Label22;
+	TLabel *Label23;
+	TLabel *Label24;
+	TLabel *Label25;
+	TEdit *Edit2;
+	TEdit *Edit3;
+	TEdit *Edit4;
+	TEdit *Edit5;
+	TEdit *Edit6;
+	TEdit *Edit7;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -101,18 +112,22 @@ __published:	// IDE-managed Components
           TGridDrawState State);
 	void __fastcall btnSaveCsvClick(TObject *Sender);
 	void __fastcall mn100Click(TObject *Sender);
-	void __fastcall KHOpenAPIEventConnect(TObject *Sender, long nErrCode);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Button3Click(TObject *Sender);
 	void __fastcall Button4Click(TObject *Sender);
+	void __fastcall KHOpenAPIEventConnect(TObject *Sender, long nErrCode);
+	void __fastcall KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo, BSTR sRQName,
+          BSTR sTrCode, BSTR sRecordName, BSTR sPrevNext, long nDataLength, BSTR sErrorCode,
+          BSTR sMessage, BSTR sSplmMsg);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
     bool m_KWLogSt;
 
-	bool __fastcall Init();
+	bool __fastcall Init(void);
+	bool __fastcall InitTrList(void);
 	bool __fastcall KWLogin(void);
-	bool __fastcall GetUserInfo();
+	bool __fastcall GetUserInfo(void);
 
 	void __fastcall MakeDirectory(const char* path);
 public:		// User declarations
@@ -131,6 +146,8 @@ public:		// User declarations
 	void __fastcall SaveSigCSV_Grid(void);
 	void __fastcall SaveSigCSV_RealTime(void);
 
+
+    void __fastcall ReqAccInfo(void);
 
 	void __fastcall fnShowGrdSIGInfo(TMessage Msg);
 	void __fastcall fnSaveRealTimeSig(TMessage Msg);

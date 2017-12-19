@@ -23,6 +23,7 @@
 TStockMainF *StockMainF;
 THRmain *ThrMain; 		// main thread
 CLSlog Log;
+TRLIST TrList;
 
 extern THRclient *ThrClient;
 extern CLSmap Map;
@@ -240,16 +241,6 @@ void __fastcall TStockMainF::SaveSigCSV_RealTime(void)
 		fclose(fp);
 	}
 
-//	char type;
-//	BYTE mon;
-//	BYTE day;
-//	BYTE hour;
-//	BYTE minute;
-//	char stockCode[7];
-//	char stockNm[32];
-//	unsigned int price;
-//	bool valid;
-
 	AnsiString str1="";
 	str1.printf("%d:%d:%d:%d,",TDSINFO.mon,TDSINFO.day,TDSINFO.hour,TDSINFO.minute);
 	sContent += str1;
@@ -272,6 +263,39 @@ void __fastcall TStockMainF::SaveSigCSV_RealTime(void)
 	fclose(fp);
 }
 //---------------------------------------------------------------------------
+// ReqAccInfo
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::ReqAccInfo(void)
+{
+	int nRet;
+	UnicodeString strData="";
+	strData=StringReplace(UInfo.accNo, ";" ,"", Sysutils::TReplaceFlags() << Sysutils::rfReplaceAll);
+
+	BSTR pSetAccno 	 	  = SysAllocString(L"계좌번호");
+	BSTR pMyAccNO_MO 	  = SysAllocString(strData.w_str());
+	BSTR pPassWord	 	  = SysAllocString(L"비밀번호");
+	BSTR pValueEmpty 	  = SysAllocString(L"");
+	BSTR pSangPe 	 	  = SysAllocString(L"상장폐지조회구분");
+	BSTR pTemp  	 	  = SysAllocString(L"0");
+	BSTR pPWinputType 	  = SysAllocString(L"비밀번호입력매체구분");
+	BSTR pValue00 	 	  = SysAllocString(L"00");
+	BSTR pReqAccoNO  	  = SysAllocString(L"계좌평가현황요청");
+	BSTR pTrCode_OPW00004 = SysAllocString(L"OPW00004");
+	BSTR pScreenNo_6001   = SysAllocString(L"6001");
+
+	try
+	{
+		KHOpenAPI->SetInputValue(pSetAccno, pMyAccNO_MO); 	// 계좌번호("계좌번호",000000000)
+		KHOpenAPI->SetInputValue(pPassWord, pValueEmpty);   // 비밀번호
+		KHOpenAPI->SetInputValue(pSangPe, pTemp);         	// 상장폐지조회구분
+		KHOpenAPI->SetInputValue(pPWinputType, pValue00);   // 비밀번호입력매체구분
+		nRet = KHOpenAPI->CommRqData(pReqAccoNO, pTrCode_OPW00004, 0,pScreenNo_6001);
+	}__finally
+	{
+		StatusBar->Panels->Items[3]->Text = "결과:"+IntToStr(nRet) ;
+	}
+}
+//---------------------------------------------------------------------------
 // fnShowGrdSIGInfo
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::fnShowGrdSIGInfo(TMessage Msg)
@@ -290,28 +314,49 @@ void __fastcall TStockMainF::fnSaveRealTimeSig(TMessage Msg)
 //---------------------------------------------------------------------------
 bool __fastcall TStockMainF::Init()
 {
+	// TR LIST 초기화
+	InitTrList();
+
+	// String 그리드 기본 화면 초기화
 	SetSigLogGrid();
 	SetSigLogGridTitle();
 	SetTradeLogGrid();
 	SetTradeLogGridTitle();
 }
 //---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
+bool __fastcall TStockMainF::InitTrList(void)
+{
+	// OPW00004 (계좌평가현황조회)
+	TrList.TR_ACC_EST.TRCODE = SysAllocString(L"OPW00004");
+	TrList.TR_ACC_EST.TRRECORD_Nm = SysAllocString(L"계좌평가현황요청");
+	TrList.TR_ACC_EST.IT_AccNM = SysAllocString(L"계좌명");
+	TrList.TR_ACC_EST.IT_Deposit = SysAllocString(L"예수금");
+	TrList.TR_ACC_EST.IT_Deposit2 = SysAllocString(L"D+2추정예수금");
+	TrList.TR_ACC_EST.IT_TotalPurchase = SysAllocString(L"총매입금액");
+	TrList.TR_ACC_EST.IT_Day_P_L_Rate = SysAllocString(L"당일손익율");
+}
+//---------------------------------------------------------------------------
 // KWLogin
 //---------------------------------------------------------------------------
 bool __fastcall TStockMainF::KWLogin(void)
 {
+
 	long Result = KHOpenAPI->CommConnect();
 
 	if(Result != 0)
 		StatusBar->Panels->Items[2]->Text = "Login창 불러오기 실패";
 	else
 		StatusBar->Panels->Items[2]->Text = "Login창 열림";
+
 }
 //---------------------------------------------------------------------------
 // GetUserInfo
 //---------------------------------------------------------------------------
 bool __fastcall TStockMainF::GetUserInfo()
 {
+
 	String str="";
 	str = KHOpenAPI->GetLoginInfo(_T(L"USER_NAME"));
 	UInfo.uName = str;
@@ -340,6 +385,41 @@ bool __fastcall TStockMainF::GetUserInfo()
 void __fastcall TStockMainF::MakeDirectory(const char* path)
 {
 	CreateDir(path);         // make log directory
+}
+//---------------------------------------------------------------------------
+// KHOpenAPIEvent (Connect)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::KHOpenAPIEventConnect(TObject *Sender, long nErrCode)
+
+{
+	if(nErrCode == 0)
+	{
+		StatusBar->Panels->Items[2]->Text = "Login 성공";
+		m_KWLogSt = true;
+		GetUserInfo();
+	}
+	else
+	{
+		m_KWLogSt = false;
+		StatusBar->Panels->Items[2]->Text = "Login 실패";
+	}
+}
+//---------------------------------------------------------------------------
+// KHOpenAPIEvent (ReceiveTrData)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo,
+		  BSTR sRQName, BSTR sTrCode, BSTR sRecordName, BSTR sPrevNext, long nDataLength,
+		  BSTR sErrorCode, BSTR sMessage, BSTR sSplmMsg)
+{
+//
+	if(wcscmp(L"계좌평가현황요청",sRQName) == 0)
+	{
+		AccInfo.a1 = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit);
+		AccInfo.a2 = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit);
+
+		ShowMessage(AccInfo.a1);
+		ShowMessage(AccInfo.a2);
+	}
 }
 //---------------------------------------------------------------------------
 // Timer (tmStatusTimer)
@@ -452,21 +532,6 @@ void __fastcall TStockMainF::mn100Click(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::KHOpenAPIEventConnect(TObject *Sender, long nErrCode)
-{
-//
-	if(nErrCode == 0)
-	{
-		StatusBar->Panels->Items[2]->Text = "Login 성공";
-		m_KWLogSt = true;
-		GetUserInfo();
-	}
-	else
-        m_KWLogSt = false;
-        StatusBar->Panels->Items[2]->Text = "Login 실패";
-
-}
-//---------------------------------------------------------------------------
 void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
 {
 //
@@ -476,7 +541,8 @@ void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
 void __fastcall TStockMainF::Button3Click(TObject *Sender)
 {
 //
-	ThrClient->Kill();
+//	ThrClient->Kill();
+    ReqAccInfo();
 }
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::Button4Click(TObject *Sender)

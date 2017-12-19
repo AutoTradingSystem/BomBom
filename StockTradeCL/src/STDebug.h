@@ -9,10 +9,7 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 //---------------------------------------------------------------------------
-// User Message
-//---------------------------------------------------------------------------
-#define WM_MSGLOG              (WM_USER + 0x01)
-#define WM_SENDLOG              (WM_USER + 0x02)
+#include "Define.h"
 //---------------------------------------------------------------------------
 class TSTDebugF : public TForm
 {

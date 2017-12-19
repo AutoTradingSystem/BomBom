@@ -14,6 +14,7 @@ TestMSG SendMsgLog;
 //---------------------------------------------------------------------------
 SYSTEM StockSYS;
 USERINFO UInfo;
+ACCINFO AccInfo;
 TradeSigInfo TDSINFO;
 //---------------------------------------------------------------------------
 // End of StockDB.cpp
