@@ -22,12 +22,12 @@ __fastcall CLSstockSig::~CLSstockSig(void)
 {
 }
 //---------------------------------------------------------------------------
-// InitSell
+// Init
 //---------------------------------------------------------------------------
-void CLSstockSig::InitSell(TradeSigInfo *pInfo)
+void CLSstockSig::Init(TradeSigInfo *pInfo)
 {
 	// Init Sell sig info
-	memset(&SInfo, 0, TSIG_INFO_SIZE);
+	memset(&TSInfo, 0, TSIG_INFO_SIZE);
 	SInfo.type = pInfo->type;
 	SInfo.mon = pInfo->mon;
 	SInfo.day = pInfo->day;
@@ -38,23 +38,9 @@ void CLSstockSig::InitSell(TradeSigInfo *pInfo)
 	SInfo.price = pInfo->price;
 }
 //---------------------------------------------------------------------------
-// InitBuySig
-//---------------------------------------------------------------------------
-void CLSstockSig::InitBuySig(TradeSigInfo *pInfo)
-{
-
-}
-//---------------------------------------------------------------------------
-// CheckSellSig
-//---------------------------------------------------------------------------
-bool CLSstockSig::CheckSellSig(int *necessaryQty)
-{
-    return (true);
-}
-//---------------------------------------------------------------------------
-// GetCodeName
+//
 //---------------------------------------------------------------------------
 char *CLSstockSig::GetCodeName()
 {
-    return (SInfo.stockNm);
+    return (TSInfo.stockNm);
 }

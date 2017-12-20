@@ -79,8 +79,6 @@ public:
 	void InitSell(TradeSigInfo *pInfo);
 	void InitBuySig(TradeSigInfo *pInfo);
 
-	bool CheckSellSig(int *necessaryQty);
-
 
 
 	char *GetCodeName();

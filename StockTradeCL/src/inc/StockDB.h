@@ -55,8 +55,12 @@ extern PACKAGE USERINFO UInfo;
 //---------------------------------------------------------------------------
 typedef struct
 {
-	WideString a1;
-    String a2;
+	String Deposit;
+	String Deposit2;
+	String TotalPurchase;
+	String Day_P_L_Rate;
+	String CumulativeRate;  // 누적 손익율
+	String CumulativePrice; // 누적 투자 손익
 }ACCINFO;
 extern PACKAGE ACCINFO AccInfo;
 

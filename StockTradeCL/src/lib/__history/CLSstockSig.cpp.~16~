@@ -22,7 +22,7 @@ __fastcall CLSstockSig::~CLSstockSig(void)
 {
 }
 //---------------------------------------------------------------------------
-// InitSell
+// Init
 //---------------------------------------------------------------------------
 void CLSstockSig::InitSell(TradeSigInfo *pInfo)
 {
@@ -36,6 +36,13 @@ void CLSstockSig::InitSell(TradeSigInfo *pInfo)
 	sprintf(SInfo.stockCode, "%s", pInfo->stockCode);
 	sprintf(SInfo.stockNm, "%s", pInfo->stockNm);
 	SInfo.price = pInfo->price;
+}
+//---------------------------------------------------------------------------
+// CheckSellSig
+//---------------------------------------------------------------------------
+bool CLSstockSig::CheckSellSig(int *necessaryQty)
+{
+
 }
 //---------------------------------------------------------------------------
 // InitBuySig

@@ -18,16 +18,6 @@ object StockMainF: TStockMainF
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object KHOpenAPI: TKHOpenAPI
-    Left = 135
-    Top = -13
-    Width = 100
-    Height = 50
-    TabOrder = 2
-    OnReceiveTrData = KHOpenAPIReceiveTrData
-    OnEventConnect = KHOpenAPIEventConnect
-    ControlData = {02000100560A00002B05000000000000}
-  end
   object StatusBar: TStatusBar
     Left = 0
     Top = 784
@@ -50,6 +40,10 @@ object StockMainF: TStockMainF
         Width = 100
       end
       item
+        Width = 1300
+      end
+      item
+        Alignment = taCenter
         Width = 50
       end>
   end
@@ -60,6 +54,16 @@ object StockMainF: TStockMainF
     Height = 784
     Align = alClient
     TabOrder = 0
+    object KHOpenAPI: TKHOpenAPI
+      Left = 1016
+      Top = 35
+      Width = 100
+      Height = 50
+      TabOrder = 3
+      OnReceiveTrData = KHOpenAPIReceiveTrData
+      OnEventConnect = KHOpenAPIEventConnect
+      ControlData = {02000100560A00002B05000000000000}
+    end
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -318,7 +322,6 @@ object StockMainF: TStockMainF
         Color = 14540253
         ParentBackground = False
         TabOrder = 1
-        ExplicitTop = 129
         object Label7: TLabel
           Left = 8
           Top = 1
@@ -364,8 +367,6 @@ object StockMainF: TStockMainF
         Align = alClient
         ParentBackground = False
         TabOrder = 2
-        ExplicitTop = 185
-        ExplicitHeight = 394
         object Label8: TLabel
           Left = 8
           Top = 1
@@ -726,7 +727,7 @@ object StockMainF: TStockMainF
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object Edit2: TEdit
+        object edDeposit: TEdit
           Left = 78
           Top = 28
           Width = 121
@@ -735,7 +736,7 @@ object StockMainF: TStockMainF
           ReadOnly = True
           TabOrder = 0
         end
-        object Edit3: TEdit
+        object edDeposit2: TEdit
           Left = 78
           Top = 49
           Width = 121
@@ -744,7 +745,7 @@ object StockMainF: TStockMainF
           ReadOnly = True
           TabOrder = 1
         end
-        object Edit4: TEdit
+        object edTotalPurchase: TEdit
           Left = 78
           Top = 70
           Width = 121
@@ -753,7 +754,7 @@ object StockMainF: TStockMainF
           ReadOnly = True
           TabOrder = 2
         end
-        object Edit5: TEdit
+        object edDayRate: TEdit
           Left = 78
           Top = 91
           Width = 121
@@ -762,7 +763,7 @@ object StockMainF: TStockMainF
           ReadOnly = True
           TabOrder = 3
         end
-        object Edit6: TEdit
+        object edCumulativePrice: TEdit
           Left = 78
           Top = 133
           Width = 121
@@ -771,7 +772,7 @@ object StockMainF: TStockMainF
           ReadOnly = True
           TabOrder = 4
         end
-        object Edit7: TEdit
+        object edCumulativeRate: TEdit
           Left = 78
           Top = 112
           Width = 121

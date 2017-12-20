@@ -9,12 +9,13 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.ComCtrls.hpp>
-#include "KHOpenAPILib_OCX.h"
+//#include "KHOpenAPILib_OCX.h"
 #include <Vcl.OleCtrls.hpp>
 #include <Vcl.Grids.hpp>
 #include <Vcl.Menus.hpp>
 //---------------------------------------------------------------------------
 #include "Define.h"
+#include "KHOpenAPILib_OCX.h"
 //---------------------------------------------------------------------------
 // Class
 //---------------------------------------------------------------------------
@@ -90,7 +91,6 @@ __published:	// IDE-managed Components
 	TPanel *Panel6;
 	TButton *Button4;
 	TEdit *Edit1;
-	TKHOpenAPI *KHOpenAPI;
 	TPanel *Panel7;
 	TLabel *Label19;
 	TLabel *Label20;
@@ -99,12 +99,13 @@ __published:	// IDE-managed Components
 	TLabel *Label23;
 	TLabel *Label24;
 	TLabel *Label25;
-	TEdit *Edit2;
-	TEdit *Edit3;
-	TEdit *Edit4;
-	TEdit *Edit5;
-	TEdit *Edit6;
-	TEdit *Edit7;
+	TEdit *edDeposit;
+	TEdit *edDeposit2;
+	TEdit *edTotalPurchase;
+	TEdit *edDayRate;
+	TEdit *edCumulativePrice;
+	TEdit *edCumulativeRate;
+	TKHOpenAPI *KHOpenAPI;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -125,7 +126,7 @@ private:	// User declarations
     bool m_KWLogSt;
 
 	bool __fastcall Init(void);
-	bool __fastcall InitTrList(void);
+	bool __fastcall SetTrAccEstList(void);
 	bool __fastcall KWLogin(void);
 	bool __fastcall GetUserInfo(void);
 
@@ -134,10 +135,11 @@ public:		// User declarations
 
 	__fastcall TStockMainF(TComponent* Owner);
 
-	void __fastcall SetSigLogGrid();
-	void __fastcall SetSigLogGridTitle();
-	void __fastcall SetTradeLogGrid();
-	void __fastcall SetTradeLogGridTitle();
+	void __fastcall SetSigLogGrid(void);
+	void __fastcall SetSigLogGridTitle(void);
+	void __fastcall SetTradeLogGrid(void);
+	void __fastcall SetTradeLogGridTitle(void);
+	void __fastcall SetAccInfo(void);
 
 	void __fastcall ShowUserInfo();
 	void __fastcall ShowSysStatus();

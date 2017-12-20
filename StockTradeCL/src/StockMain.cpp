@@ -8,6 +8,7 @@
 #include "STDebug.h"
 #include "SysConfFrm.h"
 //---------------------------------------------------------------------------
+#include "Numstr.h"
 #include "StockDB.h"
 #include "CPstock.h"
 #include "THRmain.h"
@@ -15,6 +16,7 @@
 #include "CLSstockSig.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+//#pragma link "KHOpenAPILib_OCX"
 #pragma link "KHOpenAPILib_OCX"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
@@ -129,6 +131,18 @@ void __fastcall TStockMainF::SetTradeLogGridTitle()
 	pRow[0].Strings[5]="주문가";
 	pRow[0].Strings[6]="체결가";
 	pRow[0].Strings[7]="매매상태";
+}
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::SetAccInfo(void)
+{
+	edDeposit->Text = Numstr::SToNForStr(AccInfo.Deposit);
+	edDeposit2->Text = Numstr::SToNForStr(AccInfo.Deposit2);
+	edTotalPurchase->Text = Numstr::SToNForStr(AccInfo.TotalPurchase);
+	edDayRate->Text = Numstr::SToNForStr(AccInfo.Day_P_L_Rate);
+	edCumulativeRate->Text = Numstr::SToNForStr(AccInfo.CumulativeRate);
+	edCumulativePrice->Text = Numstr::SToNForStr(AccInfo.CumulativePrice);
 }
 //---------------------------------------------------------------------------
 // ShowUserInfo
@@ -273,6 +287,7 @@ void __fastcall TStockMainF::ReqAccInfo(void)
 
 	BSTR pSetAccno 	 	  = SysAllocString(L"계좌번호");
 	BSTR pMyAccNO_MO 	  = SysAllocString(strData.w_str());
+//	BSTR pMyAccNO_MO = SysAllocString(L"8097831511");
 	BSTR pPassWord	 	  = SysAllocString(L"비밀번호");
 	BSTR pValueEmpty 	  = SysAllocString(L"");
 	BSTR pSangPe 	 	  = SysAllocString(L"상장폐지조회구분");
@@ -314,8 +329,8 @@ void __fastcall TStockMainF::fnSaveRealTimeSig(TMessage Msg)
 //---------------------------------------------------------------------------
 bool __fastcall TStockMainF::Init()
 {
-	// TR LIST 초기화
-	InitTrList();
+	// TR ACC ESTIMATE LIST 초기화
+	SetTrAccEstList();
 
 	// String 그리드 기본 화면 초기화
 	SetSigLogGrid();
@@ -324,25 +339,26 @@ bool __fastcall TStockMainF::Init()
 	SetTradeLogGridTitle();
 }
 //---------------------------------------------------------------------------
-//
+// SetTrAccEstList
 //---------------------------------------------------------------------------
-bool __fastcall TStockMainF::InitTrList(void)
+bool __fastcall TStockMainF::SetTrAccEstList(void)
 {
 	// OPW00004 (계좌평가현황조회)
-	TrList.TR_ACC_EST.TRCODE = SysAllocString(L"OPW00004");
-	TrList.TR_ACC_EST.TRRECORD_Nm = SysAllocString(L"계좌평가현황요청");
-	TrList.TR_ACC_EST.IT_AccNM = SysAllocString(L"계좌명");
-	TrList.TR_ACC_EST.IT_Deposit = SysAllocString(L"예수금");
-	TrList.TR_ACC_EST.IT_Deposit2 = SysAllocString(L"D+2추정예수금");
+	TrList.TR_ACC_EST.TRCODE 		   = SysAllocString(L"OPW00004");
+	TrList.TR_ACC_EST.TRRECORD_Nm 	   = SysAllocString(L"계좌평가현황요청");
+	TrList.TR_ACC_EST.IT_AccNM 		   = SysAllocString(L"계좌명");
+	TrList.TR_ACC_EST.IT_Deposit 	   = SysAllocString(L"예수금");
+	TrList.TR_ACC_EST.IT_Deposit2 	   = SysAllocString(L"D+2추정예수금");
 	TrList.TR_ACC_EST.IT_TotalPurchase = SysAllocString(L"총매입금액");
-	TrList.TR_ACC_EST.IT_Day_P_L_Rate = SysAllocString(L"당일손익율");
+	TrList.TR_ACC_EST.IT_Day_P_L_Rate  = SysAllocString(L"당일손익율");
+	TrList.TR_ACC_EST.IT_TotalPurchase = SysAllocString(L"누적손익율");
+	TrList.TR_ACC_EST.IT_Day_P_L_Rate  = SysAllocString(L"누적투자손익");
 }
 //---------------------------------------------------------------------------
 // KWLogin
 //---------------------------------------------------------------------------
 bool __fastcall TStockMainF::KWLogin(void)
 {
-
 	long Result = KHOpenAPI->CommConnect();
 
 	if(Result != 0)
@@ -356,25 +372,19 @@ bool __fastcall TStockMainF::KWLogin(void)
 //---------------------------------------------------------------------------
 bool __fastcall TStockMainF::GetUserInfo()
 {
+	BSTR pUSER_ID 	  =SysAllocString(L"USER_ID");
+	BSTR pUSER_NAME   =SysAllocString(L"USER_NAME");
+	BSTR pACCOUNT_CNT =SysAllocString(L"ACCOUNT_CNT");
+	BSTR pACCNO 	  =SysAllocString(L"ACCNO");
+	BSTR pKEY_BSECGB  =SysAllocString(L"KEY_BSECGB");
+	BSTR pFIREW_SECGB =SysAllocString(L"FIREW_SECGB");
 
-	String str="";
-	str = KHOpenAPI->GetLoginInfo(_T(L"USER_NAME"));
-	UInfo.uName = str;
-
-	str = KHOpenAPI->GetLoginInfo(_T(L"USER_ID"));
-	UInfo.uID = str;
-
-	str = KHOpenAPI->GetLoginInfo(_T(L"ACCNO"));
-	UInfo.accNo = str;
-
-	str = KHOpenAPI->GetLoginInfo(_T(L"ACCOUNT_CNT"));
-	UInfo.accCnt = str;
-
-	str = KHOpenAPI->GetLoginInfo(_T(L"KEY_BSECGB"));
-	UInfo.keyBs = str;
-
-	str = KHOpenAPI->GetLoginInfo(_T(L"FIREW_SECGB"));
-	UInfo.fireSe = str;
+	UInfo.uName = KHOpenAPI->GetLoginInfo(pUSER_NAME);
+	UInfo.uID  = KHOpenAPI->GetLoginInfo(pUSER_ID);
+	UInfo.accNo = KHOpenAPI->GetLoginInfo(pACCNO);
+	UInfo.accCnt = KHOpenAPI->GetLoginInfo(pACCOUNT_CNT);
+	UInfo.keyBs = KHOpenAPI->GetLoginInfo(pKEY_BSECGB);
+	UInfo.fireSe = KHOpenAPI->GetLoginInfo(pFIREW_SECGB);
 
 	ShowUserInfo();
 	ShowSysStatus();
@@ -392,11 +402,15 @@ void __fastcall TStockMainF::MakeDirectory(const char* path)
 void __fastcall TStockMainF::KHOpenAPIEventConnect(TObject *Sender, long nErrCode)
 
 {
+//
 	if(nErrCode == 0)
 	{
 		StatusBar->Panels->Items[2]->Text = "Login 성공";
 		m_KWLogSt = true;
+		// User info
 		GetUserInfo();
+        // Account info
+        ReqAccInfo();
 	}
 	else
 	{
@@ -411,14 +425,31 @@ void __fastcall TStockMainF::KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo
 		  BSTR sRQName, BSTR sTrCode, BSTR sRecordName, BSTR sPrevNext, long nDataLength,
 		  BSTR sErrorCode, BSTR sMessage, BSTR sSplmMsg)
 {
-//
 	if(wcscmp(L"계좌평가현황요청",sRQName) == 0)
 	{
-		AccInfo.a1 = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit);
-		AccInfo.a2 = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit);
+		//SetTrAccEstList();
+		// 계좌평가현황
+		BSTR pDeposit     = SysAllocString(L"예수금");      // 예수금
+		BSTR pDeposit_2d  = SysAllocString(L"D+2추정예수금");   // D+2추정예수금
+		BSTR pToPurch     = SysAllocString(L"총매입금액");      // 총매입금액
+		BSTR pOneDayRate  = SysAllocString(L"당일손익율");   // 당일손익율
+		BSTR pMoaMoaRate  = SysAllocString(L"누적손익율");   // 누적손익율
+		BSTR pMoaMoaPrice = SysAllocString(L"누적투자손익");  // 누적투자손익
 
-		ShowMessage(AccInfo.a1);
-		ShowMessage(AccInfo.a2);
+//		AccInfo.Deposit = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit);
+//		AccInfo.Deposit2 = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit2);
+//		AccInfo.TotalPurchase = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_TotalPurchase);
+//		AccInfo.Day_P_L_Rate = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Day_P_L_Rate);
+//		AccInfo.CumulativeRate = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_CumulativeRate);
+//		AccInfo.CumulativePrice = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_CumulativePrice);
+		AccInfo.Deposit = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pDeposit);
+		AccInfo.Deposit2 = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pDeposit_2d);
+		AccInfo.TotalPurchase = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pToPurch);
+		AccInfo.Day_P_L_Rate = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pOneDayRate);
+		AccInfo.CumulativeRate = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pMoaMoaRate);
+		AccInfo.CumulativePrice = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pMoaMoaPrice);
+
+		SetAccInfo();
 	}
 }
 //---------------------------------------------------------------------------
@@ -438,7 +469,7 @@ void __fastcall TStockMainF::tmStatusTimer(TObject *Sender)
 	m_curTime.DecodeTime(&sTime.hour, &sTime.min, &sTime.sec, &sTime.mSec);
 	AnsiString s="";
 	s.printf("%04d-%02d-%02d %02d:%02d:%02d", sTime.year, sTime.mon, sTime.day, sTime.hour, sTime.min, sTime.sec);
-	StatusBar->Panels->Items[3]->Text=s;
+	StatusBar->Panels->Items[5]->Text=s;
 }
 //---------------------------------------------------------------------------
 // Button Event (btnDebugClick)
@@ -471,6 +502,7 @@ void __fastcall TStockMainF::sgSiglogDrawCell(TObject *Sender, int ACol, int ARo
 
 	UINT Flags = DT_SINGLELINE | DT_VCENTER;
 	AnsiString sText = pGrid->Cells[ ACol ][ ARow ];
+	//String sText = pGrid->Cells[ ACol ][ ARow ];
 
 	AnsiString sTitle="";
 

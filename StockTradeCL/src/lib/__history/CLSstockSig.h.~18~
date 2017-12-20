@@ -10,8 +10,6 @@
 //---------------------------------------------------------------------------
 // Constant
 //---------------------------------------------------------------------------
-#define IGNORE_TIME 		3   // 3 minute
-//---------------------------------------------------------------------------
 // Type definition
 //---------------------------------------------------------------------------
 // TradeInfo SIG
@@ -54,10 +52,10 @@ typedef enum { ZERO_CONCLUSION, PART_CONCLUSION, ALL_CONCLUSION } CONCLUSION_STA
 //---------------------------------------------------------------------------
 typedef struct
 {
-	bool IgnoreSell;            // Sell 신호 무시 상태 (ture : 무시)
-	bool IgnoreBuy;             // Buy 신호 무시 상태 (ture : 무시)
 	CONCLUSION_STAT stsSell;    // Sell 신호 체결 상태
 	CONCLUSION_STAT stsBuy;     // Buy 신호 체결 상태
+
+
 } TRADE_OPR;
 //---------------------------------------------------------------------------
 // Class
@@ -69,8 +67,7 @@ private:
 public:
 	TSIG_INFO SInfo;        // Sell sig info
 	TSIG_INFO BInfo;        // Buy sig info
-	TRADE_MNG Mng;  		// 매수매도 관리
-	TRADE_OPR Opr;          // 체결 관리 (체결 상태 및 무시 할 것인지.)
+	TRADE_MNG Mng;
 
 
 	__fastcall CLSstockSig(void);
@@ -78,8 +75,6 @@ public:
 
 	void InitSell(TradeSigInfo *pInfo);
 	void InitBuySig(TradeSigInfo *pInfo);
-
-	bool CheckSellSig(int *necessaryQty);
 
 
 

@@ -59,6 +59,9 @@ typedef struct
 	BSTR IT_Deposit2;
 	BSTR IT_TotalPurchase;  // 총 매입금액
 	BSTR IT_Day_P_L_Rate;	// 당일 손익률
+	BSTR IT_CumulativeRate;  // 누적 손익율
+	BSTR IT_CumulativePrice; // 누적 투자 손익
+
 }OPW00004;
 //------------------------------------------------------------------------------
 typedef struct

@@ -79,7 +79,7 @@ public:
 	void InitSell(TradeSigInfo *pInfo);
 	void InitBuySig(TradeSigInfo *pInfo);
 
-	bool CheckSellSig(int *necessaryQty);
+	bool CheckSellSig(int *necessary);
 
 
 

@@ -22,7 +22,7 @@ __fastcall CLSstockSig::~CLSstockSig(void)
 {
 }
 //---------------------------------------------------------------------------
-// InitSell
+// Init
 //---------------------------------------------------------------------------
 void CLSstockSig::InitSell(TradeSigInfo *pInfo)
 {

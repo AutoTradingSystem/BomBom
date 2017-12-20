@@ -106,6 +106,8 @@ void __fastcall CLSstockIF::AddSigCode(const char * code, TradeSigInfo *trDB)
 	//CLSsystem *pSys = (CLSsystem*)&PublicMem.system;
 	CLSsystem *pSys = &PublicMem.system;
 	int idx = pSys->Sig;
+	if(idx>=1000)
+        return ;
 	//pSig = (CLSstockSig *)&PublicMem.stock[idx];
 	pSig = &PublicMem.stock[idx];
 
@@ -115,7 +117,7 @@ void __fastcall CLSstockIF::AddSigCode(const char * code, TradeSigInfo *trDB)
 	if((Map.Get(code)) == NULL)
 	{
 		Log.Write("MAP CODE[%s]", code);
-		pSig->Init(trDB);
+		pSig->InitSell(trDB);
 		if(Map.Add(code, pSig))
 			Log.Write("MAP SUCCESS CODE[%s]", code);
 		else
@@ -359,10 +361,19 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	memcpy(TDSINFO.stockNm, &buffer[idx], 32);    	idx += 32;
 	TDSINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
 
-	// Map에 종목코드 추가
-	AnsiString scode = TDSINFO.stockCode;
-	//AddSigCode(TDSINFO.stockCode);
-	AddSigCode(scode.c_str(), &TDSINFO);
+	// 매수 신호일때만 Map등록
+	if(TDSINFO.type='s')
+	{
+		// Map에 종목코드 추가
+		AnsiString scode = TDSINFO.stockCode;
+		//AddSigCode(TDSINFO.stockCode);
+		AddSigCode(scode.c_str(), &TDSINFO);
+	}
+	if(TDSINFO.type='b')
+	{
+
+    }
+
 
 	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t  [%s][%s] : [%d]"
 		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);

@@ -22,7 +22,7 @@ __fastcall CLSstockSig::~CLSstockSig(void)
 {
 }
 //---------------------------------------------------------------------------
-// InitSell
+// Init
 //---------------------------------------------------------------------------
 void CLSstockSig::InitSell(TradeSigInfo *pInfo)
 {
@@ -38,6 +38,13 @@ void CLSstockSig::InitSell(TradeSigInfo *pInfo)
 	SInfo.price = pInfo->price;
 }
 //---------------------------------------------------------------------------
+// CheckSellSig
+//---------------------------------------------------------------------------
+bool CLSstockSig::CheckSellSig(int *necessaryQty)
+{
+
+}
+//---------------------------------------------------------------------------
 // InitBuySig
 //---------------------------------------------------------------------------
 void CLSstockSig::InitBuySig(TradeSigInfo *pInfo)
@@ -45,14 +52,14 @@ void CLSstockSig::InitBuySig(TradeSigInfo *pInfo)
 
 }
 //---------------------------------------------------------------------------
-// CheckSellSig
+//
 //---------------------------------------------------------------------------
 bool CLSstockSig::CheckSellSig(int *necessaryQty)
 {
-    return (true);
+
 }
 //---------------------------------------------------------------------------
-// GetCodeName
+//
 //---------------------------------------------------------------------------
 char *CLSstockSig::GetCodeName()
 {
