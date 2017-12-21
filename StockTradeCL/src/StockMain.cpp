@@ -277,9 +277,9 @@ void __fastcall TStockMainF::SaveSigCSV_RealTime(void)
 	fclose(fp);
 }
 //---------------------------------------------------------------------------
-// ReqAccInfo
+// ReqAccountInfo
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::ReqAccInfo(void)
+void __fastcall TStockMainF::ReqAccountInfo(void)
 {
 	int nRet;
 	UnicodeString strData="";
@@ -309,6 +309,39 @@ void __fastcall TStockMainF::ReqAccInfo(void)
 	{
 		StatusBar->Panels->Items[3]->Text = "결과:"+IntToStr(nRet) ;
 	}
+}
+//---------------------------------------------------------------------------
+// ReqSendOrderTest
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::ReqSendOrderTest(void)
+{
+	BSTR pStockOrder = SysAllocString(L"RQ_1");
+	BSTR pScreenNo_0101 = SysAllocString(L"0101");
+	BSTR pCode = SysAllocString(edOrderCd->Text.c_str());
+	BSTR pMyAccNO = SysAllocString(L"6000163741");
+	BSTR pMyAccNO_MO = SysAllocString(L"8097831511");
+	BSTR pValue00 = SysAllocString(L"00");
+	BSTR pValueEmpty = SysAllocString(L"");
+	long pOrderType = cbOrderType->ItemIndex + 1;
+	long pQuantity = StrToIntDef(edOrderQuantity->Text,0);
+	long pPrice = StrToIntDef(edOrderPrice->Text,0);
+	long result;
+	try
+	{
+		result = KHOpenAPI->SendOrder(pStockOrder, pScreenNo_0101, pMyAccNO_MO, pOrderType, pCode, pQuantity, pPrice, pValue00, pValueEmpty);
+
+	}__finally
+	{
+		ShowMessage(result);
+		if(result == 0)
+		{
+			StatusBar->Panels->Items[4]->Text = "주문전송 성공";
+			SysMsgLog.str.printf("TP:%d  CD:%s  QYT:%d, PRICE:%d", pOrderType, edOrderCd->Text.c_str(), pQuantity, pPrice);
+		}
+		else
+			StatusBar->Panels->Items[4]->Text = "주문전송 실패";
+	}
+
 }
 //---------------------------------------------------------------------------
 // fnShowGrdSIGInfo
@@ -410,7 +443,7 @@ void __fastcall TStockMainF::KHOpenAPIEventConnect(TObject *Sender, long nErrCod
 		// User info
 		GetUserInfo();
         // Account info
-        ReqAccInfo();
+        ReqAccountInfo();
 	}
 	else
 	{
@@ -436,12 +469,6 @@ void __fastcall TStockMainF::KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo
 		BSTR pMoaMoaRate  = SysAllocString(L"누적손익율");   // 누적손익율
 		BSTR pMoaMoaPrice = SysAllocString(L"누적투자손익");  // 누적투자손익
 
-//		AccInfo.Deposit = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit);
-//		AccInfo.Deposit2 = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Deposit2);
-//		AccInfo.TotalPurchase = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_TotalPurchase);
-//		AccInfo.Day_P_L_Rate = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_Day_P_L_Rate);
-//		AccInfo.CumulativeRate = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_CumulativeRate);
-//		AccInfo.CumulativePrice = KHOpenAPI->GetCommData(TrList.TR_ACC_EST.TRCODE, TrList.TR_ACC_EST.TRRECORD_Nm,0,TrList.TR_ACC_EST.IT_CumulativePrice);
 		AccInfo.Deposit = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pDeposit);
 		AccInfo.Deposit2 = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pDeposit_2d);
 		AccInfo.TotalPurchase = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pToPurch);
@@ -451,6 +478,78 @@ void __fastcall TStockMainF::KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo
 
 		SetAccInfo();
 	}
+}
+//---------------------------------------------------------------------------
+// KHOpenAPIEvent (ReceiveChejanData)
+//---------------------------------------------------------------------------S
+void __fastcall TStockMainF::KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGubun,
+		  long nItemCnt, BSTR sFIdList)
+{
+//
+	ShowMessage(sGubun);
+
+	//접수와 체결.
+	if(wcscmp(L"0",sGubun) == 0)
+	{
+		// 주문번호         9203
+		// 종목 코드        9001
+		// 주문 상태        913
+		// 종목 명          302
+		// 주문 량          900
+		// 주문 가격        901
+		// 체결 량          911
+		// 체결 가격        910
+		// 미체결 량
+		// 원 주문번호
+		// 매매구분
+		// 주분 체결 시간
+		// 체결 번호
+		// 체결 가격
+		// 현재 가격
+		// 보유 수량
+		// 총 매입 단가
+		// 주문 가능 수량
+
+
+		OrdInfo.orderNm 	  = KHOpenAPI->GetChejanData(302);  // 종목 명
+		OrdInfo.orderQty 	  = KHOpenAPI->GetChejanData(900);  // 주문 수량
+		OrdInfo.chegyeolQry   = KHOpenAPI->GetChejanData(911);  // 체결량
+		OrdInfo.chegyeolPrice = KHOpenAPI->GetChejanData(910);  // 체결가
+		OrdInfo.time		  = KHOpenAPI->GetChejanData(908); 	// 주문 체결 시간
+	}
+	// 잔고 전달.
+	else if(wcscmp(L"1",sGubun) == 0)
+	{
+		// 미체결시 발생하는 건가?
+
+		// 주문번호
+		// 종목 코드
+		// 주문 상태
+		// 종목 명
+		// 주문 량
+		// 주문 가격
+		// 체결 량
+		// 체결 가격
+		// 미체결 량
+		// 원 주문번호
+		// 매매구분
+		// 주분 체결 시간
+		// 체결 번호
+		// 체결 가격
+		// 현재 가격
+		// 보유 수량
+		// 총 매입 단가
+		// 주문 가능 수량
+
+	}
+	else if(wcscmp(L"3",sGubun) == 0)
+	{
+
+	}
+	else
+	{
+
+    }
 }
 //---------------------------------------------------------------------------
 // Timer (tmStatusTimer)
@@ -574,7 +673,7 @@ void __fastcall TStockMainF::Button3Click(TObject *Sender)
 {
 //
 //	ThrClient->Kill();
-    ReqAccInfo();
+	ReqAccountInfo();
 }
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::Button4Click(TObject *Sender)
@@ -596,5 +695,16 @@ void __fastcall TStockMainF::Button4Click(TObject *Sender)
 		ShowMessage("Map NULL");
     }
 }
+//---------------------------------------------------------------------------
+
+
+void __fastcall TStockMainF::btnOrderClick(TObject *Sender)
+{
+//
+    ReqSendOrderTest();
+}
+//---------------------------------------------------------------------------
+
+
 //---------------------------------------------------------------------------
 

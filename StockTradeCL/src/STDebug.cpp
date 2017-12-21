@@ -40,5 +40,10 @@ void __fastcall TSTDebugF::fnMessageLog(TMessage Msg)
 //---------------------------------------------------------------------------
 void __fastcall TSTDebugF::fnMessageSendLog(TMessage Msg)
 {
-    lbSendLog->Items->Add(SendMsgLog.str);
+	lbSendLog->Items->Add(SendMsgLog.str);
+}
+//---------------------------------------------------------------------------
+void __fastcall TSTDebugF::fnMessageSysLog(TMessage Msg)
+{
+	mmSysLog->Lines->Add(SysMsgLog.str);
 }

@@ -35,12 +35,12 @@ typedef struct
 //---------------------------------------------------------------------------
 typedef struct
 {
-	bool isBuyCompleted;    // 매수 완료
-	bool isSellCompleted;   // 매도 완료
 	int buyQty;				// 매수 수량 (매수 체결량)
 	int sellQty;    		// 매도 수량 (매도 체결량)
 	int buyOrderQty;		// 매수 주문 량
 	int sellOrderQty;   	// 매도 주문 량
+	int buySignPrice;		// 매도 체결 가격
+	int sellSignPrice;		// 매수 체결 가격
 	// 미체결 량은 OrderQry - buyQty
 } TRADE_MNG;
 
@@ -59,18 +59,23 @@ typedef struct
 	CONCLUSION_STAT stsSell;    // Sell 신호 체결 상태
 	CONCLUSION_STAT stsBuy;     // Buy 신호 체결 상태
 } TRADE_OPR;
+
+#define TRADE_OPR_SIZE      sizeof(TRADE_OPR)
 //---------------------------------------------------------------------------
 // Class
 //---------------------------------------------------------------------------
 class CLSstockSig
 {
 private:
+	int m_curTime;
+	int m_sellGridIdx;
+    int m_buyGridIdx;
 
 public:
 	TSIG_INFO SInfo;        // Sell sig info
 	TSIG_INFO BInfo;        // Buy sig info
 	TRADE_MNG Mng;  		// 매수매도 관리
-	TRADE_OPR Opr;          // 체결 관리 (체결 상태 및 무시 할 것인지.)
+	TRADE_OPR Opr;          // 체결 관리 (체결 상태 및 신호를 무시 할 것인지.)
 
 
 	__fastcall CLSstockSig(void);
@@ -79,9 +84,13 @@ public:
 	void InitSell(TradeSigInfo *pInfo);
 	void InitBuySig(TradeSigInfo *pInfo);
 
-	bool CheckSellSig(int *necessaryQty);
+	void SetSellOrderQty(int qty);
+	void SetBuyOrderQty(int qty);
+	void SetSellQty(int qty);
+	void SetBuyQty(int qty);
 
-
+	bool SellIgnore(void);
+	bool BuyIgnore(void);
 
 	char *GetCodeName();
 };

@@ -17,6 +17,13 @@
 #include "Define.h"
 #include "KHOpenAPILib_OCX.h"
 //---------------------------------------------------------------------------
+// Type definition
+//---------------------------------------------------------------------------
+typedef struct
+{
+    bool accountInfo;
+} InitInfo;
+//---------------------------------------------------------------------------
 // Class
 //---------------------------------------------------------------------------
 class TStockMainF : public TForm
@@ -59,9 +66,9 @@ __published:	// IDE-managed Components
 	TRadioButton *rbUser;
 	TRadioButton *rbMarket;
 	TRadioButton *rbCurrent;
-	TComboBox *cbTradeType;
-	TButton *btnTradeInit;
-	TButton *btnTradeOk;
+	TComboBox *cbOrderType;
+	TButton *btnOrderReset;
+	TButton *btnOrder;
 	TLabel *Label13;
 	TLabel *Label14;
 	TEdit *edOrderNumber;
@@ -120,10 +127,14 @@ __published:	// IDE-managed Components
 	void __fastcall KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo, BSTR sRQName,
           BSTR sTrCode, BSTR sRecordName, BSTR sPrevNext, long nDataLength, BSTR sErrorCode,
           BSTR sMessage, BSTR sSplmMsg);
+	void __fastcall btnOrderClick(TObject *Sender);
+	void __fastcall KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGubun, long nItemCnt,
+          BSTR sFIdList);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
     bool m_KWLogSt;
+	InitInfo m_initInfo;
 
 	bool __fastcall Init(void);
 	bool __fastcall SetTrAccEstList(void);
@@ -149,7 +160,8 @@ public:		// User declarations
 	void __fastcall SaveSigCSV_RealTime(void);
 
 
-    void __fastcall ReqAccInfo(void);
+	void __fastcall ReqAccountInfo(void);
+    void __fastcall ReqSendOrderTest(void);
 
 	void __fastcall fnShowGrdSIGInfo(TMessage Msg);
 	void __fastcall fnSaveRealTimeSig(TMessage Msg);

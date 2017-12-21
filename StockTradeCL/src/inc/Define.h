@@ -8,8 +8,10 @@
 //---------------------------------------------------------------------------
 #define WM_MSGLOG               (WM_USER + 0x01)
 #define WM_SENDLOG              (WM_USER + 0x02)
-#define WM_SHOW_GRD_SIG         (WM_USER + 0x03)    // Show Grid SIG Info
-#define WM_SAVE_RT_SIG          (WM_USER + 0x04)    // Save Realtime SIG info
+#define WM_SYSLOG              	(WM_USER + 0x03)
+//---------------------------------------------------------------------------
+#define WM_SHOW_GRD_SIG         (WM_USER + 0x04)    // Show Grid SIG Info
+#define WM_SAVE_RT_SIG          (WM_USER + 0x05)    // Save Realtime SIG info
 //------------------------------------------------------------------------------
 // Constant
 //------------------------------------------------------------------------------

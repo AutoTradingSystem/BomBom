@@ -11,11 +11,13 @@
 SysTime sTime;
 TestMSG RecvMsgLog;
 TestMSG SendMsgLog;
+TestMSG SysMsgLog;
 //---------------------------------------------------------------------------
 SYSTEM StockSYS;
 USERINFO UInfo;
 ACCINFO AccInfo;
 TradeSigInfo TDSINFO;
+OrderInfo OrdInfo;
 //---------------------------------------------------------------------------
 // End of StockDB.cpp
 //---------------------------------------------------------------------------

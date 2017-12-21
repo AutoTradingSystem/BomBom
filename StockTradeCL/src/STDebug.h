@@ -25,6 +25,10 @@ __published:	// IDE-managed Components
 	TLabel *Label3;
 	TListBox *lbRecvLog;
 	TListBox *lbSendLog;
+	TPanel *Panel1;
+	TPanel *Panel2;
+	TPanel *Panel3;
+	TMemo *mmSysLog;
 	void __fastcall btnEchoClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
@@ -32,10 +36,12 @@ public:		// User declarations
 
 	void __fastcall fnMessageLog(TMessage Msg);
 	void __fastcall fnMessageSendLog(TMessage Msg);
+	void __fastcall fnMessageSysLog(TMessage Msg);
 
 	BEGIN_MESSAGE_MAP
 		VCL_MESSAGE_HANDLER(WM_MSGLOG,     TMessage, fnMessageLog);
 		VCL_MESSAGE_HANDLER(WM_SENDLOG,     TMessage, fnMessageSendLog);
+		VCL_MESSAGE_HANDLER(WM_SYSLOG,     TMessage, fnMessageSysLog);
 	END_MESSAGE_MAP(TForm);
 };
 //---------------------------------------------------------------------------

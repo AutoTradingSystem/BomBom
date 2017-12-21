@@ -61,6 +61,7 @@ object StockMainF: TStockMainF
       Height = 50
       TabOrder = 3
       OnReceiveTrData = KHOpenAPIReceiveTrData
+      OnReceiveChejanData = KHOpenAPIReceiveChejanData
       OnEventConnect = KHOpenAPIEventConnect
       ControlData = {02000100560A00002B05000000000000}
     end
@@ -149,7 +150,7 @@ object StockMainF: TStockMainF
           Top = 6
           Width = 75
           Height = 25
-          Caption = 'TEST'
+          Caption = #44228#51340#51221#48372
           TabOrder = 5
           OnClick = Button3Click
         end
@@ -498,7 +499,7 @@ object StockMainF: TStockMainF
           Caption = #54788#51228#44032
           TabOrder = 5
         end
-        object cbTradeType: TComboBox
+        object cbOrderType: TComboBox
           Left = 78
           Top = 50
           Width = 121
@@ -516,7 +517,7 @@ object StockMainF: TStockMainF
             #47588#49688#51221#51221
             #47588#46020#51221#51221)
         end
-        object btnTradeInit: TButton
+        object btnOrderReset: TButton
           Left = 52
           Top = 178
           Width = 75
@@ -530,7 +531,7 @@ object StockMainF: TStockMainF
           ParentFont = False
           TabOrder = 7
         end
-        object btnTradeOk: TButton
+        object btnOrder: TButton
           Left = 133
           Top = 178
           Width = 75
@@ -543,6 +544,7 @@ object StockMainF: TStockMainF
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 8
+          OnClick = btnOrderClick
         end
         object edOrderNumber: TEdit
           Left = 78
