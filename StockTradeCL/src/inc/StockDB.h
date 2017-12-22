@@ -106,10 +106,11 @@ typedef struct
 	String firstSellPrice;	// 최우선 매도 호가
 	String firstBuyPrice;	// 최우선 매수 호가
 	String denyReason;      // 거부 사유
-
+	String screenNo;        // 화면번호
 	String holdQty; 		// 보유 수량
 	String totalBuyPrice;   // 총 매입 단가
-    String orderableQty;    // 주문 가능 수량
+	String orderableQty;    // 주문 가능 수량
+	String basePrice;   	// 기준가
 } OrderInfo;
 
 extern PACKAGE OrderInfo OrdInfo;

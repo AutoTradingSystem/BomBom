@@ -2,113 +2,95 @@
 
 #pragma hdrstop
 
-#include "THRclient.h"
-#include "StockDB.h"
+#include "THRprcsig.h"
+#include "StockMain.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-
 //---------------------------------------------------------------------------
 // External
 //---------------------------------------------------------------------------
 extern int global;
 extern CLSlog Log;
-extern THRclient *ThrClient;
-extern CLSstockIF TcpClient;
+extern CLSqueue Que;
+extern THRprcsig *Thrprcsig;
 //---------------------------------------------------------------------------
 // THRclient
 //---------------------------------------------------------------------------
-__fastcall THRclient::THRclient(void) : TThread(true)
+__fastcall THRprcsig::THRprcsig(void) : TThread(true)
 {
 
 }
 //---------------------------------------------------------------------------
 // ~THRclient
 //---------------------------------------------------------------------------
-__fastcall THRclient::~THRclient()
+__fastcall THRprcsig::~THRprcsig()
 {
 
 }
-bool __fastcall THRclient::IsRunning(void)
+bool __fastcall THRprcsig::IsRunning(void)
 {
     return (Active);
 }
 //---------------------------------------------------------------------------
-// test
-//---------------------------------------------------------------------------
-void __fastcall THRclient::test()
-{
-	ostringstream oss;
-	oss<<global;
-	string s=oss.str();
-
-	Log.Write(s.c_str());
-}
-//---------------------------------------------------------------------------
 // start
 //---------------------------------------------------------------------------
-void __fastcall THRclient::start()
+void __fastcall THRprcsig::start()
 {
 	Start();
 }
 //---------------------------------------------------------------------------
 // stop
 //---------------------------------------------------------------------------
-void __fastcall THRclient::stop()
+void __fastcall THRprcsig::stop()
 {
 	Terminate();
 }
-void __fastcall THRclient::Kill(void)
+void __fastcall THRprcsig::Kill(void)
 {
 	Terminate();
 	TCLclearEnv();
 }
-bool __fastcall THRclient::NeedTerminate()
+bool __fastcall THRprcsig::NeedTerminate()
 {
 	return (StockSYS.Terminate);
 }
 //---------------------------------------------------------------------------
 // TCLmanage
 //---------------------------------------------------------------------------
-bool __fastcall THRclient::TCLmanage(void)
+bool __fastcall THRprcsig::TCLmanage(void)
 {
-	return (TcpClient.Manage());
-	//return (true);
+	if(!(Que.EmptySellSig()))
+	{
+		Log.Write("QUE[SELL] 皑瘤");
+		PostMessage(StockMainF->Handle, WM_QUE_SELLSIG, (WPARAM)0, (LPARAM)0);
+    }
+
+	return (true);
 }
-void __fastcall THRclient::TCLclearEnv(void)
+void __fastcall THRprcsig::TCLclearEnv(void)
 {
-	TcpClient.CloseNetwork("Socket Close");
+
 }
-void __fastcall THRclient::ExitThread()
+void __fastcall THRprcsig::ExitThread()
 {
 	Active = false;
 }
 //---------------------------------------------------------------------------
 // Execute
 //---------------------------------------------------------------------------
-void __fastcall THRclient::Execute()
+void __fastcall THRprcsig::Execute()
 {
 	Active = true;
-	int cycle = 0;
 	Log.Write("THRclient start");
 	while( !Terminated && !NeedTerminate())
 	{
-//		if (cycle % 10 == 0) {
-//			cycle++;
-//			Log.Write("thread run[%d]", cycle);
-//			if (cycle == 100000000) cycle = 0;
-//		}
 
-		// 立加 包府
-		if (!TCLmanage())
-		{
-			Log.Write("TCP Mng false");
-			TCLclearEnv();
-//			break;
-		}
+		// Sig 包府
+		TCLmanage();
 
 		Sleep(1000);
 	}
-	Log.Write("THRclient end");
+	Log.Write("THRprcsig end");
 	TCLclearEnv();
 	ExitThread();
 }

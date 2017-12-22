@@ -27,6 +27,10 @@ StockTradeCL/src/Win32/Debug
 StockTradeCL/src/inc/__history
 StockTradeCL/src/lib/__history
 StockTradeCL/src/lib/__recovery
+StockTradeCL/src/QUE/__history
+StockTradeCL/src/QUE/__recovery
+StockTradeCL/src/TPRC/__history
+StockTradeCL/src/TPRC/__recovery
 StockTradeCL/bin
 
 

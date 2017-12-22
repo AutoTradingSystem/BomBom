@@ -13,6 +13,9 @@
 #define WM_SHOW_GRD_SIG         (WM_USER + 0x04)    // Show Grid SIG Info
 #define WM_SAVE_RT_SIG          (WM_USER + 0x05)    // Save Realtime SIG info
 //------------------------------------------------------------------------------
+#define WM_QUE_SELLSIG          (WM_USER + 0x06)    // Sell signal
+#define WM_QUE_BUYSIG           (WM_USER + 0x07)    // Buy signal
+//------------------------------------------------------------------------------
 // Constant
 //------------------------------------------------------------------------------
 #define MAX_STOCK   1000;

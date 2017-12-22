@@ -19,6 +19,13 @@ __fastcall TSTDebugF::TSTDebugF(TComponent* Owner)
 {
 }
 //---------------------------------------------------------------------------
+// AddLog
+//---------------------------------------------------------------------------
+void __fastcall TSTDebugF::AddLog(UnicodeString msg)
+{
+	mmSysLog->Lines->Add(msg);
+}
+//---------------------------------------------------------------------------
 void __fastcall TSTDebugF::btnEchoClick(TObject *Sender)
 {
 	if(Pstock->SendEcho("Hello world"))
@@ -47,3 +54,12 @@ void __fastcall TSTDebugF::fnMessageSysLog(TMessage Msg)
 {
 	mmSysLog->Lines->Add(SysMsgLog.str);
 }
+void __fastcall TSTDebugF::btnClearClick(TObject *Sender)
+{
+//
+	lbRecvLog->Clear();
+	lbSendLog->Clear();
+	mmSysLog->Clear();
+}
+//---------------------------------------------------------------------------
+

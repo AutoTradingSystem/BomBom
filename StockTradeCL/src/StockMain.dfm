@@ -54,17 +54,6 @@ object StockMainF: TStockMainF
     Height = 784
     Align = alClient
     TabOrder = 0
-    object KHOpenAPI: TKHOpenAPI
-      Left = 1016
-      Top = 35
-      Width = 100
-      Height = 50
-      TabOrder = 3
-      OnReceiveTrData = KHOpenAPIReceiveTrData
-      OnReceiveChejanData = KHOpenAPIReceiveChejanData
-      OnEventConnect = KHOpenAPIEventConnect
-      ControlData = {02000100560A00002B05000000000000}
-    end
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -203,6 +192,17 @@ object StockMainF: TStockMainF
       Height = 692
       Align = alLeft
       TabOrder = 1
+      object KHOpenAPI: TKHOpenAPI
+        Left = 116
+        Top = 35
+        Width = 100
+        Height = 50
+        TabOrder = 5
+        OnReceiveTrData = KHOpenAPIReceiveTrData
+        OnReceiveChejanData = KHOpenAPIReceiveChejanData
+        OnEventConnect = KHOpenAPIEventConnect
+        ControlData = {02000100560A00002B05000000000000}
+      end
       object pnlUserInfo: TPanel
         Left = 1
         Top = 1
@@ -452,7 +452,6 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
           TabOrder = 0
         end
         object edOrderQuantity: TEdit
@@ -461,7 +460,6 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
           TabOrder = 1
         end
         object edOrderCd: TEdit
@@ -470,7 +468,6 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
           TabOrder = 2
         end
         object rbUser: TRadioButton
@@ -552,7 +549,6 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
           TabOrder = 9
         end
       end

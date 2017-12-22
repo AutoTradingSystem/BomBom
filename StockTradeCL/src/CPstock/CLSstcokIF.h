@@ -8,6 +8,7 @@
 #include "CLStcp.h"
 #include "CLSlog.h"
 #include "CLSmap.h"
+#include "CLSqueue.h"
 #include "PublicMem.h"
 #include <System.Classes.hpp>
 //---------------------------------------------------------------------------

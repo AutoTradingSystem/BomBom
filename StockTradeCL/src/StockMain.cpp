@@ -13,6 +13,7 @@
 #include "CPstock.h"
 #include "THRmain.h"
 #include "CLSmap.h"
+#include "CLSqueue.h"
 #include "CLSstockSig.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -26,6 +27,7 @@ TStockMainF *StockMainF;
 THRmain *ThrMain; 		// main thread
 CLSlog Log;
 TRLIST TrList;
+CLSqueue Que;
 
 extern THRclient *ThrClient;
 extern CLSmap Map;
@@ -315,11 +317,13 @@ void __fastcall TStockMainF::ReqAccountInfo(void)
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::ReqSendOrderTest(void)
 {
+    UnicodeString strData="";
+	strData=StringReplace(UInfo.accNo, ";" ,"", Sysutils::TReplaceFlags() << Sysutils::rfReplaceAll);
+
 	BSTR pStockOrder = SysAllocString(L"RQ_1");
 	BSTR pScreenNo_0101 = SysAllocString(L"0101");
 	BSTR pCode = SysAllocString(edOrderCd->Text.c_str());
-	BSTR pMyAccNO = SysAllocString(L"6000163741");
-	BSTR pMyAccNO_MO = SysAllocString(L"8097831511");
+	BSTR pMyAccNO_MO = SysAllocString(strData.w_str());
 	BSTR pValue00 = SysAllocString(L"00");
 	BSTR pValueEmpty = SysAllocString(L"");
 	long pOrderType = cbOrderType->ItemIndex + 1;
@@ -337,11 +341,11 @@ void __fastcall TStockMainF::ReqSendOrderTest(void)
 		{
 			StatusBar->Panels->Items[4]->Text = "주문전송 성공";
 			SysMsgLog.str.printf("TP:%d  CD:%s  QYT:%d, PRICE:%d", pOrderType, edOrderCd->Text.c_str(), pQuantity, pPrice);
+			STDebugF->AddLog(SysMsgLog.str);
 		}
 		else
 			StatusBar->Panels->Items[4]->Text = "주문전송 실패";
 	}
-
 }
 //---------------------------------------------------------------------------
 // fnShowGrdSIGInfo
@@ -355,7 +359,32 @@ void __fastcall TStockMainF::fnShowGrdSIGInfo(TMessage Msg)
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::fnSaveRealTimeSig(TMessage Msg)
 {
-    SaveSigCSV_RealTime();
+	SaveSigCSV_RealTime();
+}
+//---------------------------------------------------------------------------
+// fnQSellSig
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::fnQSellSig(TMessage Msg)
+{
+	if(Que.EmptySellSig())
+		return ;
+
+	TradeSigInfo sInfo;
+	sInfo = Que.FrontSellSig();
+	STDebugF->AddLog(" QUE_SELL===================================");
+	AnsiString str="";
+	str.printf("[%c] [%d:%d:%d:%d] [%s] [%s] [%d]",
+		sInfo.type, sInfo.mon, sInfo.day, sInfo.hour, sInfo.minute, sInfo.stockCode, sInfo.stockNm, sInfo.price);
+
+	STDebugF->AddLog(str);
+    Que.PopSellSig();
+}
+//---------------------------------------------------------------------------
+// fnQBuySig
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::fnQBuySig(TMessage Msg)
+{
+
 }
 //---------------------------------------------------------------------------
 // Init
@@ -497,50 +526,130 @@ void __fastcall TStockMainF::KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sG
 		// 종목 명          302
 		// 주문 량          900
 		// 주문 가격        901
-		// 체결 량          911
+		// 미체결 량        902
+		// 쳬결 누계 금액   903
+		// 원 주문번호      904
+		// 주문 구분        905
+		// 매매구분         906
+		// 주분 체결 시간   908
+		// 체결 번호        909
 		// 체결 가격        910
-		// 미체결 량
-		// 원 주문번호
-		// 매매구분
-		// 주분 체결 시간
-		// 체결 번호
-		// 체결 가격
-		// 현재 가격
-		// 보유 수량
-		// 총 매입 단가
-		// 주문 가능 수량
+		// 체결량           911
+		// 현재 가격        10
+		// 최우선 매도호가  27
+		// 최우선 매수호가  28
+		// 거부사유         919
+		// 화면번호         920
+		// 보유 수량        930
+		// 총 매입 가       932
+		// 주문 가능 수량   933
+		// 기준가           307
+		OrdInfo.orderNo 	  	 = KHOpenAPI->GetChejanData(9203);		// 주문번호         9203
+		OrdInfo.orderCode 	  	 = KHOpenAPI->GetChejanData(9001);		// 종목 코드        9001
+		OrdInfo.orderSts 	  	 = KHOpenAPI->GetChejanData(913);		// 주문 상태        913
+		OrdInfo.orderNm 	  	 = KHOpenAPI->GetChejanData(302);		// 종목 명          302
+		OrdInfo.orderQty 	  	 = KHOpenAPI->GetChejanData(900);		// 주문 량          900
+		OrdInfo.orderPrice 	  	 = KHOpenAPI->GetChejanData(901);		// 주문 가격        901
+		OrdInfo.michegyeolQry 	 = KHOpenAPI->GetChejanData(902);		// 미체결 량        902
+		OrdInfo.chegyeolSumMoney = KHOpenAPI->GetChejanData(903);		// 쳬결 누계 금액   903
+		OrdInfo.oneOrderNo 	  	 = KHOpenAPI->GetChejanData(904);		// 원 주문번호      904
+		OrdInfo.orderType 	  	 = KHOpenAPI->GetChejanData(905);		// 주문 구분        905
+		OrdInfo.tradeType 	  	 = KHOpenAPI->GetChejanData(906);		// 매매구분         906
+		OrdInfo.time 	  		 = KHOpenAPI->GetChejanData(908);		// 주문 체결 시간   908
+		OrdInfo.chegyeolNo 	  	 = KHOpenAPI->GetChejanData(909);		// 체결 번호        909
+		OrdInfo.chegyeolPrice 	 = KHOpenAPI->GetChejanData(910);		// 체결 가격        910
+		OrdInfo.chegyeolQry 	 = KHOpenAPI->GetChejanData(911);		// 체결량           911
+		OrdInfo.currentPrice 	 = KHOpenAPI->GetChejanData(10);		// 현재 가격        10
+		OrdInfo.firstSellPrice 	 = KHOpenAPI->GetChejanData(27);		// 최우선 매도호가  27
+		OrdInfo.firstBuyPrice 	 = KHOpenAPI->GetChejanData(28);		// 최우선 매수호가  28
+		OrdInfo.denyReason 	  	 = KHOpenAPI->GetChejanData(919);		// 거부사유         919
+		OrdInfo.screenNo 	  	 = KHOpenAPI->GetChejanData(920);		// 화면번호         920
+		OrdInfo.holdQty 	  	 = KHOpenAPI->GetChejanData(930);		// 보유 수량        930
+		OrdInfo.totalBuyPrice 	 = KHOpenAPI->GetChejanData(932);		// 총 매입 가       932
+		OrdInfo.orderableQty 	 = KHOpenAPI->GetChejanData(933);		// 주문 가능 수량   933
+		OrdInfo.basePrice 	  	 = KHOpenAPI->GetChejanData(307);		// 기준가           307
 
-
-		OrdInfo.orderNm 	  = KHOpenAPI->GetChejanData(302);  // 종목 명
-		OrdInfo.orderQty 	  = KHOpenAPI->GetChejanData(900);  // 주문 수량
-		OrdInfo.chegyeolQry   = KHOpenAPI->GetChejanData(911);  // 체결량
-		OrdInfo.chegyeolPrice = KHOpenAPI->GetChejanData(910);  // 체결가
-		OrdInfo.time		  = KHOpenAPI->GetChejanData(908); 	// 주문 체결 시간
+		STDebugF->AddLog("=================접수 체결=================");
+		STDebugF->AddLog("주문번호: "+OrdInfo.orderNo);
+		STDebugF->AddLog("종목코드: "+OrdInfo.orderCode);
+		STDebugF->AddLog("주문상태: "+OrdInfo.orderSts);
+		STDebugF->AddLog("종목명: "+OrdInfo.orderNm);
+		STDebugF->AddLog("주문수량: "+OrdInfo.orderQty);
+		STDebugF->AddLog("주문가격: "+OrdInfo.orderPrice);
+		STDebugF->AddLog("미체결 수량: "+OrdInfo.michegyeolQry);
+		STDebugF->AddLog("체결누계금액: "+OrdInfo.chegyeolSumMoney);
+		STDebugF->AddLog("원주문번호: "+OrdInfo.oneOrderNo);
+		STDebugF->AddLog("주문구분: "+OrdInfo.orderType);
+		STDebugF->AddLog("거래구분: "+OrdInfo.tradeType);
+		STDebugF->AddLog("주문체결시간: "+OrdInfo.time);
+		STDebugF->AddLog("체결번호: "+OrdInfo.chegyeolNo);
+		STDebugF->AddLog("체결가격: "+OrdInfo.chegyeolPrice);
+		STDebugF->AddLog("체결량: "+OrdInfo.chegyeolQry);
+		STDebugF->AddLog("현재가격: "+OrdInfo.currentPrice);
+		STDebugF->AddLog("최우선매도호가: "+OrdInfo.firstSellPrice);
+		STDebugF->AddLog("최우선매수호가: "+OrdInfo.firstBuyPrice);
+		STDebugF->AddLog("거부사유: "+OrdInfo.denyReason);
+		STDebugF->AddLog("화면번호: "+OrdInfo.screenNo);
+		STDebugF->AddLog("보유량: "+OrdInfo.holdQty);
+		STDebugF->AddLog("총매수가격: "+OrdInfo.totalBuyPrice);
+		STDebugF->AddLog("주문가능수량: "+OrdInfo.orderableQty);
+		STDebugF->AddLog("기본가격: "+OrdInfo.basePrice);
 	}
 	// 잔고 전달.
 	else if(wcscmp(L"1",sGubun) == 0)
 	{
 		// 미체결시 발생하는 건가?
 
-		// 주문번호
-		// 종목 코드
-		// 주문 상태
-		// 종목 명
-		// 주문 량
-		// 주문 가격
-		// 체결 량
-		// 체결 가격
-		// 미체결 량
-		// 원 주문번호
-		// 매매구분
-		// 주분 체결 시간
-		// 체결 번호
-		// 체결 가격
-		// 현재 가격
-		// 보유 수량
-		// 총 매입 단가
-		// 주문 가능 수량
+		OrdInfo.orderNo 	  	 = KHOpenAPI->GetChejanData(9203);		// 주문번호         9203
+		OrdInfo.orderCode 	  	 = KHOpenAPI->GetChejanData(9001);		// 종목 코드        9001
+		OrdInfo.orderSts 	  	 = KHOpenAPI->GetChejanData(913);		// 주문 상태        913
+		OrdInfo.orderNm 	  	 = KHOpenAPI->GetChejanData(302);		// 종목 명          302
+		OrdInfo.orderQty 	  	 = KHOpenAPI->GetChejanData(900);		// 주문 량          900
+		OrdInfo.orderPrice 	  	 = KHOpenAPI->GetChejanData(901);		// 주문 가격        901
+		OrdInfo.michegyeolQry 	 = KHOpenAPI->GetChejanData(902);		// 미체결 량        902
+		OrdInfo.chegyeolSumMoney = KHOpenAPI->GetChejanData(903);		// 쳬결 누계 금액   903
+		OrdInfo.oneOrderNo 	  	 = KHOpenAPI->GetChejanData(904);		// 원 주문번호      904
+		OrdInfo.orderType 	  	 = KHOpenAPI->GetChejanData(905);		// 주문 구분        905
+		OrdInfo.tradeType 	  	 = KHOpenAPI->GetChejanData(906);		// 매매구분         906
+		OrdInfo.time 	  		 = KHOpenAPI->GetChejanData(908);		// 주문 체결 시간   908
+		OrdInfo.chegyeolNo 	  	 = KHOpenAPI->GetChejanData(909);		// 체결 번호        909
+		OrdInfo.chegyeolPrice 	 = KHOpenAPI->GetChejanData(910);		// 체결 가격        910
+		OrdInfo.chegyeolQry 	 = KHOpenAPI->GetChejanData(911);		// 체결량           911
+		OrdInfo.currentPrice 	 = KHOpenAPI->GetChejanData(10);		// 현재 가격        10
+		OrdInfo.firstSellPrice 	 = KHOpenAPI->GetChejanData(27);		// 최우선 매도호가  27
+		OrdInfo.firstBuyPrice 	 = KHOpenAPI->GetChejanData(28);		// 최우선 매수호가  28
+		OrdInfo.denyReason 	  	 = KHOpenAPI->GetChejanData(919);		// 거부사유         919
+		OrdInfo.screenNo 	  	 = KHOpenAPI->GetChejanData(920);		// 화면번호         920
+		OrdInfo.holdQty 	  	 = KHOpenAPI->GetChejanData(930);		// 보유 수량        930
+		OrdInfo.totalBuyPrice 	 = KHOpenAPI->GetChejanData(932);		// 총 매입 가       932
+		OrdInfo.orderableQty 	 = KHOpenAPI->GetChejanData(933);		// 주문 가능 수량   933
+		OrdInfo.basePrice 	  	 = KHOpenAPI->GetChejanData(307);		// 기준가           307
 
+		STDebugF->AddLog("=================잔고 전달=================");
+		STDebugF->AddLog("주문번호: "+OrdInfo.orderNo);
+		STDebugF->AddLog("종목코드: "+OrdInfo.orderCode);
+		STDebugF->AddLog("주문상태: "+OrdInfo.orderSts);
+		STDebugF->AddLog("종목명: "+OrdInfo.orderNm);
+		STDebugF->AddLog("주문수량: "+OrdInfo.orderQty);
+		STDebugF->AddLog("주문가격: "+OrdInfo.orderPrice);
+		STDebugF->AddLog("미체결 수량: "+OrdInfo.michegyeolQry);
+		STDebugF->AddLog("체결누계금액: "+OrdInfo.chegyeolSumMoney);
+		STDebugF->AddLog("원주문번호: "+OrdInfo.oneOrderNo);
+		STDebugF->AddLog("주문구분: "+OrdInfo.orderType);
+		STDebugF->AddLog("거래구분: "+OrdInfo.tradeType);
+		STDebugF->AddLog("주문체결시간: "+OrdInfo.time);
+		STDebugF->AddLog("체결번호: "+OrdInfo.chegyeolNo);
+		STDebugF->AddLog("체결가격: "+OrdInfo.chegyeolPrice);
+		STDebugF->AddLog("체결량: "+OrdInfo.chegyeolQry);
+		STDebugF->AddLog("현재가격: "+OrdInfo.currentPrice);
+		STDebugF->AddLog("최우선매도호가: "+OrdInfo.firstSellPrice);
+		STDebugF->AddLog("최우선매수호가: "+OrdInfo.firstBuyPrice);
+		STDebugF->AddLog("거부사유: "+OrdInfo.denyReason);
+		STDebugF->AddLog("화면번호: "+OrdInfo.screenNo);
+		STDebugF->AddLog("보유량: "+OrdInfo.holdQty);
+		STDebugF->AddLog("총매수가격: "+OrdInfo.totalBuyPrice);
+		STDebugF->AddLog("주문가능수량: "+OrdInfo.orderableQty);
+		STDebugF->AddLog("기본가격: "+OrdInfo.basePrice);
 	}
 	else if(wcscmp(L"3",sGubun) == 0)
 	{
@@ -549,7 +658,10 @@ void __fastcall TStockMainF::KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sG
 	else
 	{
 
-    }
+	}
+
+	// 계좌정보 호출
+	ReqAccountInfo();
 }
 //---------------------------------------------------------------------------
 // Timer (tmStatusTimer)

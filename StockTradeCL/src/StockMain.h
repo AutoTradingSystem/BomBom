@@ -165,11 +165,16 @@ public:		// User declarations
 
 	void __fastcall fnShowGrdSIGInfo(TMessage Msg);
 	void __fastcall fnSaveRealTimeSig(TMessage Msg);
-
+	void __fastcall fnQSellSig(TMessage Msg);
+	void __fastcall fnQBuySig(TMessage Msg);
 
 	BEGIN_MESSAGE_MAP
 		VCL_MESSAGE_HANDLER(WM_SHOW_GRD_SIG,     TMessage, fnShowGrdSIGInfo);
 		VCL_MESSAGE_HANDLER(WM_SAVE_RT_SIG,     TMessage, fnSaveRealTimeSig);
+		VCL_MESSAGE_HANDLER(WM_QUE_SELLSIG,     TMessage, fnQSellSig);
+		VCL_MESSAGE_HANDLER(WM_QUE_BUYSIG,     TMessage, fnQBuySig);
+
+
 	END_MESSAGE_MAP(TForm);
 };
 //---------------------------------------------------------------------------

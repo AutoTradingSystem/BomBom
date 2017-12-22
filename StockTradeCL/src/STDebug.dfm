@@ -2,7 +2,7 @@ object STDebugF: TSTDebugF
   Left = 0
   Top = 0
   Caption = 'StockTrade-DEBUG'
-  ClientHeight = 698
+  ClientHeight = 907
   ClientWidth = 753
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,11 +17,9 @@ object STDebugF: TSTDebugF
     Left = 0
     Top = 0
     Width = 753
-    Height = 698
+    Height = 907
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 752
-    ExplicitHeight = 534
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -29,7 +27,6 @@ object STDebugF: TSTDebugF
       Height = 64
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 750
       object Label1: TLabel
         Left = 312
         Top = 0
@@ -55,6 +52,15 @@ object STDebugF: TSTDebugF
         TabOrder = 0
         OnClick = btnEchoClick
       end
+      object btnClear: TButton
+        Left = 82
+        Top = 36
+        Width = 75
+        Height = 25
+        Caption = 'Clear'
+        TabOrder = 1
+        OnClick = btnClearClick
+      end
     end
     object pnlLeft: TPanel
       Left = 1
@@ -63,7 +69,6 @@ object STDebugF: TSTDebugF
       Height = 407
       Align = alLeft
       TabOrder = 1
-      ExplicitHeight = 451
       object lbRecvLog: TListBox
         Left = 1
         Top = 42
@@ -80,9 +85,6 @@ object STDebugF: TSTDebugF
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitLeft = 160
-        ExplicitTop = 112
-        ExplicitWidth = 185
         object Label2: TLabel
           Left = 1
           Top = 6
@@ -108,8 +110,6 @@ object STDebugF: TSTDebugF
       Height = 407
       Align = alClient
       TabOrder = 2
-      ExplicitWidth = 374
-      ExplicitHeight = 431
       object lbSendLog: TListBox
         Left = 1
         Top = 42
@@ -125,11 +125,7 @@ object STDebugF: TSTDebugF
         Width = 373
         Height = 41
         Align = alTop
-        Caption = 'Panel2'
         TabOrder = 1
-        ExplicitLeft = 96
-        ExplicitTop = 104
-        ExplicitWidth = 185
         object Label3: TLabel
           Left = 1
           Top = 6
@@ -150,27 +146,24 @@ object STDebugF: TSTDebugF
     end
     object pnlBottom: TPanel
       Left = 1
-      Top = 660
+      Top = 869
       Width = 751
       Height = 37
       Align = alBottom
       TabOrder = 3
-      ExplicitTop = 496
-      ExplicitWidth = 750
     end
     object Panel3: TPanel
       Left = 1
       Top = 472
       Width = 751
-      Height = 188
+      Height = 397
       Align = alBottom
       TabOrder = 4
-      ExplicitLeft = 0
       object mmSysLog: TMemo
         Left = 1
         Top = 1
         Width = 749
-        Height = 186
+        Height = 395
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0

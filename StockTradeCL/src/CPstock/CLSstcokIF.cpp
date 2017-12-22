@@ -14,6 +14,7 @@
 int global;
 extern CLSlog Log;
 extern CLSmap Map;
+extern CLSqueue Que;
 extern PUBLIC_MEM PublicMem;
 
 //---------------------------------------------------------------------------
@@ -365,15 +366,15 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	if(TDSINFO.type='s')
 	{
 		// Map에 종목코드 추가
-		AnsiString scode = TDSINFO.stockCode;
-		//AddSigCode(TDSINFO.stockCode);
-		AddSigCode(scode.c_str(), &TDSINFO);
+		// Que에 신호 추가
+		AddSigCode(TDSINFO.stockCode, &TDSINFO);
+		Que.PushSellSig(TDSINFO);
 	}
 	if(TDSINFO.type='b')
 	{
-
+        // Que에 신호 추가
+		Que.PushBuySig(TDSINFO);
     }
-
 
 	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t  [%s][%s] : [%d]"
 		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);

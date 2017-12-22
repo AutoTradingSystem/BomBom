@@ -29,10 +29,14 @@ __published:	// IDE-managed Components
 	TPanel *Panel2;
 	TPanel *Panel3;
 	TMemo *mmSysLog;
+	TButton *btnClear;
 	void __fastcall btnEchoClick(TObject *Sender);
+	void __fastcall btnClearClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TSTDebugF(TComponent* Owner);
+
+    void __fastcall AddLog(UnicodeString msg);
 
 	void __fastcall fnMessageLog(TMessage Msg);
 	void __fastcall fnMessageSendLog(TMessage Msg);
