@@ -9,15 +9,19 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.ComCtrls.hpp>
-#include "KHOpenAPILib_OCX.h"
 #include <Vcl.OleCtrls.hpp>
 #include <Vcl.Grids.hpp>
 #include <Vcl.Menus.hpp>
 //---------------------------------------------------------------------------
-// User Message
+#include "Define.h"
+#include "KHOpenAPILib_OCX.h"
 //---------------------------------------------------------------------------
-#define WM_SHOW_GRD_SIG             (WM_USER + 0x01)    // Show Grid SIG Info
-#define WM_SAVE_RT_SIG             (WM_USER + 0x02)    // Save Realtime SIG info
+// Type definition
+//---------------------------------------------------------------------------
+typedef struct
+{
+    bool accountInfo;
+} InitInfo;
 //---------------------------------------------------------------------------
 // Class
 //---------------------------------------------------------------------------
@@ -32,7 +36,6 @@ __published:	// IDE-managed Components
 	TPanel *pnlTopMenu;
 	TLabel *Label1;
 	TButton *btnDebug;
-	TKHOpenAPI *KHOpenAPI;
 	TPanel *pnlLeft;
 	TPanel *pnlMain;
 	TPanel *pnlUserInfo;
@@ -62,9 +65,9 @@ __published:	// IDE-managed Components
 	TRadioButton *rbUser;
 	TRadioButton *rbMarket;
 	TRadioButton *rbCurrent;
-	TComboBox *cbTradeType;
-	TButton *btnTradeInit;
-	TButton *btnTradeOk;
+	TComboBox *cbOrderType;
+	TButton *btnOrderReset;
+	TButton *btnOrder;
 	TLabel *Label13;
 	TLabel *Label14;
 	TEdit *edOrderNumber;
@@ -94,6 +97,21 @@ __published:	// IDE-managed Components
 	TPanel *Panel6;
 	TButton *Button4;
 	TEdit *Edit1;
+	TPanel *Panel7;
+	TLabel *Label19;
+	TLabel *Label20;
+	TLabel *Label21;
+	TLabel *Label22;
+	TLabel *Label23;
+	TLabel *Label24;
+	TLabel *Label25;
+	TEdit *edDeposit;
+	TEdit *edDeposit2;
+	TEdit *edTotalPurchase;
+	TEdit *edDayRate;
+	TEdit *edCumulativePrice;
+	TEdit *edCumulativeRate;
+	TKHOpenAPI *KHOpenAPI;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -101,28 +119,40 @@ __published:	// IDE-managed Components
           TGridDrawState State);
 	void __fastcall btnSaveCsvClick(TObject *Sender);
 	void __fastcall mn100Click(TObject *Sender);
-	void __fastcall KHOpenAPIEventConnect(TObject *Sender, long nErrCode);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall Button3Click(TObject *Sender);
 	void __fastcall Button4Click(TObject *Sender);
+	void __fastcall KHOpenAPIEventConnect(TObject *Sender, long nErrCode);
+	void __fastcall KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo, BSTR sRQName,
+          BSTR sTrCode, BSTR sRecordName, BSTR sPrevNext, long nDataLength, BSTR sErrorCode,
+          BSTR sMessage, BSTR sSplmMsg);
+	void __fastcall btnOrderClick(TObject *Sender);
+	void __fastcall KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGubun, long nItemCnt,
+          BSTR sFIdList);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
     bool m_KWLogSt;
+	InitInfo m_initInfo;
 
-	bool __fastcall Init();
+	bool __fastcall Init(void);
+	bool __fastcall SetTrAccEstList(void);
 	bool __fastcall KWLogin(void);
-	bool __fastcall GetUserInfo();
+	bool __fastcall GetUserInfo(void);
 
 	void __fastcall MakeDirectory(const char* path);
+	void __fastcall MakeDirectory2(const char* path, const char* subDir);
+	void __fastcall MakeDirectoryLOG();
+	void __fastcall MakeDirectoryDB();
 public:		// User declarations
 
 	__fastcall TStockMainF(TComponent* Owner);
 
-	void __fastcall SetSigLogGrid();
-	void __fastcall SetSigLogGridTitle();
-	void __fastcall SetTradeLogGrid();
-	void __fastcall SetTradeLogGridTitle();
+	void __fastcall SetSigLogGrid(void);
+	void __fastcall SetSigLogGridTitle(void);
+	void __fastcall SetTradeLogGrid(void);
+	void __fastcall SetTradeLogGridTitle(void);
+	void __fastcall SetAccInfo(void);
 
 	void __fastcall ShowUserInfo();
 	void __fastcall ShowSysStatus();
@@ -131,14 +161,23 @@ public:		// User declarations
 	void __fastcall SaveSigCSV_Grid(void);
 	void __fastcall SaveSigCSV_RealTime(void);
 
+	void __fastcall GetCurrentDateTime(void);
+
+	void __fastcall ReqAccountInfo(void);
+    void __fastcall ReqSendOrderTest(void);
 
 	void __fastcall fnShowGrdSIGInfo(TMessage Msg);
 	void __fastcall fnSaveRealTimeSig(TMessage Msg);
-
+	void __fastcall fnQSellSig(TMessage Msg);
+	void __fastcall fnQBuySig(TMessage Msg);
 
 	BEGIN_MESSAGE_MAP
 		VCL_MESSAGE_HANDLER(WM_SHOW_GRD_SIG,     TMessage, fnShowGrdSIGInfo);
 		VCL_MESSAGE_HANDLER(WM_SAVE_RT_SIG,     TMessage, fnSaveRealTimeSig);
+		VCL_MESSAGE_HANDLER(WM_QUE_SELLSIG,     TMessage, fnQSellSig);
+		VCL_MESSAGE_HANDLER(WM_QUE_BUYSIG,     TMessage, fnQBuySig);
+
+
 	END_MESSAGE_MAP(TForm);
 };
 //---------------------------------------------------------------------------

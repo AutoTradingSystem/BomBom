@@ -59,8 +59,8 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <SanitizedProjectName>StockTrade</SanitizedProjectName>
-        <ILINK_LibraryPath>lib\;fileMng\;CPstock\;inc\;GenLib\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <IncludePath>lib\;fileMng\;CPstock\;inc\;GenLib\;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>TPRC\;QUE\;lib\;fileMng\;CPstock\;inc\;GenLib\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>TPRC\;QUE\;lib\;fileMng\;CPstock\;inc\;GenLib\;$(IncludePath)</IncludePath>
         <AllPackageLibs>rtl.lib;vcl.lib;KWOPENAPI.lib;KHOpenAPI.lib</AllPackageLibs>
         <Multithreaded>true</Multithreaded>
         <UWP_CppLogo44>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png</UWP_CppLogo44>
@@ -207,6 +207,14 @@
             <DependentOn>lib\CLSsystem.h</DependentOn>
             <BuildOrder>18</BuildOrder>
         </CppCompile>
+        <CppCompile Include="Numstr.cpp">
+            <DependentOn>Numstr.h</DependentOn>
+            <BuildOrder>20</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="QUE\CLSqueue.cpp">
+            <DependentOn>QUE\CLSqueue.h</DependentOn>
+            <BuildOrder>21</BuildOrder>
+        </CppCompile>
         <CppCompile Include="STDebug.cpp">
             <Form>STDebugF</Form>
             <FormType>dfm</FormType>
@@ -236,9 +244,13 @@
             <DependentOn>THRmain.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
+        <CppCompile Include="TPRC\THRprcsig.cpp">
+            <DependentOn>TPRC\THRprcsig.h</DependentOn>
+            <BuildOrder>22</BuildOrder>
+        </CppCompile>
         <FormResources Include="STDebug.dfm"/>
-        <FormResources Include="StockMain.dfm"/>
         <FormResources Include="SysConfFrm.dfm"/>
+        <FormResources Include="StockMain.dfm"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

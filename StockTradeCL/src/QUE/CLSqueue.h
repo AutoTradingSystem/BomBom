@@ -1,37 +1,50 @@
 //---------------------------------------------------------------------------
 
-#pragma hdrstop
+#ifndef CLSqueueH
+#define CLSqueueH
 //---------------------------------------------------------------------------
 // Include
 //---------------------------------------------------------------------------
-#include "CLSstockSig.h"
+#include <queue>
+#include <string>
+#include "StockDB.h"
+#include "CLSlog.h"
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
+using namespace std;
 //---------------------------------------------------------------------------
-// CLSstockSig
+// Type definition
 //---------------------------------------------------------------------------
-__fastcall CLSstockSig::CLSstockSig(void)
+// QUE_SIG
+//---------------------------------------------------------------------------
+typedef queue <TradeSigInfo> QUE_SIG;
+//---------------------------------------------------------------------------
+// Class
+//---------------------------------------------------------------------------
+class CLSqueue
 {
+private:
 
-}
+public:
+	QUE_SIG SSig;       // Sell sig que
+	QUE_SIG BSig;       // Buy sig que
+
+	CLSqueue(void);
+	~CLSqueue(void);
+
+	void PushSellSig(TradeSigInfo info);
+	void PushBuySig(TradeSigInfo info);
+
+	void PopSellSig(void);
+	void PopBuySig(void);
+
+	TradeSigInfo FrontSellSig();
+	TradeSigInfo FrontBuySig();
+
+	bool EmptySellSig(void);
+    bool EmptyBuySig(void);
+};
 //---------------------------------------------------------------------------
-// ~CLSstockSig
+#endif 	// CLSqueueH
 //---------------------------------------------------------------------------
-__fastcall CLSstockSig::~CLSstockSig(void)
-{
-}
+// End of CLSqueue.h
 //---------------------------------------------------------------------------
-// Init
-//---------------------------------------------------------------------------
-void CLSstockSig::Init(TradeSigInfo *pInfo)
-{
-    memset(&TSInfo, 0, TSIG_INFO_SIZE);
-	TSInfo.type = pInfo->type;
-	TSInfo.mon = pInfo->mon;
-	TSInfo.day = pInfo->day;
-	TSInfo.hour = pInfo->hour;
-	TSInfo.minute = pInfo->minute;
-	sprintf(TSInfo.stockCode, "%s", pInfo->stockCode);
-	sprintf(TSInfo.stockNm, "%s", pInfo->stockNm);
-	TSInfo.price = pInfo->price;
-}

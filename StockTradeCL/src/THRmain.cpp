@@ -1,7 +1,9 @@
 //---------------------------------------------------------------------------
 
 #pragma hdrstop
-
+//---------------------------------------------------------------------------
+// Include
+//---------------------------------------------------------------------------
 #include "THRmain.h"
 #include "StockDB.h"
 //---------------------------------------------------------------------------
@@ -10,6 +12,7 @@
 // External
 //---------------------------------------------------------------------------
 THRclient *ThrClient;
+THRprcsig *Thrprcsig;
 extern THRmain *ThrMain;
 extern CLSlog Log;
 //---------------------------------------------------------------------------
@@ -53,13 +56,17 @@ bool __fastcall THRmain::InitThread()
 	ThrClient = new THRclient();
 	Log.Write("Sub Thread[THRclient] Start");
 	ThrClient->start();
+
+	Thrprcsig = new THRprcsig();
+	Log.Write("Sub Thread[THRprcsig] Start");
+	Thrprcsig->start();
 }
 //---------------------------------------------------------------------------
 // CLmanage
 //---------------------------------------------------------------------------
 bool __fastcall THRmain::CLmanage(void)
 {
-	// Sub thread manage
+	// Sub thread manage (THRclient)
 	if(ThrClient!=NULL)
 	{
 		if(!ThrClient->IsRunning())
@@ -68,6 +75,18 @@ bool __fastcall THRmain::CLmanage(void)
 			ThrClient = new THRclient();
 			Log.Write("Manage [THRclient] Start");
 			ThrClient->start();
+		}
+	}
+
+	// Sub thread manage (THRprcsig)
+	if(Thrprcsig!=NULL)
+	{
+		if(!Thrprcsig->IsRunning())
+		{
+			delete Thrprcsig;
+			Thrprcsig = new THRprcsig();
+			Log.Write("Manage [THRclient] Start");
+			Thrprcsig->start();
 		}
 	}
 }
@@ -91,11 +110,6 @@ void __fastcall THRmain::Execute(void)
 	Sleep(100);
 	while( !Terminated && !needTerminate)
 	{
-//		if (cycle % 10 == 0) {
-//			cycle++;
-//			Log.Write("THRmain[%d]", cycle);
-//			if (cycle == 100000000) cycle = 0;
-//		}
         CLmanage();	// thread manage
 		Sleep(500);
 	}

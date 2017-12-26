@@ -33,13 +33,19 @@ object StockMainF: TStockMainF
         Width = 50
       end
       item
-        Width = 600
+        Width = 100
       end
       item
         Alignment = taRightJustify
         Width = 100
+      end
+      item
+        Width = 1300
+      end
+      item
+        Alignment = taCenter
+        Width = 50
       end>
-    ExplicitWidth = 1808
   end
   object pnlBgd: TPanel
     Left = 0
@@ -47,8 +53,7 @@ object StockMainF: TStockMainF
     Width = 1806
     Height = 784
     Align = alClient
-    TabOrder = 1
-    ExplicitWidth = 1808
+    TabOrder = 0
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -56,7 +61,6 @@ object StockMainF: TStockMainF
       Height = 90
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 1806
       object pnlTopMenu: TPanel
         Left = 1
         Top = 42
@@ -64,8 +68,6 @@ object StockMainF: TStockMainF
         Height = 47
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 2
-        ExplicitTop = 40
         object btnDebug: TButton
           Left = 8
           Top = 5
@@ -137,7 +139,7 @@ object StockMainF: TStockMainF
           Top = 6
           Width = 75
           Height = 25
-          Caption = 'TEST'
+          Caption = #44228#51340#51221#48372
           TabOrder = 5
           OnClick = Button3Click
         end
@@ -165,7 +167,6 @@ object StockMainF: TStockMainF
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 1804
         object Label1: TLabel
           Left = 0
           Top = 5
@@ -191,6 +192,17 @@ object StockMainF: TStockMainF
       Height = 692
       Align = alLeft
       TabOrder = 1
+      object KHOpenAPI: TKHOpenAPI
+        Left = 116
+        Top = 35
+        Width = 100
+        Height = 50
+        TabOrder = 5
+        OnReceiveTrData = KHOpenAPIReceiveTrData
+        OnReceiveChejanData = KHOpenAPIReceiveChejanData
+        OnEventConnect = KHOpenAPIEventConnect
+        ControlData = {02000100560A00002B05000000000000}
+      end
       object pnlUserInfo: TPanel
         Left = 1
         Top = 1
@@ -203,9 +215,9 @@ object StockMainF: TStockMainF
         object Label2: TLabel
           Left = 8
           Top = 1
-          Width = 124
+          Width = 86
           Height = 21
-          Caption = #49324#50857#51088' '#44228#51340' '#51221#48372
+          Caption = #49324#50857#51088' '#51221#48372
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
@@ -266,7 +278,7 @@ object StockMainF: TStockMainF
           ParentFont = False
         end
         object edUserName: TEdit
-          Left = 70
+          Left = 78
           Top = 28
           Width = 121
           Height = 21
@@ -275,7 +287,7 @@ object StockMainF: TStockMainF
           TabOrder = 0
         end
         object edAccNumber: TEdit
-          Left = 70
+          Left = 78
           Top = 49
           Width = 121
           Height = 21
@@ -284,7 +296,7 @@ object StockMainF: TStockMainF
           TabOrder = 1
         end
         object edAccCnt: TEdit
-          Left = 70
+          Left = 78
           Top = 70
           Width = 121
           Height = 21
@@ -293,7 +305,7 @@ object StockMainF: TStockMainF
           TabOrder = 2
         end
         object edBalance: TEdit
-          Left = 70
+          Left = 78
           Top = 91
           Width = 121
           Height = 21
@@ -304,10 +316,11 @@ object StockMainF: TStockMainF
       end
       object pnlSearch: TPanel
         Left = 1
-        Top = 129
+        Top = 297
         Width = 214
         Height = 56
         Align = alTop
+        Color = 14540253
         ParentBackground = False
         TabOrder = 1
         object Label7: TLabel
@@ -349,11 +362,10 @@ object StockMainF: TStockMainF
       end
       object Panel1: TPanel
         Left = 1
-        Top = 185
+        Top = 353
         Width = 214
-        Height = 394
+        Height = 215
         Align = alClient
-        Color = 14540253
         ParentBackground = False
         TabOrder = 2
         object Label8: TLabel
@@ -435,31 +447,28 @@ object StockMainF: TStockMainF
           ParentFont = False
         end
         object edOrderPrice: TEdit
-          Left = 70
+          Left = 78
           Top = 92
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
-          TabOrder = 0
+          TabOrder = 3
         end
         object edOrderQuantity: TEdit
-          Left = 70
+          Left = 78
           Top = 71
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
-          TabOrder = 1
+          TabOrder = 2
         end
         object edOrderCd: TEdit
-          Left = 70
-          Top = 29
+          Left = 78
+          Top = 28
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
-          TabOrder = 2
+          TabOrder = 0
         end
         object rbUser: TRadioButton
           Left = 8
@@ -467,7 +476,7 @@ object StockMainF: TStockMainF
           Width = 75
           Height = 17
           Caption = #49324#50857#51088#51648#51221
-          TabOrder = 3
+          TabOrder = 7
         end
         object rbMarket: TRadioButton
           Left = 87
@@ -476,7 +485,7 @@ object StockMainF: TStockMainF
           Height = 17
           Caption = #49884#51109#44032
           Checked = True
-          TabOrder = 4
+          TabOrder = 8
           TabStop = True
         end
         object rbCurrent: TRadioButton
@@ -485,17 +494,17 @@ object StockMainF: TStockMainF
           Width = 56
           Height = 17
           Caption = #54788#51228#44032
-          TabOrder = 5
+          TabOrder = 9
         end
-        object cbTradeType: TComboBox
-          Left = 70
+        object cbOrderType: TComboBox
+          Left = 78
           Top = 50
           Width = 121
           Height = 22
           Style = csOwnerDrawFixed
           Color = clSilver
           ItemIndex = 0
-          TabOrder = 6
+          TabOrder = 1
           Text = #49888#44508#47588#49688
           Items.Strings = (
             #49888#44508#47588#49688
@@ -505,7 +514,7 @@ object StockMainF: TStockMainF
             #47588#49688#51221#51221
             #47588#46020#51221#51221)
         end
-        object btnTradeInit: TButton
+        object btnOrderReset: TButton
           Left = 52
           Top = 178
           Width = 75
@@ -517,9 +526,9 @@ object StockMainF: TStockMainF
           Font.Name = #47569#51008' '#44256#46357
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 5
         end
-        object btnTradeOk: TButton
+        object btnOrder: TButton
           Left = 133
           Top = 178
           Width = 75
@@ -531,24 +540,25 @@ object StockMainF: TStockMainF
           Font.Name = #47569#51008' '#44256#46357
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 8
+          TabOrder = 6
+          OnClick = btnOrderClick
         end
         object edOrderNumber: TEdit
-          Left = 70
+          Left = 78
           Top = 113
           Width = 121
           Height = 21
           Color = clSilver
-          ReadOnly = True
-          TabOrder = 9
+          TabOrder = 4
         end
       end
       object Panel2: TPanel
         Left = 1
-        Top = 579
+        Top = 568
         Width = 214
-        Height = 112
+        Height = 123
         Align = alBottom
+        Color = 14540253
         ParentBackground = False
         TabOrder = 3
         object Label13: TLabel
@@ -617,6 +627,159 @@ object StockMainF: TStockMainF
           ParentFont = False
         end
       end
+      object Panel7: TPanel
+        Left = 1
+        Top = 129
+        Width = 214
+        Height = 168
+        Align = alTop
+        TabOrder = 4
+        object Label19: TLabel
+          Left = 8
+          Top = 1
+          Width = 70
+          Height = 21
+          Caption = #44228#51340' '#51221#48372
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label20: TLabel
+          Left = 8
+          Top = 32
+          Width = 33
+          Height = 13
+          Caption = #50696#49688#44552
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label21: TLabel
+          Left = 8
+          Top = 53
+          Width = 55
+          Height = 13
+          Caption = #50696#49688#44552'(+2)'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label22: TLabel
+          Left = 8
+          Top = 74
+          Width = 55
+          Height = 13
+          Caption = #52509#47588#51077#44552#50529
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label23: TLabel
+          Left = 8
+          Top = 95
+          Width = 55
+          Height = 13
+          Caption = #45817#51068#49552#51061#50984
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label24: TLabel
+          Left = 8
+          Top = 137
+          Width = 66
+          Height = 13
+          Caption = #45572#51201#53804#51088#49552#51061
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label25: TLabel
+          Left = 8
+          Top = 116
+          Width = 55
+          Height = 13
+          Caption = #45572#51201#49552#51061#50984
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = #47569#51008' '#44256#46357
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object edDeposit: TEdit
+          Left = 78
+          Top = 28
+          Width = 121
+          Height = 21
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object edDeposit2: TEdit
+          Left = 78
+          Top = 49
+          Width = 121
+          Height = 21
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 1
+        end
+        object edTotalPurchase: TEdit
+          Left = 78
+          Top = 70
+          Width = 121
+          Height = 21
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 2
+        end
+        object edDayRate: TEdit
+          Left = 78
+          Top = 91
+          Width = 121
+          Height = 21
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 3
+        end
+        object edCumulativePrice: TEdit
+          Left = 78
+          Top = 133
+          Width = 121
+          Height = 21
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 5
+        end
+        object edCumulativeRate: TEdit
+          Left = 78
+          Top = 112
+          Width = 121
+          Height = 21
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 4
+        end
+      end
     end
     object pnlMain: TPanel
       Left = 217
@@ -625,7 +788,6 @@ object StockMainF: TStockMainF
       Height = 692
       Align = alClient
       TabOrder = 2
-      ExplicitWidth = 1590
       object pnlTradeLog: TPanel
         Left = 681
         Top = 1
@@ -633,7 +795,6 @@ object StockMainF: TStockMainF
         Height = 690
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 683
         object Panel5: TPanel
           Left = 1
           Top = 1
@@ -664,10 +825,6 @@ object StockMainF: TStockMainF
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitLeft = 360
-          ExplicitTop = 328
-          ExplicitWidth = 185
-          ExplicitHeight = 41
           object sgTradeLog: TStringGrid
             Tag = 1
             Left = 6
@@ -711,7 +868,6 @@ object StockMainF: TStockMainF
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitWidth = 680
           object Label16: TLabel
             Left = 7
             Top = 1
@@ -734,10 +890,6 @@ object StockMainF: TStockMainF
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitLeft = 248
-          ExplicitTop = 328
-          ExplicitWidth = 185
-          ExplicitHeight = 41
           object sgSiglog: TStringGrid
             Left = 6
             Top = 8
@@ -765,16 +917,6 @@ object StockMainF: TStockMainF
         end
       end
     end
-  end
-  object KHOpenAPI: TKHOpenAPI
-    Left = 40
-    Top = 734
-    Width = 100
-    Height = 33
-    TabOrder = 2
-    Visible = False
-    OnEventConnect = KHOpenAPIEventConnect
-    ControlData = {02000100560A00006903000000000000}
   end
   object tmStatus: TTimer
     Enabled = False

@@ -1,63 +1,96 @@
 //---------------------------------------------------------------------------
+
 #pragma hdrstop
-//---------------------------------------------------------------------------
-// Include
-//---------------------------------------------------------------------------
-#include "CLSmap.h"
+
+#include "THRprcsig.h"
+#include "StockMain.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 //---------------------------------------------------------------------------
-// Global
+// External
 //---------------------------------------------------------------------------
+extern int global;
 extern CLSlog Log;
+extern CLSqueue Que;
+extern THRprcsig *Thrprcsig;
 //---------------------------------------------------------------------------
-// CLSmap
+// THRclient
 //---------------------------------------------------------------------------
-CLSmap::CLSmap(void)
+__fastcall THRprcsig::THRprcsig(void) : TThread(true)
 {
 
 }
 //---------------------------------------------------------------------------
-// ~CLSmap
+// ~THRclient
 //---------------------------------------------------------------------------
-CLSmap::~CLSmap(void)
+__fastcall THRprcsig::~THRprcsig()
 {
 
 }
-//---------------------------------------------------------------------------
-// Add
-//---------------------------------------------------------------------------
-bool CLSmap::Add(const char *code, CLSstockSig *pSig)
+bool __fastcall THRprcsig::IsRunning(void)
 {
-	if (Sig.insert(pair<string, CLSstockSig *>(code, pSig)).second == false)
-		return (false);
+    return (Active);
+}
+//---------------------------------------------------------------------------
+// start
+//---------------------------------------------------------------------------
+void __fastcall THRprcsig::start()
+{
+	Start();
+}
+//---------------------------------------------------------------------------
+// stop
+//---------------------------------------------------------------------------
+void __fastcall THRprcsig::stop()
+{
+	Terminate();
+}
+void __fastcall THRprcsig::Kill(void)
+{
+	Terminate();
+	TCLclearEnv();
+}
+bool __fastcall THRprcsig::NeedTerminate()
+{
+	return (StockSYS.Terminate);
+}
+//---------------------------------------------------------------------------
+// TCLmanage
+//---------------------------------------------------------------------------
+bool __fastcall THRprcsig::TCLmanage(void)
+{
+	if(!(Que.EmptySellSig()))
+	{
+		Log.Write("QUE[SELL] 감지");
+		PostMessage(StockMainF->Handle, WM_QUE_SELLSIG, (WPARAM)0, (LPARAM)0);
+    }
 
 	return (true);
 }
-//---------------------------------------------------------------------------
-// Erase
-//---------------------------------------------------------------------------
-void CLSmap::Erase(const char *code)
+void __fastcall THRprcsig::TCLclearEnv(void)
 {
-	MASG_IT it;
 
-	if ((it = Sig.find(code)) == Sig.end())
-		return ;
-
-	Sig.erase(it);
+}
+void __fastcall THRprcsig::ExitThread()
+{
+	Active = false;
 }
 //---------------------------------------------------------------------------
-// Get
+// Execute
 //---------------------------------------------------------------------------
-CLSstockSig *CLSmap::Get(const char *code)
+void __fastcall THRprcsig::Execute()
 {
-	MASG_IT it;
-	Log.Write("Map GET[0]");
-	if((it = Sig.find(code)) == Sig.end())
-		return (NULL);
+	Active = true;
+	Log.Write("THRclient start");
+	while( !Terminated && !NeedTerminate())
+	{
 
-	return (it->second);
+		// Sig 관리
+		TCLmanage();
+
+		Sleep(1000);
+	}
+	Log.Write("THRprcsig end");
+	TCLclearEnv();
+	ExitThread();
 }
-//---------------------------------------------------------------------------
-// End of CLSmap.cpp
-//---------------------------------------------------------------------------

@@ -108,7 +108,7 @@ void __fastcall THRclient::Execute()
 
 		Sleep(1000);
 	}
-	Log.Write("THRclient start");
+	Log.Write("THRclient end");
 	TCLclearEnv();
 	ExitThread();
 }

@@ -14,6 +14,7 @@
 int global;
 extern CLSlog Log;
 extern CLSmap Map;
+extern CLSqueue Que;
 extern PUBLIC_MEM PublicMem;
 
 //---------------------------------------------------------------------------
@@ -100,19 +101,28 @@ void __fastcall CLSstockIF::SetRxState(RX_STATE state, int delta)
 //---------------------------------------------------------------------------
 // SetSigCode
 //---------------------------------------------------------------------------
-void __fastcall CLSstockIF::AddSigCode(const char * code)
+void __fastcall CLSstockIF::AddSigCode(const char * code, TradeSigInfo *trDB)
 {
 	CLSstockSig *pSig;
-	CLSsystem *pSys = (CLSsystem*)&PublicMem.system;
+	//CLSsystem *pSys = (CLSsystem*)&PublicMem.system;
+	CLSsystem *pSys = &PublicMem.system;
 	int idx = pSys->Sig;
-	pSig = (CLSstockSig *)&PublicMem.stock[idx];
+	if(idx>=1000)
+        return ;
+	//pSig = (CLSstockSig *)&PublicMem.stock[idx];
+	pSig = &PublicMem.stock[idx];
 
 	pSig = (pSig+pSys->Sig);
 
-	if((pSig = Map.Get(code)) == NULL)
+
+	if((Map.Get(code)) == NULL)
 	{
-        Log.Write("MAP CODE[%s]", code);
-		Map.Add(code, pSig);
+		Log.Write("MAP CODE[%s]", code);
+		pSig->InitSell(trDB);
+		if(Map.Add(code, pSig))
+			Log.Write("MAP SUCCESS CODE[%s]", code);
+		else
+            Log.Write("MAP FAIL CODE[%s]", code);
 		pSys->Sig += 1;	// 수신받은 종목 코드 수 1개 증가
     }
 }
@@ -352,12 +362,21 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	memcpy(TDSINFO.stockNm, &buffer[idx], 32);    	idx += 32;
 	TDSINFO.price = GetNumber(&buffer[idx], 4);      idx += 4;
 
-	// Map에 종목코드 추가
-	AnsiString scode = TDSINFO.stockCode;
-	//AddSigCode(TDSINFO.stockCode);
-	AddSigCode(scode.c_str());
+	// 매수 신호일때만 Map등록
+	if(TDSINFO.type='s')
+	{
+		// Map에 종목코드 추가
+		// Que에 신호 추가
+		AddSigCode(TDSINFO.stockCode, &TDSINFO);
+		Que.PushSellSig(TDSINFO);
+	}
+	if(TDSINFO.type='b')
+	{
+        // Que에 신호 추가
+		Que.PushBuySig(TDSINFO);
+    }
 
-	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
+	Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t  [%s][%s] : [%d]"
 		, TDSINFO.type, TDSINFO.mon, TDSINFO.day, TDSINFO.hour, TDSINFO.minute, TDSINFO.stockCode,TDSINFO.stockNm, TDSINFO.price);
 
 	RecvMsgLog.str.printf("[TradeSignal] [%c]\t[%d]:[%d]:[%d]:[%d]\t[%s][%s] : [%d]"
@@ -367,6 +386,7 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	PostMessage(StockMainF->Handle, WM_SHOW_GRD_SIG, (WPARAM)0, (LPARAM)0);
 	PostMessage(StockMainF->Handle, WM_SAVE_RT_SIG, (WPARAM)0, (LPARAM)0);
 
+	// Response
 	SendACK(m_message[OPCODE]);
 }
 //---------------------------------------------------------------------------

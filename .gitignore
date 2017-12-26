@@ -19,10 +19,18 @@ kAPU/src/Win32
 StockTradeCL/src/__history
 StockTradeCL/src/__recovery
 StockTradeCL/src/CPstock/__history
+StockTradeCL/src/CPstock/__recovery
 StockTradeCL/src/GenLib/__history
+StockTradeCL/src/GenLib/__recovery
 StockTradeCL/src/fileMng/__history
 StockTradeCL/src/Win32/Debug
 StockTradeCL/src/inc/__history
+StockTradeCL/src/lib/__history
+StockTradeCL/src/lib/__recovery
+StockTradeCL/src/QUE/__history
+StockTradeCL/src/QUE/__recovery
+StockTradeCL/src/TPRC/__history
+StockTradeCL/src/TPRC/__recovery
 StockTradeCL/bin
 
 
