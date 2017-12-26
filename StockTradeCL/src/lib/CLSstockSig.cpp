@@ -16,6 +16,9 @@ __fastcall CLSstockSig::CLSstockSig(void)
 	memset(&BInfo, 0, TSIG_INFO_SIZE);
 	memset(&Mng, 0, TRADE_MNG_SIZE);
 	memset(&Opr, 0, TRADE_OPR_SIZE);
+
+	m_sellGridIdx = 0;
+    m_buyGridIdx = 0;
 }
 //---------------------------------------------------------------------------
 // ~CLSstockSig
@@ -135,5 +138,33 @@ bool CLSstockSig::BuyIgnore(void)
 char *CLSstockSig::GetCodeName()
 {
 	return (SInfo.stockNm);
+}
+//---------------------------------------------------------------------------
+// SetGridIndex_Sell
+//---------------------------------------------------------------------------
+void CLSstockSig::SetGridIndex_Sell(int grdIdx)
+{
+	m_sellGridIdx = grdIdx;
+}
+//---------------------------------------------------------------------------
+// GetGridIndex_Sell
+//---------------------------------------------------------------------------
+int CLSstockSig::GetGridIndex_Sell(void)
+{
+	return m_sellGridIdx;
+}
+//---------------------------------------------------------------------------
+// SetGridIndex_Buy
+//---------------------------------------------------------------------------
+void CLSstockSig::SetGridIndex_Buy(int grdIdx)
+{
+	m_buyGridIdx = grdIdx;
+}
+//---------------------------------------------------------------------------
+// GetGridIndex_Buy
+//---------------------------------------------------------------------------
+int CLSstockSig::GetGridIndex_Buy(void)
+{
+	return m_buyGridIdx;
 }
 

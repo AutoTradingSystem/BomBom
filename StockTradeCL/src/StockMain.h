@@ -132,8 +132,10 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
-    bool m_KWLogSt;
+	bool m_KWLogSt;
 	InitInfo m_initInfo;
+	int m_Trd_S_GridIdx;    	// 매수/매도 grid sell index
+	int m_Trd_B_GridIdx;        // 매수/매도 grid buy index
 
 	bool __fastcall Init(void);
 	bool __fastcall SetTrAccEstList(void);
@@ -157,6 +159,7 @@ public:		// User declarations
 	void __fastcall ShowUserInfo();
 	void __fastcall ShowSysStatus();
 	void __fastcall ShowGridSigInfo();
+    void __fastcall ShowGridTradeInfo(int rowIdx);
 
 	void __fastcall SaveSigCSV_Grid(void);
 	void __fastcall SaveSigCSV_RealTime(void);

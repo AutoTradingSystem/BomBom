@@ -57,8 +57,8 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 	mTcpSt = false;
 //	Pstock = new CPstock("210.220.167.67", 12000);
 //	Pstock = new CPstock("192.168.6.129", 12000);   // home
-//	Pstock = new CPstock("192.168.42.128", 12000);  // lux
-	Pstock = new CPstock("127.0.0.1", 12000);
+	Pstock = new CPstock("192.168.42.128", 12000);  // lux
+//	Pstock = new CPstock("127.0.0.1", 12000);
 
 	// Main thread init
 	ThrMain = new THRmain();
@@ -197,6 +197,39 @@ void __fastcall TStockMainF::ShowGridSigInfo()
 
 	sgSiglog->Cells[5][row]="-";
 
+}
+//---------------------------------------------------------------------------
+// ShowGridTradeInfo
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::ShowGridTradeInfo(int rowIdx)
+{
+
+	sgTradeLog->RowCount++;
+	TStrings *pRow = sgTradeLog->Rows[rowIdx];
+
+	AnsiString str1="";
+	str1.printf("%d/%d %d:%d",TDSINFO.mon,TDSINFO.day,TDSINFO.hour,TDSINFO.minute);
+	sgTradeLog->Cells[0][rowIdx]=str1;
+
+	str1 = TDSINFO.stockCode;
+	sgTradeLog->Cells[1][rowIdx]=str1;
+
+	str1 = TDSINFO.stockNm;
+	sgTradeLog->Cells[2][rowIdx]=str1;
+
+	str1 = TDSINFO.type;
+	sgTradeLog->Cells[3][rowIdx]=str1;
+
+	str1.printf("%d",TDSINFO.price);
+	sgTradeLog->Cells[4][rowIdx]=str1;
+
+	sgTradeLog->Cells[5][rowIdx]="-";
+
+
+	AnsiString str="";
+	str.printf("INDEX:[%d] rowCnt:[%d]", rowIdx, sgTradeLog->RowCount);
+
+	STDebugF->AddLog(str);
 }
 //---------------------------------------------------------------------------
 // SaveCSV
@@ -385,6 +418,31 @@ void __fastcall TStockMainF::fnQSellSig(TMessage Msg)
 		sInfo.type, sInfo.mon, sInfo.day, sInfo.hour, sInfo.minute, sInfo.stockCode, sInfo.stockNm, sInfo.price);
 
 	STDebugF->AddLog(str);
+	//===================================
+	// Map Get
+	//===================================
+	CLSstockSig *pSig;
+	if((pSig = Map.Get(sInfo.stockCode)) != NULL)
+	{
+		int rowCnt = sgTradeLog->RowCount;
+		if(rowCnt > 1)
+		{
+			pSig->SetGridIndex_Sell(rowCnt+1);
+			int idx = pSig->GetGridIndex_Sell();
+			ShowGridTradeInfo(idx);
+		}
+		else if( rowCnt <= 1)
+		{
+			ShowGridTradeInfo(1);
+        }
+	}
+	else
+	{
+		ShowMessage("Map NULL");
+	}
+
+
+
     Que.PopSellSig();
 }
 //---------------------------------------------------------------------------
@@ -407,6 +465,9 @@ bool __fastcall TStockMainF::Init()
 	SetSigLogGridTitle();
 	SetTradeLogGrid();
 	SetTradeLogGridTitle();
+
+	m_Trd_S_GridIdx = 0;
+	m_Trd_B_GridIdx = 0;
 }
 //---------------------------------------------------------------------------
 // SetTrAccEstList
@@ -826,7 +887,7 @@ void __fastcall TStockMainF::Button4Click(TObject *Sender)
 	AnsiString codenm;
 	CLSstockSig *pSig;
 	AnsiString str = Edit1->Text;
-    char *pCode = str.c_str();
+	char *pCode = str.c_str();
 
 //	if((pSig = Map.Get(str.c_str())) != NULL)
 	if((pSig = Map.Get(pCode)) != NULL)
@@ -837,7 +898,7 @@ void __fastcall TStockMainF::Button4Click(TObject *Sender)
 	else
 	{
 		ShowMessage("Map NULL");
-    }
+	}
 }
 //---------------------------------------------------------------------------
 
