@@ -9,7 +9,6 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.ComCtrls.hpp>
-//#include "KHOpenAPILib_OCX.h"
 #include <Vcl.OleCtrls.hpp>
 #include <Vcl.Grids.hpp>
 #include <Vcl.Menus.hpp>
@@ -142,6 +141,9 @@ private:	// User declarations
 	bool __fastcall GetUserInfo(void);
 
 	void __fastcall MakeDirectory(const char* path);
+	void __fastcall MakeDirectory2(const char* path, const char* subDir);
+	void __fastcall MakeDirectoryLOG();
+	void __fastcall MakeDirectoryDB();
 public:		// User declarations
 
 	__fastcall TStockMainF(TComponent* Owner);
@@ -159,6 +161,7 @@ public:		// User declarations
 	void __fastcall SaveSigCSV_Grid(void);
 	void __fastcall SaveSigCSV_RealTime(void);
 
+	void __fastcall GetCurrentDateTime(void);
 
 	void __fastcall ReqAccountInfo(void);
     void __fastcall ReqSendOrderTest(void);

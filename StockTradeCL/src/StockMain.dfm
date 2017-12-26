@@ -452,7 +452,7 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           Color = clSilver
-          TabOrder = 0
+          TabOrder = 3
         end
         object edOrderQuantity: TEdit
           Left = 78
@@ -460,15 +460,15 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           Color = clSilver
-          TabOrder = 1
+          TabOrder = 2
         end
         object edOrderCd: TEdit
           Left = 78
-          Top = 29
+          Top = 28
           Width = 121
           Height = 21
           Color = clSilver
-          TabOrder = 2
+          TabOrder = 0
         end
         object rbUser: TRadioButton
           Left = 8
@@ -476,7 +476,7 @@ object StockMainF: TStockMainF
           Width = 75
           Height = 17
           Caption = #49324#50857#51088#51648#51221
-          TabOrder = 3
+          TabOrder = 7
         end
         object rbMarket: TRadioButton
           Left = 87
@@ -485,7 +485,7 @@ object StockMainF: TStockMainF
           Height = 17
           Caption = #49884#51109#44032
           Checked = True
-          TabOrder = 4
+          TabOrder = 8
           TabStop = True
         end
         object rbCurrent: TRadioButton
@@ -494,7 +494,7 @@ object StockMainF: TStockMainF
           Width = 56
           Height = 17
           Caption = #54788#51228#44032
-          TabOrder = 5
+          TabOrder = 9
         end
         object cbOrderType: TComboBox
           Left = 78
@@ -504,7 +504,7 @@ object StockMainF: TStockMainF
           Style = csOwnerDrawFixed
           Color = clSilver
           ItemIndex = 0
-          TabOrder = 6
+          TabOrder = 1
           Text = #49888#44508#47588#49688
           Items.Strings = (
             #49888#44508#47588#49688
@@ -526,7 +526,7 @@ object StockMainF: TStockMainF
           Font.Name = #47569#51008' '#44256#46357
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 5
         end
         object btnOrder: TButton
           Left = 133
@@ -540,7 +540,7 @@ object StockMainF: TStockMainF
           Font.Name = #47569#51008' '#44256#46357
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 8
+          TabOrder = 6
           OnClick = btnOrderClick
         end
         object edOrderNumber: TEdit
@@ -549,7 +549,7 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           Color = clSilver
-          TabOrder = 9
+          TabOrder = 4
         end
       end
       object Panel2: TPanel
@@ -768,7 +768,7 @@ object StockMainF: TStockMainF
           Height = 21
           Color = clSilver
           ReadOnly = True
-          TabOrder = 4
+          TabOrder = 5
         end
         object edCumulativeRate: TEdit
           Left = 78
@@ -777,7 +777,7 @@ object StockMainF: TStockMainF
           Height = 21
           Color = clSilver
           ReadOnly = True
-          TabOrder = 5
+          TabOrder = 4
         end
       end
     end

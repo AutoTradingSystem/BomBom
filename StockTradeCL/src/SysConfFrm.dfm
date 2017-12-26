@@ -20,10 +20,6 @@ object SysConfF: TSysConfF
     Height = 120
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 72
-    ExplicitTop = 64
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object Label9: TLabel
       Left = 8
       Top = 36
@@ -69,33 +65,34 @@ object SysConfF: TSysConfF
       Width = 121
       Height = 21
       Color = clWhite
-      ReadOnly = True
       TabOrder = 0
     end
-    object Edit1: TEdit
+    object edPort: TEdit
       Left = 38
       Top = 59
       Width = 121
       Height = 21
       Color = clWhite
-      ReadOnly = True
+      NumbersOnly = True
       TabOrder = 1
     end
-    object Button1: TButton
+    object btnCancel: TButton
       Left = 99
       Top = 86
       Width = 60
       Height = 25
       Caption = #52712#49548
       TabOrder = 2
+      OnClick = btnCancelClick
     end
-    object Button2: TButton
+    object btnOk: TButton
       Left = 38
       Top = 86
       Width = 60
       Height = 25
       Caption = #54869#51064
       TabOrder = 3
+      OnClick = btnOkClick
     end
   end
 end

@@ -17,7 +17,6 @@
 #include "CLSstockSig.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-//#pragma link "KHOpenAPILib_OCX"
 #pragma link "KHOpenAPILib_OCX"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
@@ -35,20 +34,22 @@ extern CLSmap Map;
 // Local
 //---------------------------------------------------------------------------
 AnsiString ExeDir;
+char logPath[256];
 char dbPath[256];
 //---------------------------------------------------------------------------
 __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 	: TForm(Owner)
 {
-	char logPath[256];
 	//char dbPath[256];
 	// Set Log directory
 	ExeDir = ExtractFilePath(Application->ExeName);
 
-	sprintf(logPath,"%s\\log", ExeDir.c_str());
-	sprintf(dbPath,"%s\\DB",ExeDir.c_str());
-	MakeDirectory(logPath);
-	MakeDirectory(dbPath);
+	//sprintf(logPath,"%slog", ExeDir.c_str());
+	//sprintf(dbPath,"%sDB",ExeDir.c_str());
+	//MakeDirectory2(logPath, "log");
+	//MakeDirectory2(dbPath, "DB");
+	MakeDirectoryLOG();
+	MakeDirectoryDB();
 
 	Log = CLSlog("STOCKCL", logPath);
 	Log.Write("Process start");
@@ -56,8 +57,8 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 	mTcpSt = false;
 //	Pstock = new CPstock("210.220.167.67", 12000);
 //	Pstock = new CPstock("192.168.6.129", 12000);   // home
-	Pstock = new CPstock("192.168.42.128", 12000);  // lux
-//	Pstock = new CPstock("127.0.0.1", 12000);
+//	Pstock = new CPstock("192.168.42.128", 12000);  // lux
+	Pstock = new CPstock("127.0.0.1", 12000);
 
 	// Main thread init
 	ThrMain = new THRmain();
@@ -278,6 +279,13 @@ void __fastcall TStockMainF::SaveSigCSV_RealTime(void)
 	fwrite(sContent.c_str(), 1, length, fp);
 	fclose(fp);
 }
+void __fastcall TStockMainF::GetCurrentDateTime(void)
+{
+	m_curTime = Now();
+	m_curTime.Val =  floor(m_curTime.Val);
+	m_curTime.DecodeDate(&sTime.year, &sTime.mon, &sTime.day);
+	m_curTime.DecodeTime(&sTime.hour, &sTime.min, &sTime.sec, &sTime.mSec);
+}
 //---------------------------------------------------------------------------
 // ReqAccountInfo
 //---------------------------------------------------------------------------
@@ -456,7 +464,31 @@ bool __fastcall TStockMainF::GetUserInfo()
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::MakeDirectory(const char* path)
 {
-	CreateDir(path);         // make log directory
+	AnsiString strPath="";
+	GetCurrentDateTime();
+	strPath.printf("%s\\%04d%02d%02d", path, sTime.year, sTime.mon, sTime.day);
+	CreateDir(path);                    // Make directory
+	CreateDir(strPath.c_str());         // make sub directory
+}
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::MakeDirectoryLOG()
+{
+	GetCurrentDateTime();
+	AnsiString path="";
+	path.printf("%slog", ExeDir.c_str());
+	CreateDir(path.c_str());
+	sprintf(logPath,"%s\\%04d%02d%02d", path.c_str(), sTime.year, sTime.mon, sTime.day);
+	CreateDir(logPath);
+}
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::MakeDirectoryDB()
+{
+	GetCurrentDateTime();
+	AnsiString path="";
+	path.printf("%sDB", ExeDir.c_str());
+	CreateDir(path.c_str());
+	sprintf(dbPath,"%s\\%04d%02d%02d", path.c_str(), sTime.year, sTime.mon, sTime.day);
+	CreateDir(dbPath);
 }
 //---------------------------------------------------------------------------
 // KHOpenAPIEvent (Connect)

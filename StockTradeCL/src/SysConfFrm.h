@@ -16,10 +16,12 @@ __published:	// IDE-managed Components
 	TEdit *edOrderCd;
 	TLabel *Label9;
 	TLabel *Label1;
-	TEdit *Edit1;
-	TButton *Button1;
-	TButton *Button2;
+	TEdit *edPort;
+	TButton *btnCancel;
+	TButton *btnOk;
 	TLabel *Label2;
+	void __fastcall btnOkClick(TObject *Sender);
+	void __fastcall btnCancelClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TSysConfF(TComponent* Owner);
