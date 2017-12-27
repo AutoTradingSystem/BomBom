@@ -112,6 +112,8 @@ __published:	// IDE-managed Components
 	TEdit *edCumulativePrice;
 	TEdit *edCumulativeRate;
 	TKHOpenAPI *KHOpenAPI;
+	TButton *Button2;
+	TButton *Button5;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -130,6 +132,8 @@ __published:	// IDE-managed Components
 	void __fastcall KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGubun, long nItemCnt,
           BSTR sFIdList);
 	void __fastcall btnConfClick(TObject *Sender);
+	void __fastcall Button2Click(TObject *Sender);
+	void __fastcall Button5Click(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;

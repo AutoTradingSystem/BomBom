@@ -38,6 +38,19 @@ extern PACKAGE TestMSG SendMsgLog;
 extern PACKAGE TestMSG SysMsgLog;
 
 //---------------------------------------------------------------------------
+// Signal order configuration
+//---------------------------------------------------------------------------
+typedef struct
+{
+	int totalOrderablePrice;	// 총 매수 가능 금액
+	int maxOrderCnt;            // 최대 매수 종목 수
+	int buyPriceConf;			// 매수 가격 설정
+	int sellPriceConf;			// 매도 가격 설정
+	int sigValidTime;			// 시그널 유효 시간
+}SignalConf;
+extern PACKAGE SignalConf SigConf;
+
+//---------------------------------------------------------------------------
 // User information
 //---------------------------------------------------------------------------
 typedef struct
@@ -82,6 +95,8 @@ typedef struct
 } TradeSigInfo;
 
 extern  TradeSigInfo TDSINFO;
+extern  TradeSigInfo TDTotalBuyINFO[100];
+extern  TradeSigInfo TDTotalSellINFO[100];
 //---------------------------------------------------------------------------
 // Order Info
 //---------------------------------------------------------------------------

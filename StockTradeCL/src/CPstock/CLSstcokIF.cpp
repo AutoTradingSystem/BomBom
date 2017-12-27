@@ -296,6 +296,12 @@ void __fastcall CLSstockIF::MsgHandler(void)
 	case SELL_SIG:
 		PrcTradeSignal();
 		break;
+	case TOTAL_BUY_SIG:
+		PrcTotalBuySig();
+		break;
+	case TOTAL_SELL_SIG:
+		PrcTotalSellSig();
+		break;
     }
 }
 //---------------------------------------------------------------------------
@@ -321,6 +327,8 @@ bool __fastcall CLSstockIF::SendMessage(BYTE code, int length, char *info)
 		break;
 	case ACK:
 	case NACK:
+	case TOTAL_BUY_SIG:
+	case TOTAL_SELL_SIG:
 		message[SEQ] = m_rxSeq++;
 		break;
 	default :
@@ -390,6 +398,70 @@ void __fastcall CLSstockIF::PrcTradeSignal(void)
 	SendACK(m_message[OPCODE]);
 }
 //---------------------------------------------------------------------------
+// PrcTotalBuySig
+//---------------------------------------------------------------------------
+void __fastcall CLSstockIF::PrcTotalBuySig(void)
+{
+	int sigCnt=0;
+	int idx = 0;
+	int sigTime;
+	char buffer[TCPBUF_LEN];
+	memcpy(buffer, &m_message[DATA], m_length-HEARD_LEN);
+
+	sigCnt = buffer[idx];      idx += 1;
+
+    Log.Write("[TOTAL BUY SIG]");
+	for(int i=0; i<sigCnt; i++)
+	{
+		TDTotalBuyINFO[i].type = buffer[idx];      idx += 1;
+
+		sigTime = GetNumber(&buffer[idx], 4);
+		TDTotalBuyINFO[i].minute = sigTime % 100;    		sigTime /= 100;
+		TDTotalBuyINFO[i].hour	 = sigTime % 100;      		sigTime /= 100;
+		TDTotalBuyINFO[i].day 	 = sigTime % 100;   	  	sigTime /= 100;
+		TDTotalBuyINFO[i].mon	 = sigTime % 100;		    		idx += 4;
+		memcpy(TDTotalBuyINFO[i].stockCode, &buffer[idx], 7);       idx += 7;
+		memcpy(TDTotalBuyINFO[i].stockNm, &buffer[idx], 32);    	idx += 32;
+		TDTotalBuyINFO[i].price  = GetNumber(&buffer[idx], 4);      idx += 4;
+
+		Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t  [%s][%s] : [%d]"
+		, TDTotalBuyINFO[i].type, TDTotalBuyINFO[i].mon, TDTotalBuyINFO[i].day, TDTotalBuyINFO[i].hour, TDTotalBuyINFO[i].minute
+		, TDTotalBuyINFO[i].stockCode,TDTotalBuyINFO[i].stockNm, TDTotalBuyINFO[i].price);
+    }
+}
+//---------------------------------------------------------------------------
+// PrcTotalSellSig
+//---------------------------------------------------------------------------
+void __fastcall CLSstockIF::PrcTotalSellSig(void)
+{
+    int sigCnt=0;
+	int idx = 0;
+	int sigTime;
+	char buffer[TCPBUF_LEN];
+	memcpy(buffer, &m_message[DATA], m_length-HEARD_LEN);
+
+	sigCnt = buffer[idx];      idx += 1;
+
+    Log.Write("[TOTAL SELL SIG]");
+	for(int i=0; i<sigCnt; i++)
+	{
+		TDTotalSellINFO[i].type = buffer[idx];      idx += 1;
+
+		sigTime = GetNumber(&buffer[idx], 4);
+		TDTotalSellINFO[i].minute = sigTime % 100;    		sigTime /= 100;
+		TDTotalSellINFO[i].hour	 = sigTime % 100;      		sigTime /= 100;
+		TDTotalSellINFO[i].day 	 = sigTime % 100;   	  	sigTime /= 100;
+		TDTotalSellINFO[i].mon	 = sigTime % 100;		    		idx += 4;
+		memcpy(TDTotalSellINFO[i].stockCode, &buffer[idx], 7);       idx += 7;
+		memcpy(TDTotalSellINFO[i].stockNm, &buffer[idx], 32);    	idx += 32;
+		TDTotalSellINFO[i].price  = GetNumber(&buffer[idx], 4);      idx += 4;
+
+		Log.Write("[%c]\t[%d]:[%d]:[%d]:[%d]\t  [%s][%s] : [%d]"
+		, TDTotalSellINFO[i].type, TDTotalSellINFO[i].mon, TDTotalSellINFO[i].day, TDTotalSellINFO[i].hour, TDTotalSellINFO[i].minute
+		, TDTotalSellINFO[i].stockCode,TDTotalSellINFO[i].stockNm, TDTotalSellINFO[i].price);
+	}
+}
+//---------------------------------------------------------------------------
 // SendEcho
 //---------------------------------------------------------------------------
 bool __fastcall CLSstockIF::SendEcho(char *str)
@@ -418,7 +490,26 @@ bool __fastcall CLSstockIF::SendHeartBeat(void)
 	char info;
 	Log.Write("HEAR BEAT [%02X]", HEARTBEAT);
 	return (SendMessage(HEARTBEAT, 0, &info));
-
+}
+//---------------------------------------------------------------------------
+// SendTotalBuySig
+//---------------------------------------------------------------------------
+bool __fastcall CLSstockIF::SendTotalBuySig(BYTE code)
+{
+    char info;
+	Log.Write("REQ TOTAL BUY SIG [%02X]", TOTAL_BUY_SIG);
+	info = code;
+	return (SendMessage(TOTAL_BUY_SIG, 1, &info));
+}
+//---------------------------------------------------------------------------
+// SendTotalSellSig
+//---------------------------------------------------------------------------
+bool __fastcall CLSstockIF::SendTotalSellSig(BYTE code)
+{
+    char info;
+	Log.Write("REQ TOTAL SELL SIG [%02X]", TOTAL_SELL_SIG);
+	info = code;
+	return (SendMessage(TOTAL_SELL_SIG, 1, &info));
 }
 //---------------------------------------------------------------------------
 // SendACK

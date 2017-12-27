@@ -7,6 +7,7 @@
 //---------------------------------------------------------------------------
 #include "STDebug.h"
 #include "SysConfFrm.h"
+#include "SigConfFrm.h"
 //---------------------------------------------------------------------------
 #include "Numstr.h"
 #include "StockDB.h"
@@ -55,9 +56,9 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 	Log.Write("Process start");
 
 	mTcpSt = false;
-//	Pstock = new CPstock("210.220.167.67", 12000);
+	Pstock = new CPstock("210.220.167.67", 12000);
 //	Pstock = new CPstock("192.168.6.129", 12000);   // home
-	Pstock = new CPstock("192.168.42.128", 12000);  // lux
+//	Pstock = new CPstock("192.168.42.128", 12000);  // lux
 //	Pstock = new CPstock("127.0.0.1", 12000);
 
 	// Main thread init
@@ -822,6 +823,9 @@ void __fastcall TStockMainF::btnDebugClick(TObject *Sender)
 void __fastcall TStockMainF::btnConfClick(TObject *Sender)
 {
 //
+	if (SigConfF == NULL) SigConfF = new TSigConfF(this);
+	if( !SigConfF->Visible ) SigConfF->Show();
+	if( SigConfF->WindowState == wsMinimized ) SigConfF->WindowState = wsNormal;
 }
 //---------------------------------------------------------------------------
 // Button Event (btnCSVSave)
@@ -931,6 +935,26 @@ void __fastcall TStockMainF::btnOrderClick(TObject *Sender)
 {
 //
     ReqSendOrderTest();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TStockMainF::Button2Click(TObject *Sender)
+{
+//
+	if(Pstock->SendTotalBuySig())
+	{
+		ShowMessage("success");
+	}
+	else
+	{
+        ShowMessage("fail");
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TStockMainF::Button5Click(TObject *Sender)
+{
+//
 }
 //---------------------------------------------------------------------------
 

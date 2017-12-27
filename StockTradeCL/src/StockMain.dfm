@@ -160,6 +160,15 @@ object StockMainF: TStockMainF
           Height = 21
           TabOrder = 7
         end
+        object Button5: TButton
+          Left = 1019
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'total sell'
+          TabOrder = 8
+          OnClick = Button5Click
+        end
       end
       object pnlTitle: TPanel
         Left = 1
@@ -918,6 +927,15 @@ object StockMainF: TStockMainF
         end
       end
     end
+  end
+  object Button2: TButton
+    Left = 940
+    Top = 49
+    Width = 75
+    Height = 25
+    Caption = 'total buy'
+    TabOrder = 2
+    OnClick = Button2Click
   end
   object tmStatus: TTimer
     Enabled = False

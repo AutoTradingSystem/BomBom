@@ -14,9 +14,12 @@ TestMSG SendMsgLog;
 TestMSG SysMsgLog;
 //---------------------------------------------------------------------------
 SYSTEM StockSYS;
+SignalConf SigConf;
 USERINFO UInfo;
 ACCINFO AccInfo;
 TradeSigInfo TDSINFO;
+TradeSigInfo TDTotalBuyINFO[100];
+TradeSigInfo TDTotalSellINFO[100];
 OrderInfo OrdInfo;
 //---------------------------------------------------------------------------
 // End of StockDB.cpp
