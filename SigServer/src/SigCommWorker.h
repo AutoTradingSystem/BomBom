@@ -39,13 +39,17 @@ private:
 	bool isEndConnectionCheck;
 	bool isSendHeatHeat;
 	PACK_INFO packInfo;
+
 	/*
 	MtPacket23 		mtPacket23;
 	MtPacket24		mtPacket24;
-	MtPacket41		mtPacket41;
+
 	MtPacket42		mtPacket42;
 	MtPacket43		mtPacket43;
 	*/
+
+	SgPacket41 sgPacket41;
+
 	char rcvUserID[16];
 	char rcvUserPW[16];
 	char rcvVIN[18];
@@ -53,7 +57,7 @@ private:
 
 	VH 				dVH;
 	VH_SPEC     	dVH_SPEC;
-	RECEIPT     	dRECEIPT;
+	TradHis     	dTradHis;
 
 	ISPT_STAT		dISPT_STAT;
 
@@ -111,9 +115,9 @@ public:
 	void __fastcall SendHeartBeat();
 	void __fastcall SendHeartBeatRes(const LP_IOPACKET_HEADER h);
 	void __fastcall SendMeasuSig(const LP_IOPACKET_HEADER h, char sigType, int eventTime, AnsiString code, AnsiString jName, int price);
-	void __fastcall SendPacketToIDev(const SgPacket* p);
+	void __fastcall SendPacketToIDev(SgPacket* p);
 
-    void __fastcall Finalize();
+	void __fastcall Finalize();
     void __fastcall Send(char* buf);
 	void __fastcall CommDump( int devID, const char* pBuf, int iLen, const char* tag );
 };

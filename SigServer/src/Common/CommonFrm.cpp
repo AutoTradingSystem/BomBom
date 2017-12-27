@@ -4,7 +4,7 @@
 #pragma hdrstop
 
 #include "CommonFrm.h"
-#include "MainU.h"
+#include "MainFrm.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -13,7 +13,7 @@
 TCommonF *CommonF;
 
 //---------------------------------------------------------------------------
-void execCmd(AnsiString cmd)
+void execCmd(String cmd)
 { 
     HWND                    hdWindow;
     STARTUPINFO             siParam;
@@ -27,12 +27,12 @@ void execCmd(AnsiString cmd)
     // Param 섯팅
     siParam.cb          = sizeof(STARTUPINFO);
     siParam.dwFlags     = STARTF_USESHOWWINDOW;
-    siParam.wShowWindow = SW_SHOW;
+	siParam.wShowWindow = SW_SHOW;
 
-    CreateProcess(NULL, cmd.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &siParam, &piParam);
+	CreateProcess(NULL, cmd.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &siParam, &piParam);
     /*
     // 프로세스가 종료될때까지 대기함
-    WaitForInputIdle(GetCurrentProcess(), INFINITE);
+	WaitForInputIdle(GetCurrentProcess(), INFINITE);
     if(piParam.hProcess)
     {
         dwExitCode = STILL_ACTIVE;
@@ -80,6 +80,7 @@ void __fastcall TCommonF::StrToDateByte(AnsiString str, char* bDate )
 	bDate[5] = StrToIntDef( str.SubString(13, 2), 0);
 }
 
+/*
 //---------------------------------------------------------------------------
 bool __fastcall TCommonF::IsGridEmpty(TAdvStringGrid *G)
 {
@@ -99,7 +100,7 @@ void __fastcall TCommonF::ClearGrid(TAdvStringGrid *G)
     G->RowCount = G->FixedRows + 1;
     for(int iCnt=0; iCnt<G->ColCount; iCnt++)
         G->Cells[iCnt][G->FixedRows] = "";
-}
+}        */
 //---------------------------------------------------------------------------
 // Datetime 을 각 에디트 박스에 넣어주기
 void  __fastcall TCommonF::SetDateTime(AnsiString sTime,TEdit * pDatetime,
@@ -166,36 +167,37 @@ AnsiString  __fastcall TCommonF::SubString(const AnsiString* str, char c)
 //---------------------------------------------------------------------------
 // Grid 를 CSV 파일로 저장하기
 //---------------------------------------------------------------------------
+/*
 void __fastcall TCommonF::SaveGridToCSV(TAdvStringGrid * SG)
 {
-    TSaveDialog * SD = new TSaveDialog(this);
-    SD->DefaultExt = "csv";
-    SD->InitialDir = GetCurrentDir();
-    if(!SD->Execute()){return;}
-    TFileStream * FS = new TFileStream(SD->FileName,fmCreate);
-    AnsiString sTmp;
-    for (int i=0;i< SG->RowCount ;i++){
-        sTmp = "";
-        for(int j=0;j< SG->ColCount ;j++){
-            sTmp += SG->Cells[j][i]+",";
-        }
-        sTmp += "\r\n";
-        FS->Write(sTmp.c_str(),sTmp.Length());
-    }
-    delete FS;
-}
+	TSaveDialog * SD = new TSaveDialog(this);
+	SD->DefaultExt = "csv";
+	SD->InitialDir = GetCurrentDir();
+	if(!SD->Execute()){return;}
+	TFileStream * FS = new TFileStream(SD->FileName,fmCreate);
+	AnsiString sTmp;
+	for (int i=0;i< SG->RowCount ;i++){
+		sTmp = "";
+		for(int j=0;j< SG->ColCount ;j++){
+			sTmp += SG->Cells[j][i]+",";
+		}
+		sTmp += "\r\n";
+		FS->Write(sTmp.c_str(),sTmp.Length());
+	}
+	delete FS;
+} */
 
 //---------------------------------------------------------------------------
 void __fastcall TCommonF::DateTimeToFileTime(const TDateTime *localDateTime, FILETIME* utcFileTime)
 {
-    SYSTEMTIME  localSystemTime;
-    FILETIME    localFileTime;
+	SYSTEMTIME  localSystemTime;
+	FILETIME    localFileTime;
 
-    if( localDateTime != NULL){
-        DateTimeToSystemTime(*localDateTime,   localSystemTime);
-        SystemTimeToFileTime(&localSystemTime, &localFileTime);
-        LocalFileTimeToFileTime(&localFileTime, utcFileTime); // LocalFileTime => UTC Base
-    }
+	if( localDateTime != NULL){
+		DateTimeToSystemTime(*localDateTime,   localSystemTime);
+		SystemTimeToFileTime(&localSystemTime, &localFileTime);
+		LocalFileTimeToFileTime(&localFileTime, utcFileTime); // LocalFileTime => UTC Base
+	}
     else
     {
         utcFileTime->dwLowDateTime  = 0;
@@ -452,16 +454,16 @@ void __fastcall TCommonF::WriteQueryError(AnsiString strOraErr, AnsiString strSq
 {
     HANDLE     hFile;
     DWORD      dwWriteSize;
-    AnsiString strFName;
-    AnsiString strMsg;
+	String strFName;
+	String strMsg;
 
 	//strFName = logDir + "\\ESQL_" + Now().FormatString("yyyy-mm-dd") + ".txt";
 
-	strFName.printf("%s\\ORAERR_%hu-%02hu-%02hu.txt",
-		MainF->LOG_ROOT, MainF->sysYear, MainF->sysMon, MainF->sysDay );
-    if((hFile = CreateFile(strFName.c_str(),
+//	strFName.printf("%s\\ORAERR_%hu-%02hu-%02hu.txt",
+//		MainF->LOG_ROOT, MainF->sysYear, MainF->sysMon, MainF->sysDay );
+	if((hFile = CreateFile(strFName.c_str(),
                         GENERIC_READ|GENERIC_WRITE,
-                        FILE_SHARE_READ,
+						FILE_SHARE_READ,
                         NULL,
                         OPEN_ALWAYS,
                         FILE_ATTRIBUTE_NORMAL,

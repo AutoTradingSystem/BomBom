@@ -12,7 +12,7 @@
 #include "SgPacketInc.h"
 
 #include "MainFrm.h"
-//#include "CommonFrm.h"
+#include "CommonFrm.h"
 
 #include "SigCommServer.h"
 #include "SigCommWorker.h"
@@ -87,8 +87,8 @@ __fastcall SigCommWorker::SigCommWorker(TcpSocket *csock) : TThread(True)
 		//====================================================
 	}
 
-//	qrySel = new TSQLQuery(MainF);
-//	qrySel->SQLConnection = MainF->DB;
+	qrySel = new TSQLQuery(MainF);
+	qrySel->SQLConnection = MainF->DB;
 }
 
 //---------------------------------------------------------------------------
@@ -678,17 +678,18 @@ void __fastcall SigCommWorker::ProcessPacket(LP_IOPACKET_HEADER h, SgPacket* p)
 			SendPacket0x24();
 			break;
 
-		// 접수정보요청
+		// 전체 매수 신호
 		case 0x31 :
-			strLog.sprintf( "[DEV_%05d] RECV [%02X:%4d] 접수정보요청",
-				connDevID, h->opCode, h->length );
-			MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
+			MainF->SysLog("0x31요청 들어옴", 1, true);
+//			strLog.sprintf( "[DEV_%05d] RECV [%02X:%4d] 접수정보요청",
+//				connDevID, h->opCode, h->length );
+//			MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
 
-			cnt = ProcessReqReceiptInfo();
+			cnt = ProcessReqReceiptInfo();      // 매수/매도 신호 SET
 			//strLog.sprintf( "[DEV_%05d] PROC 접수정보처리 %d", connDevID, cnt);
 			//MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
 
-//			SendPacketToIDev( &SgPacket41 );
+			SendPacketToIDev( &sgPacket41 );    // 매수/매도 신호  SEND
 
 			strLog.sprintf( "[DEV_%05d] RECV [%02X:%4d] 접수정보전송 CNT:%d",
 				connDevID, h->opCode, h->length, cnt );
@@ -958,82 +959,56 @@ void __fastcall SigCommWorker::SendPacket0x24()
 
 //----------------------------------------------------------------------
 // ProcessReqReceipt
-// - 접수정보 전송
+// - 오늘자 매수정보 조회
 //----------------------------------------------------------------------
 int __fastcall SigCommWorker::ProcessReqReceiptInfo()
 {
-/*	int ret;
+	int ret;
 	int cnt;
 
-	SgPacket41.clear();
+	sgPacket41.clear();
 
-	SgPacket41.setDeviceID(connDevID);
-
-	// 검사일자가 오늘인 접수정보 전송
-	if( MainF->cfg.UseIsptDate )
-	{
-		qrySel->SQL->Text =
-		"SELECT A.RCPT_NO, A.VIN, A.VH_REG_NO                   \
-			,NVL(A.ISPT_DIV_CD, 0) ISPT_DIV_CD                  \
-			,NVL(A.ISPT_TP, 1) ISPT_TP                          \
-			,A.ISPT_OFFICE_ID                                   \
-			,A.RCPT_STAT                                        \
-			,A.RCPT_DT                                          \
-			,A.ISPT_DT                                          \
-			,TO_NUMBER( TO_CHAR(A.ISPT_DT,'YYYY') ) ISPT_YEAR   \
-			,TO_NUMBER( TO_CHAR(A.ISPT_DT,'MM') )  ISPT_MON     \
-			,TO_NUMBER( TO_CHAR(A.ISPT_DT,'DD') )  ISPT_DAY     \
-			,NVL( C.VH_NM, '-') VH_NM                           \
-		FROM                                                    \
-			ISPT_RCPT A, VH B, SPEC C                           \
-		WHERE A.RCPT_STAT = 1                                   \
-			AND ISPT_DT = TO_CHAR( SYSDATE, 'YYYY-MM-DD')       \
-			AND A.VIN = B.VIN                                   \
-			AND B.SPEC_NO = C.SPEC_NO(+)                        \
-		ORDER BY A.RCPT_NO";
-	}
-	else
-	{
-		// TEST시  모든 접수정보 전송
-		qrySel->SQL->Text =
-		"SELECT A.RCPT_NO, A.VIN, A.VH_REG_NO 		\
-			,NVL(A.ISPT_DIV_CD, 0) ISPT_DIV_CD      \
-			,NVL(A.ISPT_TP, 1) ISPT_TP              \
-			,A.ISPT_OFFICE_ID                       \
-			,A.RCPT_STAT                            \
-			,A.RCPT_DT                              \
-			,TO_NUMBER( TO_CHAR(A.RCPT_DT,'YYYY') ) ISPT_YEAR   \
-			,TO_NUMBER( TO_CHAR(A.RCPT_DT,'MM') )  ISPT_MON     \
-			,TO_NUMBER( TO_CHAR(A.RCPT_DT,'DD') )  ISPT_DAY     \
-			,NVL( C.VH_NM, '-') VH_NM               \
-		FROM                                        \
-			ISPT_RCPT A, VH B, SPEC C               \
-		WHERE A.RCPT_STAT = 1                       \
-			AND A.VIN = B.VIN                       \
-			AND B.SPEC_NO = C.SPEC_NO(+)            \
-		ORDER BY A.RCPT_NO";
-	}
-
+	qrySel->SQL->Text =
+	"SELECT IDX, SN, NAME S_NAME, SIGNAL_CODE, CODE S_CODE, MARK, PRICE, \
+		DATE_FORMAT(BSTIME,'%m') TIME_MON,           \
+		DATE_FORMAT(BSTIME,'%d') TIME_DAY,           \
+		DATE_FORMAT(BSTIME,'%H') TIME_HOUR,          \
+		DATE_FORMAT(BSTIME,'%i') TIME_MIN,           \
+		RETENTION_PERIOD,                            \
+		CUMPR, PROFITS_3MILLION,REG_DATE,USE_YN      \
+	   FROM signal_db                                \
+	  WHERE date(BSTIME) = date(now())               \
+		AND SN = 'S1'";
 	cnt = 0;
+	qrySel->SQLConnection =  CommonF->DB;
 	if((ret = CommonF->OpenSQL(qrySel)) > 0)
 	{
+		MainF->SysLog("Open", 1, true);
 		try {
 			while( !qrySel->Eof)
 			{
-				ZeroMemory( &dRECEIPT, sizeof( RECEIPT ) );
-				snprintf( dRECEIPT.RCPT_NO,   18, "%s", qrySel->FieldByName("RCPT_NO"   )->AsAnsiString.c_str() );
-				snprintf( dRECEIPT.VIN,       18, "%s", qrySel->FieldByName("VIN"       )->AsAnsiString.c_str() );
-				snprintf( dRECEIPT.VH_REG_NO, 20, "%s", qrySel->FieldByName("VH_REG_NO" )->AsAnsiString.c_str() );
-				snprintf( dRECEIPT.VH_NM,     31, "%s", qrySel->FieldByName("VH_NM"     )->AsAnsiString.c_str() );
+				ZeroMemory( &dTradHis, sizeof( TradHis ) );
+//				snprintf( dRECEIPT.RCPT_NO,   18, "%s", qrySel->FieldByName("RCPT_NO"   )->AsAnsiString.c_str() );
+//				snprintf( dRECEIPT.VIN,       18, "%s", qrySel->FieldByName("VIN"       )->AsAnsiString.c_str() );
+//				snprintf( dRECEIPT.VH_REG_NO, 20, "%s", qrySel->FieldByName("VH_REG_NO" )->AsAnsiString.c_str() );
+//				snprintf( dRECEIPT.VH_NM,     31, "%s", qrySel->FieldByName("VH_NM"     )->AsAnsiString.c_str() );
 
-				dRECEIPT.ISPT_DIV_CD = qrySel->FieldByName("ISPT_DIV_CD" )->AsInteger;
-				dRECEIPT.ISPT_TP     = qrySel->FieldByName("ISPT_TP"     )->AsInteger;
-				dRECEIPT.RCPT_YEAR   = qrySel->FieldByName("ISPT_YEAR"   )->AsInteger;
-				dRECEIPT.RCPT_MON    = qrySel->FieldByName("ISPT_MON"    )->AsInteger;
-				dRECEIPT.RCPT_DAY    = qrySel->FieldByName("ISPT_DAY"    )->AsInteger;
+				snprintf(&dTradHis.MARK, 1, "%c", qrySel->FieldByName("MARK")->AsAnsiString.c_str());
+				snprintf(&dTradHis.TIME_MON, 1, "%c", qrySel->FieldByName("TIME_MON")->AsAnsiString.c_str());
+				snprintf(&dTradHis.TIME_DAY, 1, "%c", qrySel->FieldByName("TIME_DAY")->AsAnsiString.c_str());
+				snprintf(&dTradHis.TIME_HOUR, 1, "%c", qrySel->FieldByName("TIME_HOUR")->AsAnsiString.c_str());
+				snprintf(&dTradHis.TIME_MIN, 1, "%c", qrySel->FieldByName("TIME_MIN")->AsAnsiString.c_str());
 
-				SgPacket41.addReceiptInfo( &dRECEIPT );
 
+//				dTradHis.MARK = qrySel->FieldByName("MARK")->AsString;
+//				dTradHis.TIME_MON  = qrySel->FieldByName("TIME_MON")->AsString;
+//				dTradHis.TIME_DAY  = qrySel->FieldByName("TIME_DAY")->AsString;
+//				dTradHis.TIME_HOUR = qrySel->FieldByName("TIME_HOUR")->AsString;
+//				dTradHis.TIME_MIN  = qrySel->FieldByName("TIME_MIN")->AsString;
+				snprintf( dTradHis.S_CODE, 7, "%s", qrySel->FieldByName("S_CODE" )->AsAnsiString.c_str() );
+				snprintf( dTradHis.S_NAME, 32, "%s", qrySel->FieldByName("S_NAME")->AsAnsiString.c_str() );
+				dTradHis.PRICE    = qrySel->FieldByName("PRICE")->AsInteger;
+				sgPacket41.addReceiptInfo( &dTradHis );
 				cnt++;
 				if( cnt >= MAX_RCPT_INFO_CNT ) break;
 				qrySel->Next();
@@ -1043,7 +1018,27 @@ int __fastcall SigCommWorker::ProcessReqReceiptInfo()
 	}
 	qrySel->Close();
 
-	return cnt;                   */
+	return cnt;
+
+//	AnsiString strLog;
+//	int len;
+//	char *buf;
+
+//	SgPacket24.setDeviceID( connDevID );
+//	SgPacket24.setSeqNo( GetSeqNo() );
+//	SgPacket24.setDataLength( SgPacket24::PACKET_DATA_SIZE );
+//
+//	SgPacket24.setVersionInfo( DataVersion.isptCrtrVer, DataVersion.isptCrtrFileName,
+//							   DataVersion.specVer, DataVersion.specFileName );
+//
+//	len = SgPacket24.getLength();
+//	buf = SgPacket24.getBytes();
+//	cSock->send( buf, len );
+//
+//	if( MainF->ckSigCommLog->Checked )CommDump( connDevID, buf, len, "SEND");
+//
+//	strLog.sprintf( "[DEV_%05d] SEND [%02X:%4d] 버전정보전송", connDevID, 0x24, len );
+//	MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);         */
 }
 
 //----------------------------------------------------------------------
@@ -1363,19 +1358,19 @@ void __fastcall SigCommWorker::SendMeasuSig(const LP_IOPACKET_HEADER h, char sig
 //----------------------------------------------------------------------
 // sendPacket
 //----------------------------------------------------------------------
-void __fastcall SigCommWorker::SendPacketToIDev(const SgPacket* p)
+void __fastcall SigCommWorker::SendPacketToIDev(SgPacket* p)
 {
-/*
+
 	AnsiString strLog;
 	unsigned short seqNo;
 
 	char* buf = (char *)( p->getBytes());
 	unsigned short len = p->getLength();
 
-	if( !p->staticSeq ) {
-		seqNo = GetSeqNo();
-		p->setSeqNo( seqNo );
-	}
+//	if( !p->staticSeq ) {
+//		seqNo = GetSeqNo();
+//		p->setSeqNo( seqNo );
+//	}
 
 	try {
 		cSock->send( buf, len );
@@ -1385,7 +1380,7 @@ void __fastcall SigCommWorker::SendPacketToIDev(const SgPacket* p)
 //		MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
 		MainF->SysLog(strLog.c_str(), 1, true);
 	}
-              */
+
 
 //	if( MainF->ckSigCommLog->Checked ) {
 //		CommDump( connDevID, (char *)p->getBytes(), len, "SEND");

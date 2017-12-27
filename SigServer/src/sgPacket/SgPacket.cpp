@@ -128,7 +128,7 @@ void SgPacket::setDeviceID( unsigned int deviceID )
 //---------------------------------------------------------------------
 // 패킷 전체길이
 //---------------------------------------------------------------------
-unsigned short SgPacket::getLength()
+unsigned short SgPacket::getLength()    const
 {
 	return IOP_HEADER_SIZE + getUInt2(buf,2);
 //	return IOP_HEADER_SIZE + getUInt2( buf, 7 );

@@ -5,10 +5,13 @@
 #define _SG_PACKETINC_H_
 //---------------------------------------------------------------------------
 #include "SgPacket.h"
+
+
+#include "SgPacket41.h"     // 매매정보 전송
 /*
 #include "SgPacket23.h"     // 설정정보 전송
 #include "SgPacket24.h"     // 버전정보 전송
-#include "SgPacket41.h"     // 접수정보 전송
+#include "SgPacket41.h"     // 매매정보 전송
 #include "SgPacket42.h"     // 차량정보 전송
 #include "SgPacket43.h"     // 제원정보 전송
 #include "SgPacket51.h"     // 관능검사결과 수신

@@ -69,4 +69,24 @@ object MainF: TMainF
     Left = 403
     Top = 95
   end
+  object DB: TSQLConnection
+    ConnectionName = 'MySQLConnection'
+    DriverName = 'MySQL'
+    LoginPrompt = False
+    Params.Strings = (
+      'DriverName=MySQL'
+      'HostName=ServerName'
+      'Database=DBNAME'
+      'User_Name=user'
+      'Password=password'
+      'ServerCharSet='
+      'BlobSize=-1'
+      'ErrorResourceFile='
+      'LocaleCode=0000'
+      'Compressed=False'
+      'Encrypted=False'
+      'ConnectTimeout=60')
+    Left = 232
+    Top = 64
+  end
 end

@@ -11,8 +11,8 @@
 #include <System.DateUtils.hpp>
 
 
-#include "AdvGrid.hpp"
-#include "BaseGrid.hpp"
+//#include "AdvGrid.hpp"
+//#include "BaseGrid.hpp"
 
 #include "Mios.h"
 
@@ -47,11 +47,11 @@ public:
 	bool __fastcall IsDbConnected();
     void __fastcall SetLogDir(AnsiString dir);
     //void __fastcall SetCodeToCombo(TQuery * Q, TComboBox * CB, AnsiString sCodeType, AnsiString sUserType);
-    bool __fastcall IsGridEmpty(TAdvStringGrid *G);
-    void __fastcall ClearGrid(TAdvStringGrid *G);
-    void __fastcall SetDateTime(AnsiString sTime, TEdit * pDatetime, TEdit * pTime, TEdit * pMin);
+//    bool __fastcall IsGridEmpty(TAdvStringGrid *G);
+//    void __fastcall ClearGrid(TAdvStringGrid *G);
+	void __fastcall SetDateTime(AnsiString sTime, TEdit * pDatetime, TEdit * pTime, TEdit * pMin);
     AnsiString  __fastcall MakeDateTime(TEdit * pDatetime, TEdit * pTime, TEdit * pMin);
-    void __fastcall SaveGridToCSV(TAdvStringGrid * SG);
+//    void __fastcall SaveGridToCSV(TAdvStringGrid * SG);
     AnsiString  __fastcall SubString(const AnsiString* str, char c);
 
     // FILE FUNCTION

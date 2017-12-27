@@ -68,7 +68,7 @@ public:
 
 	unsigned char getByte(int idx);
 
-	unsigned short getLength();
+	unsigned short getLength() const;
 	unsigned short getDataLength();
 	void setDataLength( unsigned short len );
 

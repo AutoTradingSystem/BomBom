@@ -15,6 +15,9 @@
 #include "SigComm.h"
 #include "SigCommServer.h"
 #include <Vcl.ExtCtrls.hpp>
+#include <Data.DB.hpp>
+#include <Data.DBXMySQL.hpp>
+#include <Data.SqlExpr.hpp>
 
 //---------------------------------------------------------------------------
 typedef struct
@@ -48,6 +51,7 @@ __published:	// IDE-managed Components
 	TEdit *Edit4;
 	TEdit *Edit5;
 	TButton *Button1;
+	TSQLConnection *DB;
 	void __fastcall tmClockTimer(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
@@ -56,10 +60,13 @@ private:	// User declarations
 	void __fastcall fnSysLog(AnsiString strLog, int iMsgLevel);
 	void __fastcall fnSigCommLog(TMessage Msg);
 	void __fastcall fnSigCommLog(SIG_COMMLOG *log, int iMsgLevel);
+	bool __fastcall ConnectDB(void);
+    bool        bFirstConnection;
 public:		// User declarations
 	String APP_HOME;
 	String LOG_ROOT;
 	APP_CONFIG cfg;
+	bool        isAppTerminate;
 
 	TDateTime      sysTime;
 	unsigned short sysYear;

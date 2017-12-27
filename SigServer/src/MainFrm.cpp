@@ -5,6 +5,7 @@
 
 #include "MainFrm.h"
 #include "SigCommServer.h"
+#include "CommonFrm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -19,12 +20,17 @@ __fastcall TMainF::TMainF(TComponent* Owner)
 {
 	APP_HOME = ExtractFilePath( Application->ExeName );
 	APP_HOME.SetLength( APP_HOME.Length()-1 );
-	LOG_ROOT = APP_HOME+"\\log";
+	LOG_ROOT = ExtractFilePath(ParamStr(0)) + "log";
 
 	sysTime = Now();
 	curTimeSec = sysTime.Val*86400;
 	sysTime.DecodeDate( &sysYear, &sysMon, &sysDay );
 	sysTime.DecodeTime( &sysHour, &sysMin, &sysSec, &sysMSec);
+	bFirstConnection= true;
+
+	CommonF = new TCommonF(this );
+
+	CommonF->SetLogDir( LOG_ROOT );
 
 }
 
@@ -236,11 +242,57 @@ void __fastcall TMainF::tmClockTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMainF::FormShow(TObject *Sender)
 {
-    if( !Init() )
+	static bool bIsFirst = true;
+
+	if(bIsFirst && !isAppTerminate)
 	{
-		ShowMessage("program is already running or the port is being used by another application.");
-        Close();
+        bIsFirst = false;
+//		dbProc->StartProcess();
+//		fileGenProc->StartProcess();
+
+		#ifdef DbConnThdH
+//		dbConnThd  = new DbConnThread(DB);
+//		dbConnThd->StartProcess();
+		#else
+        Init();
+		ConnectDB();
+		#endif
 	}
+
+}
+
+//---------------------------------------------------------------------------
+//  DBConnect
+//---------------------------------------------------------------------------
+bool __fastcall TMainF::ConnectDB(void)
+{
+	try {
+		//pDatabase->Params->Clear();
+		DB->LoginPrompt    = false;
+		DB->KeepConnection = true;
+		DB->Params->Values["HostName"]   = "my5008.gabiadb.com";
+		DB->Params->Values["Port"]   	 = "3306";
+		DB->Params->Values["Database"]   = "mcsig";
+		DB->Params->Values["User_Name"]  = "mcadmin";
+		DB->Params->Values["Password"]   = "anchor21**";
+//		DB_SB->Params->Values["RowsetSize"] = "512";
+		DB->Params->Values["SchemaOverride"] = "%.dbo";
+		DB->Params->Values["ServerCharSet"] = "utf8";
+		DB->SQLHourGlass = false;
+		DB->Connected    = true;
+		bFirstConnection = false;
+		CommonF->SetDB( DB );
+	}
+	catch(...){
+		DB->Connected   = false;
+		if( bFirstConnection )
+		{
+			//AnsiString msg = "[MAIN] 데이타 베이스 (" +cfg.strDataSource + ") 에 접속 할수 없습니다.";
+			//ShowMessage(msg);
+			bFirstConnection = false;
+		}
+	}
+	return DB->Connected;
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainF::Button1Click(TObject *Sender)
