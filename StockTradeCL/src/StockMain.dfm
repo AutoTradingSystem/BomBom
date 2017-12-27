@@ -105,7 +105,7 @@ object StockMainF: TStockMainF
           ParentFont = False
           TabOrder = 2
         end
-        object Button2: TButton
+        object btnConf: TButton
           Left = 329
           Top = 4
           Width = 114
@@ -118,6 +118,7 @@ object StockMainF: TStockMainF
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 3
+          OnClick = btnConfClick
         end
         object btnSaveCsv: TButton
           Left = 449

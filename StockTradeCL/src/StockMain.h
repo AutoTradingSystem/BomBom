@@ -78,7 +78,7 @@ __published:	// IDE-managed Components
 	TStringGrid *sgSiglog;
 	TButton *btnOutstandingLog;
 	TButton *Button1;
-	TButton *Button2;
+	TButton *btnConf;
 	TStringGrid *sgTradeLog;
 	TButton *btnSaveCsv;
 	TMainMenu *MainMenu1;
@@ -129,6 +129,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnOrderClick(TObject *Sender);
 	void __fastcall KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGubun, long nItemCnt,
           BSTR sFIdList);
+	void __fastcall btnConfClick(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;

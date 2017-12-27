@@ -422,19 +422,29 @@ void __fastcall TStockMainF::fnQSellSig(TMessage Msg)
 	// Map Get
 	//===================================
 	CLSstockSig *pSig;
+	int sellIdx=0;
+	int rowCnt=0;
 	if((pSig = Map.Get(sInfo.stockCode)) != NULL)
 	{
-		int rowCnt = sgTradeLog->RowCount;
-		if(rowCnt > 1)
-		{
-			pSig->SetGridIndex_Sell(rowCnt+1);
-			int idx = pSig->GetGridIndex_Sell();
-			ShowGridTradeInfo(idx);
+		sellIdx = pSig->GetGridIndex_Sell();
+		rowCnt = sgTradeLog->RowCount;
+
+		if (rowCnt > 1) {
+			if(sellIdx == 0)
+			{
+				pSig->SetGridIndex_Sell(rowCnt);
+				ShowGridTradeInfo(pSig->GetGridIndex_Sell());
+			}
+			else
+			{
+                ShowGridTradeInfo(pSig->GetGridIndex_Sell());
+            }
 		}
-		else if( rowCnt <= 1)
+		else
 		{
+			pSig->SetGridIndex_Sell(1);
 			ShowGridTradeInfo(1);
-        }
+		}
 	}
 	else
 	{
@@ -757,6 +767,27 @@ void __fastcall TStockMainF::KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sG
 	ReqAccountInfo();
 }
 //---------------------------------------------------------------------------
+// FormShow
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::FormShow(TObject *Sender)
+{
+//	long Result = KHOpenAPI->CommConnect();
+//
+//	if(Result != 0)
+//		StatusBar->Panels->Items[2]->Text = "Login창 불러오기 실패";
+//	else
+//		StatusBar->Panels->Items[2]->Text = "Login창 열림";
+	//Init();
+}
+//---------------------------------------------------------------------------
+// FormClose
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
+{
+//
+	Log.Write("Process exit");
+}
+//---------------------------------------------------------------------------
 // Timer (tmStatusTimer)
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::tmStatusTimer(TObject *Sender)
@@ -786,16 +817,22 @@ void __fastcall TStockMainF::btnDebugClick(TObject *Sender)
 	if( STDebugF->WindowState == wsMinimized ) STDebugF->WindowState = wsNormal;
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::FormShow(TObject *Sender)
+// Button Event (btnConf)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::btnConfClick(TObject *Sender)
 {
-//	long Result = KHOpenAPI->CommConnect();
 //
-//	if(Result != 0)
-//		StatusBar->Panels->Items[2]->Text = "Login창 불러오기 실패";
-//	else
-//		StatusBar->Panels->Items[2]->Text = "Login창 열림";
-	//Init();
 }
+//---------------------------------------------------------------------------
+// Button Event (btnCSVSave)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::btnSaveCsvClick(TObject *Sender)
+{
+//
+	SaveSigCSV_Grid();
+}
+//---------------------------------------------------------------------------
+// StrigGrid DrawCell Evnet
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::sgSiglogDrawCell(TObject *Sender, int ACol, int ARow,
 		  TRect &Rect, TGridDrawState State)
@@ -841,12 +878,7 @@ void __fastcall TStockMainF::sgSiglogDrawCell(TObject *Sender, int ACol, int ARo
 
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::btnSaveCsvClick(TObject *Sender)
-{
-//
-	SaveSigCSV_Grid();
-
-}
+// Menu click event
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::mn100Click(TObject *Sender)
 {
@@ -866,12 +898,6 @@ void __fastcall TStockMainF::mn100Click(TObject *Sender)
         Close();
 		break;
     }
-}
-//---------------------------------------------------------------------------
-void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
-{
-//
-	Log.Write("Process exit");
 }
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::Button3Click(TObject *Sender)
@@ -901,15 +927,10 @@ void __fastcall TStockMainF::Button4Click(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-
-
 void __fastcall TStockMainF::btnOrderClick(TObject *Sender)
 {
 //
     ReqSendOrderTest();
 }
-//---------------------------------------------------------------------------
-
-
 //---------------------------------------------------------------------------
 
