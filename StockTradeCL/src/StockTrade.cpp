@@ -5,8 +5,9 @@
 #include <tchar.h>
 //---------------------------------------------------------------------------
 USEFORM("STDebug.cpp", STDebugF);
-USEFORM("SysConfFrm.cpp", SysConfF);
 USEFORM("StockMain.cpp", StockMainF);
+USEFORM("SysConfFrm.cpp", SysConfF);
+USEFORM("SigConfFrm.cpp", SigConfF);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

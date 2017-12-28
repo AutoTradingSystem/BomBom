@@ -84,15 +84,20 @@ public:
 	void InitSell(TradeSigInfo *pInfo);
 	void InitBuySig(TradeSigInfo *pInfo);
 
-	void SetSellOrderQty(int qty);
-	void SetBuyOrderQty(int qty);
-	void SetSellQty(int qty);
-	void SetBuyQty(int qty);
+	void SetSellOrderQty(int qty);  // 매도 주문량
+	void SetBuyOrderQty(int qty);   // 매수 주문량
+	void SetSellQty(int qty);		// 매도량.
+	void SetBuyQty(int qty);        // 매수량.
 
-	bool SellIgnore(void);
-	bool BuyIgnore(void);
+	bool SellIgnore(void);          // 매도 무시할 것인지.
+	bool BuyIgnore(void);   		// 매수 무시할 것인지.
 
 	char *GetCodeName();
+
+	void SetGridIndex_Sell(int grdIdx);
+	int GetGridIndex_Sell(void);
+	void SetGridIndex_Buy(int grdIdx);
+	int GetGridIndex_Buy(void);
 };
 //---------------------------------------------------------------------------
 #endif  // CLSstockSigH

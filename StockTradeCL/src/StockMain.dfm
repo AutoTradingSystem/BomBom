@@ -105,7 +105,7 @@ object StockMainF: TStockMainF
           ParentFont = False
           TabOrder = 2
         end
-        object Button2: TButton
+        object btnConf: TButton
           Left = 329
           Top = 4
           Width = 114
@@ -118,6 +118,7 @@ object StockMainF: TStockMainF
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 3
+          OnClick = btnConfClick
         end
         object btnSaveCsv: TButton
           Left = 449
@@ -158,6 +159,15 @@ object StockMainF: TStockMainF
           Width = 121
           Height = 21
           TabOrder = 7
+        end
+        object Button5: TButton
+          Left = 1019
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'total sell'
+          TabOrder = 8
+          OnClick = Button5Click
         end
       end
       object pnlTitle: TPanel
@@ -917,6 +927,15 @@ object StockMainF: TStockMainF
         end
       end
     end
+  end
+  object Button2: TButton
+    Left = 940
+    Top = 49
+    Width = 75
+    Height = 25
+    Caption = 'total buy'
+    TabOrder = 2
+    OnClick = Button2Click
   end
   object tmStatus: TTimer
     Enabled = False

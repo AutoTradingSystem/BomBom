@@ -78,7 +78,7 @@ __published:	// IDE-managed Components
 	TStringGrid *sgSiglog;
 	TButton *btnOutstandingLog;
 	TButton *Button1;
-	TButton *Button2;
+	TButton *btnConf;
 	TStringGrid *sgTradeLog;
 	TButton *btnSaveCsv;
 	TMainMenu *MainMenu1;
@@ -112,6 +112,8 @@ __published:	// IDE-managed Components
 	TEdit *edCumulativePrice;
 	TEdit *edCumulativeRate;
 	TKHOpenAPI *KHOpenAPI;
+	TButton *Button2;
+	TButton *Button5;
 	void __fastcall tmStatusTimer(TObject *Sender);
 	void __fastcall btnDebugClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
@@ -129,11 +131,16 @@ __published:	// IDE-managed Components
 	void __fastcall btnOrderClick(TObject *Sender);
 	void __fastcall KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGubun, long nItemCnt,
           BSTR sFIdList);
+	void __fastcall btnConfClick(TObject *Sender);
+	void __fastcall Button2Click(TObject *Sender);
+	void __fastcall Button5Click(TObject *Sender);
 private:	// User declarations
 	bool mTcpSt;
 	TDateTime m_curTime;
-    bool m_KWLogSt;
+	bool m_KWLogSt;
 	InitInfo m_initInfo;
+	int m_Trd_S_GridIdx;    	// 매수/매도 grid sell index
+	int m_Trd_B_GridIdx;        // 매수/매도 grid buy index
 
 	bool __fastcall Init(void);
 	bool __fastcall SetTrAccEstList(void);
@@ -157,6 +164,7 @@ public:		// User declarations
 	void __fastcall ShowUserInfo();
 	void __fastcall ShowSysStatus();
 	void __fastcall ShowGridSigInfo();
+    void __fastcall ShowGridTradeInfo(int rowIdx);
 
 	void __fastcall SaveSigCSV_Grid(void);
 	void __fastcall SaveSigCSV_RealTime(void);

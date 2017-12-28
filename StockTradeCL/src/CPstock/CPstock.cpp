@@ -105,3 +105,17 @@ bool __fastcall CPstock::SendEcho(char *str)
 {
 	return (TcpClient.SendEcho(str));
 }
+//---------------------------------------------------------------------------
+// SendTotalBuySig
+//---------------------------------------------------------------------------
+bool __fastcall CPstock::SendTotalBuySig()
+{
+	return (TcpClient.SendTotalBuySig(0x31));
+}
+//---------------------------------------------------------------------------
+// SendTotalSellSig
+//---------------------------------------------------------------------------
+bool __fastcall CPstock::SendTotalSellSig()
+{
+    return (TcpClient.SendTotalBuySig(0x41));
+}

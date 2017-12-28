@@ -36,6 +36,8 @@ public:
 	bool __fastcall GetCommStatus();
 
 	bool __fastcall SendEcho(char *str);
+	bool __fastcall SendTotalBuySig();
+	bool __fastcall SendTotalSellSig();
 };
 //---------------------------------------------------------------------------
 // External

@@ -7,6 +7,7 @@
 //---------------------------------------------------------------------------
 #include "STDebug.h"
 #include "SysConfFrm.h"
+#include "SigConfFrm.h"
 //---------------------------------------------------------------------------
 #include "Numstr.h"
 #include "StockDB.h"
@@ -55,10 +56,10 @@ __fastcall TStockMainF::TStockMainF(TComponent* Owner)
 	Log.Write("Process start");
 
 	mTcpSt = false;
-//	Pstock = new CPstock("210.220.167.67", 12000);
+	Pstock = new CPstock("210.220.167.67", 12000);
 //	Pstock = new CPstock("192.168.6.129", 12000);   // home
 //	Pstock = new CPstock("192.168.42.128", 12000);  // lux
-	Pstock = new CPstock("127.0.0.1", 12000);
+//	Pstock = new CPstock("127.0.0.1", 12000);
 
 	// Main thread init
 	ThrMain = new THRmain();
@@ -197,6 +198,39 @@ void __fastcall TStockMainF::ShowGridSigInfo()
 
 	sgSiglog->Cells[5][row]="-";
 
+}
+//---------------------------------------------------------------------------
+// ShowGridTradeInfo
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::ShowGridTradeInfo(int rowIdx)
+{
+
+	sgTradeLog->RowCount++;
+	TStrings *pRow = sgTradeLog->Rows[rowIdx];
+
+	AnsiString str1="";
+	str1.printf("%d/%d %d:%d",TDSINFO.mon,TDSINFO.day,TDSINFO.hour,TDSINFO.minute);
+	sgTradeLog->Cells[0][rowIdx]=str1;
+
+	str1 = TDSINFO.stockCode;
+	sgTradeLog->Cells[1][rowIdx]=str1;
+
+	str1 = TDSINFO.stockNm;
+	sgTradeLog->Cells[2][rowIdx]=str1;
+
+	str1 = TDSINFO.type;
+	sgTradeLog->Cells[3][rowIdx]=str1;
+
+	str1.printf("%d",TDSINFO.price);
+	sgTradeLog->Cells[4][rowIdx]=str1;
+
+	sgTradeLog->Cells[5][rowIdx]="-";
+
+
+	AnsiString str="";
+	str.printf("INDEX:[%d] rowCnt:[%d]", rowIdx, sgTradeLog->RowCount);
+
+	STDebugF->AddLog(str);
 }
 //---------------------------------------------------------------------------
 // SaveCSV
@@ -385,6 +419,41 @@ void __fastcall TStockMainF::fnQSellSig(TMessage Msg)
 		sInfo.type, sInfo.mon, sInfo.day, sInfo.hour, sInfo.minute, sInfo.stockCode, sInfo.stockNm, sInfo.price);
 
 	STDebugF->AddLog(str);
+	//===================================
+	// Map Get
+	//===================================
+	CLSstockSig *pSig;
+	int sellIdx=0;
+	int rowCnt=0;
+	if((pSig = Map.Get(sInfo.stockCode)) != NULL)
+	{
+		sellIdx = pSig->GetGridIndex_Sell();
+		rowCnt = sgTradeLog->RowCount;
+
+		if (rowCnt > 1) {
+			if(sellIdx == 0)
+			{
+				pSig->SetGridIndex_Sell(rowCnt);
+				ShowGridTradeInfo(pSig->GetGridIndex_Sell());
+			}
+			else
+			{
+                ShowGridTradeInfo(pSig->GetGridIndex_Sell());
+            }
+		}
+		else
+		{
+			pSig->SetGridIndex_Sell(1);
+			ShowGridTradeInfo(1);
+		}
+	}
+	else
+	{
+		ShowMessage("Map NULL");
+	}
+
+
+
     Que.PopSellSig();
 }
 //---------------------------------------------------------------------------
@@ -407,6 +476,9 @@ bool __fastcall TStockMainF::Init()
 	SetSigLogGridTitle();
 	SetTradeLogGrid();
 	SetTradeLogGridTitle();
+
+	m_Trd_S_GridIdx = 0;
+	m_Trd_B_GridIdx = 0;
 }
 //---------------------------------------------------------------------------
 // SetTrAccEstList
@@ -696,6 +768,27 @@ void __fastcall TStockMainF::KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sG
 	ReqAccountInfo();
 }
 //---------------------------------------------------------------------------
+// FormShow
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::FormShow(TObject *Sender)
+{
+//	long Result = KHOpenAPI->CommConnect();
+//
+//	if(Result != 0)
+//		StatusBar->Panels->Items[2]->Text = "Login창 불러오기 실패";
+//	else
+//		StatusBar->Panels->Items[2]->Text = "Login창 열림";
+	//Init();
+}
+//---------------------------------------------------------------------------
+// FormClose
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
+{
+//
+	Log.Write("Process exit");
+}
+//---------------------------------------------------------------------------
 // Timer (tmStatusTimer)
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::tmStatusTimer(TObject *Sender)
@@ -725,16 +818,25 @@ void __fastcall TStockMainF::btnDebugClick(TObject *Sender)
 	if( STDebugF->WindowState == wsMinimized ) STDebugF->WindowState = wsNormal;
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::FormShow(TObject *Sender)
+// Button Event (btnConf)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::btnConfClick(TObject *Sender)
 {
-//	long Result = KHOpenAPI->CommConnect();
 //
-//	if(Result != 0)
-//		StatusBar->Panels->Items[2]->Text = "Login창 불러오기 실패";
-//	else
-//		StatusBar->Panels->Items[2]->Text = "Login창 열림";
-	//Init();
+	if (SigConfF == NULL) SigConfF = new TSigConfF(this);
+	if( !SigConfF->Visible ) SigConfF->Show();
+	if( SigConfF->WindowState == wsMinimized ) SigConfF->WindowState = wsNormal;
 }
+//---------------------------------------------------------------------------
+// Button Event (btnCSVSave)
+//---------------------------------------------------------------------------
+void __fastcall TStockMainF::btnSaveCsvClick(TObject *Sender)
+{
+//
+	SaveSigCSV_Grid();
+}
+//---------------------------------------------------------------------------
+// StrigGrid DrawCell Evnet
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::sgSiglogDrawCell(TObject *Sender, int ACol, int ARow,
 		  TRect &Rect, TGridDrawState State)
@@ -780,12 +882,7 @@ void __fastcall TStockMainF::sgSiglogDrawCell(TObject *Sender, int ACol, int ARo
 
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::btnSaveCsvClick(TObject *Sender)
-{
-//
-	SaveSigCSV_Grid();
-
-}
+// Menu click event
 //---------------------------------------------------------------------------
 void __fastcall TStockMainF::mn100Click(TObject *Sender)
 {
@@ -807,12 +904,6 @@ void __fastcall TStockMainF::mn100Click(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-void __fastcall TStockMainF::FormClose(TObject *Sender, TCloseAction &Action)
-{
-//
-	Log.Write("Process exit");
-}
-//---------------------------------------------------------------------------
 void __fastcall TStockMainF::Button3Click(TObject *Sender)
 {
 //
@@ -826,7 +917,7 @@ void __fastcall TStockMainF::Button4Click(TObject *Sender)
 	AnsiString codenm;
 	CLSstockSig *pSig;
 	AnsiString str = Edit1->Text;
-    char *pCode = str.c_str();
+	char *pCode = str.c_str();
 
 //	if((pSig = Map.Get(str.c_str())) != NULL)
 	if((pSig = Map.Get(pCode)) != NULL)
@@ -837,11 +928,9 @@ void __fastcall TStockMainF::Button4Click(TObject *Sender)
 	else
 	{
 		ShowMessage("Map NULL");
-    }
+	}
 }
 //---------------------------------------------------------------------------
-
-
 void __fastcall TStockMainF::btnOrderClick(TObject *Sender)
 {
 //
@@ -849,6 +938,23 @@ void __fastcall TStockMainF::btnOrderClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TStockMainF::Button2Click(TObject *Sender)
+{
+//
+	if(Pstock->SendTotalBuySig())
+	{
+		ShowMessage("success");
+	}
+	else
+	{
+        ShowMessage("fail");
+    }
+}
+//---------------------------------------------------------------------------
 
+void __fastcall TStockMainF::Button5Click(TObject *Sender)
+{
+//
+}
 //---------------------------------------------------------------------------
 

@@ -32,11 +32,13 @@
 #define SEQ     OPCODE+1
 #define DATA    SEQ+1
 //---------------------------------------------------------------------------
-#define HEARTBEAT   0x01
-#define BUY_SIG     0x20
-#define SELL_SIG    0x21
-#define ACK         0x80
-#define NACK        0x81
+#define HEARTBEAT   	 0x01
+#define BUY_SIG     	 0x20
+#define SELL_SIG    	 0x21
+#define TOTAL_BUY_SIG    0x31
+#define TOTAL_SELL_SIG   0x41
+#define ACK         	 0x80
+#define NACK        	 0x81
 //---------------------------------------------------------------------------
 // Type Definition
 //---------------------------------------------------------------------------
@@ -80,6 +82,9 @@ private:
 	bool __fastcall SendMessage(BYTE code, int length, char *info);
 	void __fastcall PrcTradeSignal(void);
 
+	void __fastcall PrcTotalBuySig(void);
+	void __fastcall PrcTotalSellSig(void);
+
 public:
 	__fastcall CLSstockIF(void);
 	__fastcall CLSstockIF(const char *name, int port, const char *ipAddr, TCP_MODE mode = TCP_SERVER);
@@ -94,6 +99,8 @@ public:
 
 	bool __fastcall SendEcho(char *str);
 	bool __fastcall SendHeartBeat(void);
+	bool __fastcall SendTotalBuySig(BYTE code);
+	bool __fastcall SendTotalSellSig(BYTE code);
 	bool __fastcall SendACK(BYTE code);
 	bool __fastcall SendNACK(BYTE code);
 };
