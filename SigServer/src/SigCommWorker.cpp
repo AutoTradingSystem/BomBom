@@ -678,25 +678,24 @@ void __fastcall SigCommWorker::ProcessPacket(LP_IOPACKET_HEADER h, SgPacket* p)
 			SendPacket0x24();
 			break;
 
-		// 전체 매수 신호
+		// 오늘자 매수 신호
 		case 0x31 :
-			MainF->SysLog("0x31요청 들어옴", 1, true);
-//			strLog.sprintf( "[DEV_%05d] RECV [%02X:%4d] 접수정보요청",
-//				connDevID, h->opCode, h->length );
-//			MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
-
-			cnt = ProcessReqReceiptInfo();      // 매수/매도 신호 SET
-			//strLog.sprintf( "[DEV_%05d] PROC 접수정보처리 %d", connDevID, cnt);
-			//MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
+			MainF->SysLog("매수신호요청 들어옴", 1, true);
+			cnt = TodayBuyOrSellInfo(1);      // 매수/매도 신호 SET
 
 			SendPacketToIDev( &sgPacket41 );    // 매수/매도 신호  SEND
 
-			strLog.sprintf( "[DEV_%05d] RECV [%02X:%4d] 접수정보전송 CNT:%d",
-				connDevID, h->opCode, h->length, cnt );
-			MainF->SigCommLog(connDevID, strLog.c_str(), 1, true);
+			MainF->SysLog("매수신호 전송", 1, true);
+			break;
 
-			//strLog = SgPacket41::toString( SgPacket41.getBody() );
-			//MainF->SigCommLog(connDevID, strLog.c_str(), 0, false);
+		// 오늘자 매도 신호
+		case 0x41 :
+			MainF->SysLog("매도신호요청 들어옴", 1, true);
+			cnt = TodayBuyOrSellInfo(0);      // 매수/매도 신호 SET
+
+			SendPacketToIDev( &sgPacket41 );    // 매수/매도 신호  SEND
+
+			MainF->SysLog("매도신호 전송", 1, true);
 			break;
 
 		// 차량정보요청
@@ -958,10 +957,10 @@ void __fastcall SigCommWorker::SendPacket0x24()
 
 
 //----------------------------------------------------------------------
-// ProcessReqReceipt
-// - 오늘자 매수정보 조회
+// TodayBuyOrSellInfo
+// - 오늘자 매수/매도 정보 조회 ( 매수 : sigType = 1, 매도 : sigType = 0)
 //----------------------------------------------------------------------
-int __fastcall SigCommWorker::ProcessReqReceiptInfo()
+int __fastcall SigCommWorker::TodayBuyOrSellInfo(int sigType)
 {
 	int ret;
 	int cnt;
@@ -970,16 +969,23 @@ int __fastcall SigCommWorker::ProcessReqReceiptInfo()
 
 	qrySel->SQL->Text =
 	"SELECT IDX, SN, NAME S_NAME, SIGNAL_CODE, CODE S_CODE, MARK, PRICE, \
-		DATE_FORMAT(BSTIME,'%m') TIME_MON,           \
-		DATE_FORMAT(BSTIME,'%d') TIME_DAY,           \
-		DATE_FORMAT(BSTIME,'%H') TIME_HOUR,          \
-		DATE_FORMAT(BSTIME,'%i') TIME_MIN,           \
-		RETENTION_PERIOD,                            \
-		CUMPR, PROFITS_3MILLION,REG_DATE,USE_YN      \
+			DATE_FORMAT(BSTIME,'%m') TIME_MON,           \
+			DATE_FORMAT(BSTIME,'%d') TIME_DAY,           \
+			DATE_FORMAT(BSTIME,'%H') TIME_HOUR,          \
+			DATE_FORMAT(BSTIME,'%i') TIME_MIN,           \
+			RETENTION_PERIOD,                            \
+			CUMPR, PROFITS_3MILLION,REG_DATE,USE_YN      \
 	   FROM signal_db                                \
 	  WHERE date(BSTIME) = date(now())               \
-		AND SN = 'S1'";
+		AND SN = 'S1'                                \
+		AND MARK = :pMARK";
+
+	if(sigType == 1)
+		qrySel->ParamByName("pMARK")->AsString = "B";
+	else
+		qrySel->ParamByName("pMARK")->AsString = "S";
 	cnt = 0;
+
 	qrySel->SQLConnection =  CommonF->DB;
 	if((ret = CommonF->OpenSQL(qrySel)) > 0)
 	{
@@ -988,23 +994,11 @@ int __fastcall SigCommWorker::ProcessReqReceiptInfo()
 			while( !qrySel->Eof)
 			{
 				ZeroMemory( &dTradHis, sizeof( TradHis ) );
-//				snprintf( dRECEIPT.RCPT_NO,   18, "%s", qrySel->FieldByName("RCPT_NO"   )->AsAnsiString.c_str() );
-//				snprintf( dRECEIPT.VIN,       18, "%s", qrySel->FieldByName("VIN"       )->AsAnsiString.c_str() );
-//				snprintf( dRECEIPT.VH_REG_NO, 20, "%s", qrySel->FieldByName("VH_REG_NO" )->AsAnsiString.c_str() );
-//				snprintf( dRECEIPT.VH_NM,     31, "%s", qrySel->FieldByName("VH_NM"     )->AsAnsiString.c_str() );
-
 				snprintf(&dTradHis.MARK, 1, "%c", qrySel->FieldByName("MARK")->AsAnsiString.c_str());
 				snprintf(&dTradHis.TIME_MON, 1, "%c", qrySel->FieldByName("TIME_MON")->AsAnsiString.c_str());
 				snprintf(&dTradHis.TIME_DAY, 1, "%c", qrySel->FieldByName("TIME_DAY")->AsAnsiString.c_str());
 				snprintf(&dTradHis.TIME_HOUR, 1, "%c", qrySel->FieldByName("TIME_HOUR")->AsAnsiString.c_str());
 				snprintf(&dTradHis.TIME_MIN, 1, "%c", qrySel->FieldByName("TIME_MIN")->AsAnsiString.c_str());
-
-
-//				dTradHis.MARK = qrySel->FieldByName("MARK")->AsString;
-//				dTradHis.TIME_MON  = qrySel->FieldByName("TIME_MON")->AsString;
-//				dTradHis.TIME_DAY  = qrySel->FieldByName("TIME_DAY")->AsString;
-//				dTradHis.TIME_HOUR = qrySel->FieldByName("TIME_HOUR")->AsString;
-//				dTradHis.TIME_MIN  = qrySel->FieldByName("TIME_MIN")->AsString;
 				snprintf( dTradHis.S_CODE, 7, "%s", qrySel->FieldByName("S_CODE" )->AsAnsiString.c_str() );
 				snprintf( dTradHis.S_NAME, 32, "%s", qrySel->FieldByName("S_NAME")->AsAnsiString.c_str() );
 				dTradHis.PRICE    = qrySel->FieldByName("PRICE")->AsInteger;

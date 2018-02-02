@@ -11,6 +11,7 @@ object MainF: TMainF
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -74,18 +75,37 @@ object MainF: TMainF
     DriverName = 'MySQL'
     LoginPrompt = False
     Params.Strings = (
-      'DriverName=MySQL'
+      'DriverUnit=Data.DBXMySQL'
+      
+        'DriverPackageLoader=TDBXDynalinkDriverLoader,DbxCommonDriver240.' +
+        'bpl'
+      
+        'DriverAssemblyLoader=Borland.Data.TDBXDynalinkDriverLoader,Borla' +
+        'nd.Data.DbxCommonDriver,Version=24.0.0.0,Culture=neutral,PublicK' +
+        'eyToken=91d62ebb5b0d1b1b'
+      
+        'MetaDataPackageLoader=TDBXMySqlMetaDataCommandFactory,DbxMySQLDr' +
+        'iver240.bpl'
+      
+        'MetaDataAssemblyLoader=Borland.Data.TDBXMySqlMetaDataCommandFact' +
+        'ory,Borland.Data.DbxMySQLDriver,Version=24.0.0.0,Culture=neutral' +
+        ',PublicKeyToken=91d62ebb5b0d1b1b'
+      'GetDriverFunc=getSQLDriverMYSQL'
+      'LibraryName=dbxmys.dll'
+      'LibraryNameOsx=libsqlmys.dylib'
+      'VendorLib=LIBMYSQL.dll'
+      'VendorLibWin64=libmysql.dll'
+      'VendorLibOsx=libmysqlclient.dylib'
       'HostName=ServerName'
       'Database=DBNAME'
       'User_Name=user'
       'Password=password'
-      'ServerCharSet='
-      'BlobSize=-1'
-      'ErrorResourceFile='
+      'MaxBlobSize=-1'
       'LocaleCode=0000'
       'Compressed=False'
       'Encrypted=False'
-      'ConnectTimeout=60')
+      'BlobSize=-1'
+      'ErrorResourceFile=')
     Left = 232
     Top = 64
   end

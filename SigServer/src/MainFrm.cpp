@@ -5,6 +5,7 @@
 
 #include "MainFrm.h"
 #include "SigCommServer.h"
+#include "SigCommDbProc.h"
 #include "CommonFrm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -114,9 +115,9 @@ void __fastcall TMainF::fnSysLog(TMessage Msg)
 void __fastcall TMainF::fnSysLog(AnsiString strLog, int iMsgLevel)
 {
     HANDLE     hFile;
-    DWORD      dwWriteSize;
+	DWORD      dwWriteSize;
 
-    strLog += "\r\n";
+	strLog += "\r\n";
 	logDateChange();
 	if((hFile = CreateFile(strSysLogFile.c_str(),
 						   GENERIC_READ|GENERIC_WRITE,
@@ -127,9 +128,8 @@ void __fastcall TMainF::fnSysLog(AnsiString strLog, int iMsgLevel)
 						   NULL)) == INVALID_HANDLE_VALUE) return;
 	SetFilePointer(hFile, 0, NULL, FILE_END);
     WriteFile(hFile, strLog.c_str(), strLog.Length(), &dwWriteSize, NULL);
-    CloseHandle(hFile);
+	CloseHandle(hFile);
 }
-
 
 //---------------------------------------------------------------------------
 // logDateChange
@@ -300,6 +300,22 @@ void __fastcall TMainF::Button1Click(TObject *Sender)
 	static bool threadStop = true;
 	sigCommSvr->SetStop(threadStop);
 	threadStop =!threadStop;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMainF::FormCreate(TObject *Sender)
+{
+	if( GetSystemMetrics(SM_CXSCREEN) <= 1024 ){
+		Left = 0;
+		Top  = 0;
+	}else{
+		Position = poDesktopCenter;
+	}
+
+//	LoadConfig();
+//	CreateFolder();
+
+	dbProc     = new SigCommDbProc(LOG_ROOT);
 }
 //---------------------------------------------------------------------------
 

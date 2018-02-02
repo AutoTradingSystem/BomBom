@@ -2,8 +2,8 @@ object MecaBackF: TMecaBackF
   Left = 0
   Top = 0
   Caption = 'MecaBackF'
-  ClientHeight = 641
-  ClientWidth = 954
+  ClientHeight = 463
+  ClientWidth = 907
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,19 +11,48 @@ object MecaBackF: TMecaBackF
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 208
-    Top = 295
+    Left = 8
+    Top = 327
     Width = 44
     Height = 13
     Caption = #51333#47785#53076#46300
   end
+  object Label2: TLabel
+    Left = 21
+    Top = 131
+    Width = 77
+    Height = 13
+    Caption = #51333#47785#45817#47588#49688#44552#50529
+  end
+  object Label5: TLabel
+    Left = 112
+    Top = 131
+    Width = 36
+    Height = 13
+    Caption = #51092#44256' '#49688
+  end
+  object Label6: TLabel
+    Left = 5
+    Top = 150
+    Width = 11
+    Height = 13
+    Caption = #45817
+  end
+  object Label7: TLabel
+    Left = 5
+    Top = 175
+    Width = 11
+    Height = 13
+    Caption = #50724
+  end
   object KHOpenAPI: TKHOpenAPI
     Left = 0
-    Top = 542
+    Top = 423
     Width = 185
     Height = 17
     TabOrder = 0
@@ -40,36 +69,27 @@ object MecaBackF: TMecaBackF
     TabOrder = 1
   end
   object btnReqStockInfo: TButton
-    Left = 364
-    Top = 288
+    Left = 103
+    Top = 346
     Width = 57
     Height = 25
     Caption = #50836#52397
     TabOrder = 2
     OnClick = btnReqStockInfoClick
   end
-  object Button4: TButton
-    Left = 208
-    Top = 483
-    Width = 57
-    Height = 25
-    Caption = #47588#49688
-    TabOrder = 3
-    OnClick = Button4Click
-  end
   object btnReqAc: TButton
-    Left = 897
-    Top = 140
+    Left = 846
+    Top = 123
     Width = 57
     Height = 25
     Caption = #44228#51340#51092#44256
-    TabOrder = 4
+    TabOrder = 3
     OnClick = btnReqAcClick
   end
   object statusBar: TStatusBar
     Left = 0
-    Top = 623
-    Width = 954
+    Top = 445
+    Width = 907
     Height = 18
     Panels = <
       item
@@ -87,19 +107,19 @@ object MecaBackF: TMecaBackF
     SizeGrip = False
   end
   object mmoAccount: TMemo
-    Left = 793
-    Top = 8
+    Left = 744
+    Top = 0
     Width = 161
     Height = 126
-    TabOrder = 6
+    TabOrder = 5
   end
   object GroupBox1: TGroupBox
-    Left = 785
-    Top = 192
+    Left = 738
+    Top = 147
     Width = 169
     Height = 217
     Caption = #51452#47928
-    TabOrder = 7
+    TabOrder = 6
     object laOrder1: TLabel
       Left = 16
       Top = 22
@@ -210,38 +230,128 @@ object MecaBackF: TMecaBackF
     end
   end
   object mmoOrderLog: TMemo
-    Left = 208
-    Top = 16
-    Width = 217
-    Height = 225
-    Lines.Strings = (
-      'mmoOrderLog')
-    TabOrder = 8
+    Left = 163
+    Top = 0
+    Width = 579
+    Height = 126
+    TabOrder = 7
   end
   object mmoCheJanLog: TMemo
-    Left = 456
-    Top = 16
-    Width = 217
-    Height = 225
-    Lines.Strings = (
-      'mmoOrderLog')
-    TabOrder = 9
+    Left = 163
+    Top = 128
+    Width = 579
+    Height = 231
+    TabOrder = 8
   end
   object mmoStackInfo: TMemo
-    Left = 208
-    Top = 317
-    Width = 409
-    Height = 111
+    Left = 0
+    Top = 373
+    Width = 905
+    Height = 44
     Lines.Strings = (
       '<'#51452#49885#44592#48376#51221#48372'>')
-    TabOrder = 10
+    TabOrder = 9
   end
   object edReqStockInfo: TEdit
-    Left = 261
-    Top = 290
+    Left = 0
+    Top = 346
     Width = 97
     Height = 21
+    TabOrder = 10
+    OnKeyPress = edOrder1KeyPress
+  end
+  object edBettingPrice: TEdit
+    Left = 21
+    Top = 147
+    Width = 76
+    Height = 21
     TabOrder = 11
+    OnKeyPress = edOrder1KeyPress
+  end
+  object GroupBox2: TGroupBox
+    Left = 3
+    Top = 196
+    Width = 159
+    Height = 125
+    Caption = #51088#46041#54840#44032
+    TabOrder = 12
+    object Label3: TLabel
+      Left = 15
+      Top = 37
+      Width = 66
+      Height = 13
+      Caption = #47588#49688#54840#44032#51312#51221
+    end
+    object Label4: TLabel
+      Left = 15
+      Top = 79
+      Width = 66
+      Height = 13
+      Caption = #47588#46020#54840#44032#51312#51221
+    end
+    object chHogaAdjust: TCheckBox
+      Left = 16
+      Top = 14
+      Width = 97
+      Height = 17
+      Caption = #54840#44032#51312#51221
+      TabOrder = 0
+    end
+    object chMesuHUpDwon: TCheckBox
+      Left = 35
+      Top = 56
+      Width = 97
+      Height = 17
+      Caption = 'V'#52404#53356' '#50948#47196
+      TabOrder = 1
+    end
+    object edMesuHModify: TEdit
+      Left = 111
+      Top = 52
+      Width = 42
+      Height = 21
+      TabOrder = 2
+      OnKeyPress = edOrder1KeyPress
+    end
+    object chMedoHUpDwon: TCheckBox
+      Left = 35
+      Top = 98
+      Width = 97
+      Height = 17
+      Caption = 'V'#52404#53356' '#50948#47196
+      TabOrder = 3
+    end
+    object edMedoHModify: TEdit
+      Left = 112
+      Top = 94
+      Width = 41
+      Height = 21
+      TabOrder = 4
+      OnKeyPress = edOrder1KeyPress
+    end
+  end
+  object edMesuCNT: TEdit
+    Left = 113
+    Top = 147
+    Width = 34
+    Height = 21
+    TabOrder = 13
+    OnKeyPress = edOrder1KeyPress
+  end
+  object edBettingPrice2: TEdit
+    Left = 21
+    Top = 172
+    Width = 76
+    Height = 21
+    TabOrder = 14
+    OnKeyPress = edOrder1KeyPress
+  end
+  object edMesuCNT2: TEdit
+    Left = 113
+    Top = 172
+    Width = 34
+    Height = 21
+    TabOrder = 15
     OnKeyPress = edOrder1KeyPress
   end
 end

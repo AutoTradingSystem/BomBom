@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899-12-30 00:00:00.000.547,E:\Projects\kAPU\src\Unit1.cpp=E:\Projects\kAPU\src\LoadDataFrm.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.965,=E:\Projects\kAPU\src\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.547,E:\Projects\kAPU\src\Unit1.cpp=E:\Projects\kAPU\src\LoadDataFrm.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.426,C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Unit1.h=E:\Projects\kAPU\src\MainFrm.h</Transaction>
     <Transaction>1899-12-30 00:00:00.000.547,E:\Projects\kAPU\src\Unit1.dfm=E:\Projects\kAPU\src\LoadDataFrm.dfm</Transaction>
     <Transaction>1899-12-30 00:00:00.000.188,=E:\Projects\kAPU\src\sb_com_packet.h</Transaction>
@@ -11,8 +11,8 @@
     <Transaction>1899-12-30 00:00:00.000.198,=E:\Projects\kAPU\src\Master.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.426,C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Unit1.dfm=E:\Projects\kAPU\src\MainFrm.dfm</Transaction>
     <Transaction>1899-12-30 00:00:00.000.547,E:\Projects\kAPU\src\Unit1.h=E:\Projects\kAPU\src\LoadDataFrm.h</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.869,=C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.138,=C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.869,=C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.190,=E:\Projects\kAPU\src\Numstr.cpp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.564,=E:\Projects\kAPU\src\Messages.h</Transaction>
     <Transaction>1899-12-30 00:00:00.000.116,C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Project1.cbproj=E:\Projects\kAPU\src\APU.cbproj</Transaction>

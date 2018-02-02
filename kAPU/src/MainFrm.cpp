@@ -141,13 +141,47 @@ void __fastcall TMecaBackF::KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo,
 		GetStockBasicInfo();
 	}else if(wcscmp(L"계좌평가현황요청",sRQName) == 0)
 	{
+		int nCnt = KHOpenAPI->GetRepeatCnt(sTrCode,sRQName);
+		MyAccountInfo.stockCnt = nCnt;
 		MyAccountInfo.rDeposit = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pDeposit);
 		MyAccountInfo.rDeposit_2d = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pDeposit_2d);
 		MyAccountInfo.rToPurch = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pToPurch);
 		MyAccountInfo.rOneDayRate = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pOneDayRate);
 		MyAccountInfo.rMoaMoaRate = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pMoaMoaRate);
 		MyAccountInfo.rMoaMoaPrice = KHOpenAPI->GetCommData(SysAllocString(L"OPW00004"),SysAllocString(L"계좌평가현황요청"),0,pMoaMoaPrice);
-		GetMyAccouontInfo();
+		for(int nLoop = 0; nLoop < nCnt; nLoop++)
+		{
+			// 잔고
+			BSTR pCodeName  = SysAllocString(L"종목명");     // 종목명
+			BSTR pCode      = SysAllocString(L"종목코드");   // 종목코드
+			BSTR pStockVol  = SysAllocString(L"보유수량");   // 보유수량
+			BSTR pAverPrice = SysAllocString(L"평군단가");   // 평군단가
+			BSTR pBuyPrice  = SysAllocString(L"매입금액");   // 매입금액
+			BSTR pEvalPrice = SysAllocString(L"평가금액");   // 평가금액
+			BSTR pPLPrice   = SysAllocString(L"손익금액");   // 손익금액
+			BSTR pPLRate    = SysAllocString(L"손익률");     // 손익률
+
+			MyAccountInfo.MyStocks[nLoop].rCodeName = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pCodeName);
+			MyAccountInfo.MyStocks[nLoop].rCode = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pCode);
+			MyAccountInfo.MyStocks[nLoop].rStockVol = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pStockVol);
+			MyAccountInfo.MyStocks[nLoop].rAverPrice = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pAverPrice);
+			MyAccountInfo.MyStocks[nLoop].rBuyPrice = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pBuyPrice);
+			MyAccountInfo.MyStocks[nLoop].rEvalPrice = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pEvalPrice);
+			MyAccountInfo.MyStocks[nLoop].rPLPrice = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pPLPrice);
+			MyAccountInfo.MyStocks[nLoop].rPLRate = KHOpenAPI->CommGetData(SysAllocString(L"OPW00004"),SysAllocString(L""),SysAllocString(L"계좌평가현황요청"),nLoop,pPLRate);
+			/*
+			MyAccountInfo.rCodeName[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pCodeName);
+			MyAccountInfo.rCode[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pCode);
+			MyAccountInfo.rStockVol[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pStockVol);
+			MyAccountInfo.rAverPrice[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pAverPrice);
+			MyAccountInfo.rBuyPrice[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pBuyPrice);
+			MyAccountInfo.rEvalPrice[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pEvalPrice);
+			MyAccountInfo.rPLPrice[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pPLPrice);
+			MyAccountInfo.rPLRate[nLoop] = KHOpenAPI->CommGetData(sTrCode,SysAllocString(L""),sRQName,nLoop,pPLRate);
+			*/
+		}
+
+//		GetMyAccouontInfo();
 	}
 }
 
@@ -159,18 +193,7 @@ void __fastcall TMecaBackF::KHOpenAPIReceiveTrData(TObject *Sender, BSTR sScrNo,
 //---------------------------------------------------------------------------
 void __fastcall TMecaBackF::Start_Order(void)
 {
-	WideString pCode = "084370";
-	WideString pHogaGb = "00";
-//	int ret = KHOpenAPI->SendOrder(pStockOrder, pScreenNo_0101, pMyAccNO_MO, 1, pCode, 10, 21400, pHogaGb,L"");
-
-}
-
-
-//---------------------------------------------------------------------------
-void __fastcall TMecaBackF::Button4Click(TObject *Sender)
-{
-	Start_Order();
-//	pMyAccNO_MO.c_bstr();
+//
 }
 
 //---------------------------------------------------------------------------
@@ -179,7 +202,7 @@ void __fastcall TMecaBackF::Button4Click(TObject *Sender)
 void __fastcall TMecaBackF::RequesMyAccouontInfo(void)
 {
 	BSTR pSetAccno = SysAllocString(L"계좌번호");
-	BSTR pMyAccNO_MO = SysAllocString(L"8095376111");
+	BSTR pMyAccNO_MO = SysAllocString(L"5161066310"); //SysAllocString(L"8095376111");
 	BSTR pPassWord = SysAllocString(L"비밀번호");
 	BSTR pValueEmpty = SysAllocString(L"");
 	BSTR pSangPe = SysAllocString(L"상장폐지조회구분");
@@ -216,6 +239,19 @@ void __fastcall TMecaBackF::GetMyAccouontInfo(void)
 	mmoAccount->Lines->Add("당일손익율    = " + Numstr::SToNForStr(MyAccountInfo.rOneDayRate));
 	mmoAccount->Lines->Add("누적손익율    = " + Numstr::SToNForStr(MyAccountInfo.rMoaMoaRate));
 	mmoAccount->Lines->Add("누적투자손익 = " + Numstr::SToNForStr(MyAccountInfo.rMoaMoaPrice));
+	mmoAccount->Lines->Add("=================");
+	mmoAccount->Lines->Add(String().sprintf(L"잔고 수 : %d",MyAccountInfo.stockCnt));
+	for(int nLoop = 0; nLoop < MyAccountInfo.stockCnt; nLoop++)
+	{
+		mmoAccount->Lines->Add("종목명 = "   + MyAccountInfo.MyStocks[nLoop].rCodeName);
+		mmoAccount->Lines->Add("종목코드 = " + MyAccountInfo.MyStocks[nLoop].rCode);
+		mmoAccount->Lines->Add("보유수량 = " + Numstr::SToNForStr(MyAccountInfo.MyStocks[nLoop].rStockVol));
+		mmoAccount->Lines->Add("평균단가 = " + MyAccountInfo.MyStocks[nLoop].rAverPrice);
+		mmoAccount->Lines->Add("매입금액 = " + Numstr::SToNForStr(MyAccountInfo.MyStocks[nLoop].rBuyPrice));
+		mmoAccount->Lines->Add("평가금액 = " + Numstr::SToNForStr(MyAccountInfo.MyStocks[nLoop].rEvalPrice));
+		mmoAccount->Lines->Add("손익금액 = " + Numstr::SToNForStr(MyAccountInfo.MyStocks[nLoop].rPLPrice));
+		mmoAccount->Lines->Add("손익율 = " + MyAccountInfo.MyStocks[nLoop].rPLRate);
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -239,6 +275,8 @@ void __fastcall TMecaBackF::GetStockBasicInfo(void)
 void __fastcall TMecaBackF::FormShow(TObject *Sender)
 {
 	LoginPopUp();
+	LoadIniFile();
+	WriteLog("프로그램시작");
 }
 
 //---------------------------------------------------------------------------
@@ -257,6 +295,7 @@ void __fastcall TMecaBackF::KHOpenAPIEventConnect(TObject *Sender, long nErrCode
 void __fastcall TMecaBackF::btnReqAcClick(TObject *Sender)
 {
 	RequesMyAccouontInfo();
+	GetMyAccouontInfo();
 }
 
 //---------------------------------------------------------------------------
@@ -285,8 +324,8 @@ void __fastcall TMecaBackF::SendOrderVictory()
 	BSTR pStockOrder = SysAllocString(L"RQ_1");
 	BSTR pScreenNo_0101 = SysAllocString(L"0101");
 	BSTR pCode = SysAllocString(edOrder1->Text.c_str());
-	BSTR pMyAccNO = SysAllocString(L"6000163741");
-	BSTR pMyAccNO_MO = SysAllocString(L"8095376111");
+	BSTR pMyAccNO = SysAllocString(L"8100421911");
+	BSTR pMyAccNO_MO = SysAllocString(L"8100421911");
 	BSTR pValue00 = SysAllocString(L"00");
 	BSTR pValueEmpty = SysAllocString(L"");
 	long pOrderType = cbOrderType->ItemIndex + 1;
@@ -299,7 +338,6 @@ void __fastcall TMecaBackF::SendOrderVictory()
 
 	}__finally
 	{
-		ShowMessage(result);
 		if(result == 0)
 		{
 			statusBar->Panels->Items[0]->Text = "주문전송 성공";
@@ -313,13 +351,13 @@ void __fastcall TMecaBackF::SendOrderVictory()
 //---------------------------------------------------------------------------
 // 자동주식주문
 //---------------------------------------------------------------------------
-void __fastcall TMecaBackF::SendOrderVictory(bool buy, String code, int price)
+void __fastcall TMecaBackF::SendOrderVictory(bool buy, String code, int price, int vol)
 {
 	BSTR pStockOrder = SysAllocString(L"RQ_1");
 	BSTR pScreenNo_0101 = SysAllocString(L"0101");
 	BSTR pCode = SysAllocString(code.c_str());
-	BSTR pMyAccNO = SysAllocString(L"6000163741");
-	BSTR pMyAccNO_MO = SysAllocString(L"8095376111");
+	BSTR pMyAccNO = SysAllocString(L"5161066310");    // 모의 8100421911
+	BSTR pMyAccNO_MO = SysAllocString(L"5161066310"); // 모의 8100421911
 	BSTR pValue00 = SysAllocString(L"00");
 	BSTR pValueEmpty = SysAllocString(L"");
 	long pOrderType; //cbOrderType->ItemIndex + 1;
@@ -328,26 +366,37 @@ void __fastcall TMecaBackF::SendOrderVictory(bool buy, String code, int price)
 		pOrderType = 1;
 	}else
 	{
-        pOrderType = 2;
-    }
-	pOrderType = cbOrderType->ItemIndex + 1;
+		pOrderType = 2;
+	}
+//	pOrderType = cbOrderType->ItemIndex + 1;
 
-	long pQuantity = 1;//StrToIntDef(edOrder3->Text,0);
+	long pQuantity = vol;//StrToIntDef(edOrder3->Text,0);        vol
 	long pPrice = price;
 	long result;
 	try
 	{
-		result = KHOpenAPI->SendOrder(pStockOrder, pScreenNo_0101, pMyAccNO_MO, pOrderType, pCode, pQuantity, pPrice, pValue00, pValueEmpty);
+		if(buy)
+		{
+			result = KHOpenAPI->SendOrder(pStockOrder, pScreenNo_0101, pMyAccNO_MO, pOrderType, pCode, pQuantity, pPrice, pValue00, pValueEmpty);
+		}else
+		{
+			result = KHOpenAPI->SendOrder(pStockOrder, pScreenNo_0101, pMyAccNO_MO, pOrderType, pCode, pQuantity, pPrice, pValue00, pValueEmpty);
+		}
 
 	}__finally
 	{
 		if(result == 0)
 		{
 			statusBar->Panels->Items[0]->Text = "주문전송 성공";
-			OrderLogAdd(pOrderType,code,pQuantity,pPrice);
+			WriteLog(String().sprintf(L"코드 :%s MARK : %s 주문전송 성공",code,buy?L"매수":L"매도"));
+			// 잔고관리
 		}
 		else
+		{
 			statusBar->Panels->Items[0]->Text = "주문전송 실패";
+			WriteLog(String().sprintf(L"코드 :%s MARK : %s 주문전송 실패",code,buy?L"매수":L"매도"));
+			// 다시 주문
+		}
 	}
 }
 
@@ -367,7 +416,11 @@ void __fastcall TMecaBackF::edOrder1KeyPress(TObject *Sender, System::WideChar &
 void __fastcall TMecaBackF::OrderLogAdd(long orderType, UnicodeString Code,long Quantity,long Price)
 {
 	String strLog;
-	strLog.sprintf(L"[주문%d][코드%s][수량%d][가격%d][시간%s]", orderType, Code, Quantity,Price, Now().FormatString("HH:NN:SS").c_str());
+	if(orderType == 1)
+		strLog.sprintf(L"[%s] 매수 :: 코드 :  %s 단가 : %d  수량 : %d  총액 : %d  ", Now().FormatString("HH:NN:SS").c_str(), Code, Price, Quantity, Price*Quantity);
+	else
+		strLog.sprintf(L"[%s] 매도 :: 코드 :  %s 단가 : %d  수량 : %d  총액 : %d  ", Now().FormatString("HH:NN:SS").c_str(), Code, Price, Quantity, Price*Quantity);
+//	strLog.sprintf(L"[주문%d][코드%s][수량%d][가격%d][시간%s]", orde?rType, Code, Quantity,Price, Now().FormatString("HH:NN:SS").c_str());
 	mmoOrderLog->Lines->Add(strLog);
 }
 
@@ -375,7 +428,6 @@ void __fastcall TMecaBackF::OrderLogAdd(long orderType, UnicodeString Code,long 
 void __fastcall TMecaBackF::KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGubun, long nItemCnt,
 		  BSTR sFIdList)
 {
-	ShowMessage(sGubun);
 	if(wcscmp(L"0",sGubun) == 0)
 	{
 		OrderInfo.rOrderTime = KHOpenAPI->GetChejanData(908);
@@ -400,6 +452,7 @@ void __fastcall TMecaBackF::KHOpenAPIReceiveChejanData(TObject *Sender, BSTR sGu
 		mmoCheJanLog->Lines->Add("보유수량:" + StringReplace( OrderInfo.rMyQuantity," ", "", TReplaceFlags() << rfReplaceAll ));
 		mmoCheJanLog->Lines->Add("예수금:" + StringReplace( OrderInfo.rDeposit," ", "", TReplaceFlags() << rfReplaceAll ));
 		mmoCheJanLog->Lines->Add("==============================");
+		// 잔고에서 저장
 	}else if(wcscmp(L"3",sGubun) == 0)
 	{
 		mmoCheJanLog->Lines->Add("[특이신호]");
@@ -413,24 +466,254 @@ void __fastcall TMecaBackF::WndProc(Messages::TMessage &Message)
 {
 	if (Message.Msg == WM_BACKUP_B)
 	{
-		AutoBuy(Message.LParam,Message.WParam);
+		AutoBuy(Message.WParam, Message.LParam);
 	}else if (Message.Msg == WM_BACKUP_S)
 	{
-		AutoSell(Message.LParam,Message.WParam);
+		AutoSell(Message.WParam, Message.LParam);
 	}
 
 	inherited::WndProc(Message);
 }
 
+
+//---------------------------------------------------------------------------
+bool __fastcall TMecaBackF::DuplicateCheck(int code)
+{
+	bool checker = false;
+	for(int i = 0; i < 100; i++)
+	{
+		if(todayJangGo[i].acode == code)
+			checker = true;
+	}
+	return checker;
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TMecaBackF::AutoBuy(int code, int price)
 {
-	SendOrderVictory(true, Numstr::NumberToCode(code), price);
+	RequesMyAccouontInfo(); // 계좌정보 갱신
+
+	if(MyAccountInfo.stockCnt >= StrToInt64Def(edMesuCNT2->Text,0))
+	{
+		WriteLog("초과잔고주문");
+		return;
+    }
+
+	static int buyCnt = 0;
+	int orderVol = 	StrToInt64Def(edBettingPrice->Text,0) / price;
+	if((orderVol < 1) || (buyCnt+1 > StrToInt64Def(edMesuCNT->Text,0)) || DuplicateCheck(code))
+		return;
+
+	todayJangGo[buyCnt].acode = code;
+	todayJangGo[buyCnt].vol = orderVol;
+	buyCnt++;
+
+	if(chHogaAdjust->Checked)
+	{
+		price = HoGaCnversion(Numstr::MarketGubun(code),price,chMesuHUpDwon->Checked, StrToInt64Def(edMesuHModify->Text,0));
+	}
+	SendOrderVictory(true, Numstr::NumberToCode(code), price, orderVol);
+	OrderLogAdd(1, Numstr::NumberToCode(code), orderVol, price);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMecaBackF::AutoSell(int code, int price)
 {
-	SendOrderVictory(false, Numstr::NumberToCode(code), price);
+	RequesMyAccouontInfo();
+
+	int sellCnt = 0;
+	for(int i = 0; i < 50; i++)
+	{
+		if(code == todayJangGo[buyCnt].acode)
+		{
+			sellCnt = todayJangGo[buyCnt].vol;
+			break;
+		}
+//		todayJangGo[buyCnt].acode = code;
+//		todayJangGo[buyCnt].vol = orderVol;
+
+//		String t1 = MyAccountInfo.MyStocks[i].rCode.SubString(2,6);
+//		String t2 = NumberToCode(code);
+//
+//		if(MyAccountInfo.MyStocks[i].rCode.SubString(2,6).Compare(NumberToCode(code)) == 0)
+//			sellCnt = StrToIntDef(MyAccountInfo.MyStocks[i].rStockVol,0);
+
+	}
+	if(chHogaAdjust->Checked)
+	{
+		price = HoGaCnversion(Numstr::MarketGubun(code),price,chMedoHUpDwon->Checked, StrToInt64Def(edMedoHModify->Text,0));
+	}
+
+	SendOrderVictory(false, Numstr::NumberToCode(code), price, sellCnt);
+	OrderLogAdd(0, Numstr::NumberToCode(code), sellCnt, price);
+}
+//---------------------------------------------------------------------------
+void __fastcall TMecaBackF::SaveToSigFile(void)
+{
+	TIniFile *ini = new TIniFile(ExtractFilePath(ParamStr(0)) + "SigBackup.ini");
+	if(ini)
+	{
+	   ini->WriteString("사용자", "종목금액", edBettingPrice->Text);
+	   ini->WriteString("사용자", "종목금액2", edBettingPrice2->Text);
+
+	   ini->WriteBool("사용자", "호가조정", chHogaAdjust->Checked);
+	   ini->WriteBool("사용자", "매수호가위", chMesuHUpDwon->Checked);
+	   ini->WriteBool("사용자", "매도호가위", chMedoHUpDwon->Checked);
+	   ini->WriteString("사용자", "매수호가단계", edMesuHModify->Text);
+	   ini->WriteString("사용자", "매도호가단계", edMedoHModify->Text);
+	   ini->WriteString("사용자", "잔고수", edMesuCNT->Text);
+	   ini->WriteString("사용자", "잔고수2", edMesuCNT2->Text);
+	}
+   delete ini;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMecaBackF::FormClose(TObject *Sender, TCloseAction &Action)
+{
+	SaveToSigFile();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMecaBackF::LoadIniFile(void)
+{
+	TIniFile *ini = new TIniFile(ExtractFilePath(ParamStr(0)) + "SigBackup.ini");
+	if(ini)
+	{
+	   edBettingPrice->Text = ini->ReadString("사용자", "종목금액", "4000000");
+	   edBettingPrice2->Text = ini->ReadString("사용자", "종목금액2", "4000000");
+
+	   chHogaAdjust->Checked = ini->ReadBool("사용자", "호가조정", false);
+	   chMesuHUpDwon->Checked = ini->ReadBool("사용자", "매수호가위", false);
+	   chMedoHUpDwon->Checked = ini->ReadBool("사용자", "매도호가위", true);
+	   edMesuHModify->Text = ini->ReadString("사용자", "매수호가단계", "1");
+	   edMedoHModify->Text = ini->ReadString("사용자", "매도호가단계", "1");
+	   edMesuCNT->Text = ini->ReadString("사용자", "잔고수", "3");
+	   edMesuCNT2->Text = ini->ReadString("사용자", "잔고수2", "3");
+	}
+   delete ini;
+}
+
+//---------------------------------------------------------------------------
+// 거래소 구분 bool ExchangeTP,  가격 int Price,  호가 위로 아래로 bool UpDwon, 단계 int Level
+//---------------------------------------------------------------------------
+int __fastcall TMecaBackF::HoGaCnversion(bool ExchangeTP, int Price, bool UpDwon, int Level)
+{
+	int multiply = 1;
+	if(UpDwon)
+	{
+		multiply = 1;
+	}else
+	{
+		multiply = -1;
+    }
+
+	if(ExchangeTP) // 거래소
+	{
+		if(Price >= 500000)
+		{
+			Price += 1000 * Level * multiply;
+		}else if(Price >= 100000)
+		{
+			Price += 500 * Level * multiply;
+		}else if(Price >= 50000)
+		{
+			Price += 100 * Level * multiply;
+		}
+		else if(Price >= 10000)
+		{
+			Price += 50 * Level * multiply;
+		}else if(Price >= 5000)
+		{
+			Price += 10 * Level * multiply;
+		}else if(Price >= 1000)
+		{
+			Price += 5 * Level * multiply;
+		}else
+		{
+			Price += 1 * Level * multiply;
+		}
+	}else
+	{
+		if(Price >= 50000)
+		{
+			Price += 100 * Level * multiply;
+		}else if(Price >= 10000)
+		{
+			Price += 50 * Level * multiply;
+		}else if(Price >= 5000)
+		{
+			Price += 10 * Level * multiply;
+		}else if(Price >= 1000)
+		{
+			Price += 5 * Level * multiply;
+		}else
+		{
+			Price += 1 * Level * multiply;
+		}
+
+	}
+	return Price;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMecaBackF::SysLog( String str, bool timeStamp )
+{
+	String strLog;
+	if(timeStamp)
+	{
+		strLog.sprintf(L"[%s] %s", Now().FormatString("HH:NN:SS").c_str(), str.c_str());
+	}else
+	{
+		strLog = str;
+	}
+	SysLogQ.push(strLog);
+	PostMessage(MecaBackF->Handle, WM_SYS_LOG, (WPARAM)0, (LPARAM)0);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMecaBackF::fnSysLog(TMessage Msg)
+{
+	String strLog;
+
+	if (SysLogQ.size() > 0)
+	{
+		strLog = SysLogQ.front();
+		SysLogQ.pop();
+		fnSysLog(strLog);
+	}
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMecaBackF::fnSysLog(AnsiString strLog)
+{
+    HANDLE     hFile;
+	DWORD      dwWriteSize;
+
+	strLog += "\r\n";
+
+	String sDate = Now().FormatString("yyyy-mm-dd");
+	String logDir = "./Log/" + sDate;
+	MkDir(logDir);
+	String strFile = logDir + "\\APU.log";
+
+	if((hFile = CreateFile(strFile.c_str(),
+						   GENERIC_READ|GENERIC_WRITE,
+						   FILE_SHARE_READ,
+						   NULL,
+						   OPEN_ALWAYS,
+						   FILE_ATTRIBUTE_NORMAL,
+						   NULL)) == INVALID_HANDLE_VALUE) return;
+	SetFilePointer(hFile, 0, NULL, FILE_END);
+	WriteFile(hFile, strLog.c_str(), strLog.Length(), &dwWriteSize, NULL);
+	CloseHandle(hFile);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMecaBackF::WriteLog(String msg)
+{
+	MecaBackF->SysLog(msg,true);
+	mmoCheJanLog->Lines->Add( Now().FormatString("[HH:NN:SS] ") + msg);
+	if(mmoCheJanLog->Lines->Count > 100)
+		mmoCheJanLog->Lines->Clear();
 }
 

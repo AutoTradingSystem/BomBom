@@ -55,6 +55,7 @@ __published:	// IDE-managed Components
 	void __fastcall tmClockTimer(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
+	void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
 	void __fastcall fnSysLog(TMessage Msg);
 	void __fastcall fnSysLog(AnsiString strLog, int iMsgLevel);

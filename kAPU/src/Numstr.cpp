@@ -67,5 +67,16 @@ String __fastcall Numstr::SToNForStr(String AValue)
 //---------------------------------------------------------------------------
 String __fastcall Numstr::NumberToCode(int nCode)
 {
-	return String().sprintf(_T("%06d"),nCode);
+	// 01 005930 0
+	return String().sprintf(_T("%08d"),nCode).SubString1(3,6);
 }
+
+//---------------------------------------------------------------------------
+bool __fastcall Numstr::MarketGubun(int nCode)
+{
+	// 1005 9300
+	if(nCode / 1000000 == 1)
+		return  true;
+	return false;
+}
+

@@ -103,7 +103,7 @@ public:
 	int  __fastcall ProcessAuth(LP_IOPACKET_HEADER h, SgPacket* p);
 	void __fastcall ProcessPacket(LP_IOPACKET_HEADER h, SgPacket* p);
 	bool __fastcall ProcessLogIn(char* strUserID, char* strPasswd);
-	int  __fastcall ProcessReqReceiptInfo();
+	int  __fastcall TodayBuyOrSellInfo(int sigType = 1);
 	bool __fastcall GetVehicleInfo(char* strVin);
 	bool __fastcall GetVehicleSpecInfo(char* specNo);
 

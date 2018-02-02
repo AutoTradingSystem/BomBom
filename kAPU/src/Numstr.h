@@ -16,6 +16,7 @@ String __fastcall IntToTimeStr(int AValue);
 String __fastcall IntToChartTimeStr(int AValue);
 String __fastcall SToNForStr(String AValue);
 String __fastcall NumberToCode(int nCode);
+bool __fastcall MarketGubun(int nCode);
 
 inline String __fastcall RemoveComma(const String AValue)
 {

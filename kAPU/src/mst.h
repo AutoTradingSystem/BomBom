@@ -159,6 +159,17 @@ struct st_jBasic_Info
 	WideString rLowPrice;
 };
 
+struct st_MyStocks
+{
+	String rCodeName;     // 종목명
+	String rCode;         // 종목코드
+	WideString rStockVol;     // 보유수량
+	String rAverPrice;    // 평군단가
+	WideString rBuyPrice;     // 매입금액
+	WideString rEvalPrice;    // 평가금액
+	WideString rPLPrice;      // 손익금액
+	String rPLRate;       // 손익률
+};
 
 //--------------------------------------------------------------------------
 // 계좌평가
@@ -171,6 +182,8 @@ struct st_MyAccount_Info
 	WideString rOneDayRate;   // 당일손익율
 	WideString rMoaMoaRate;   // 누적손익율
 	WideString rMoaMoaPrice;  // 누적투자손익
+	int stockCnt;             // 잔고수
+	st_MyStocks MyStocks[50];
 };
 #endif
 
