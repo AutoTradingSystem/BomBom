@@ -317,5 +317,11 @@ void __fastcall TMainF::FormCreate(TObject *Sender)
 
 	dbProc     = new SigCommDbProc(LOG_ROOT);
 }
+
+//---------------------------------------------------------------------------
+void __fastcall TMainF::btnSendClick(TObject *Sender)
+{
+//
+}
 //---------------------------------------------------------------------------
 

@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <BorlandProject>
 	<Transactions>
     <Transaction>1899-12-30 00:00:00.000.473,=E:\Projects\BomBom\SigServer\src\sgPacket\MtPacket41.cpp</Transaction>
@@ -10,3 +11,6 @@
     <Transaction>2018-01-12 17:45:51.300,E:\Projects\BomBom\SigServer\src\SigCommDbProc.cpp=E:\Projects\BomBom\SigServer\src\IDevCommDbProc.cpp</Transaction>
   </Transactions>
 </BorlandProject>
+=======
+<BorlandProject/>
+>>>>>>> ats/ATS_DevSig
